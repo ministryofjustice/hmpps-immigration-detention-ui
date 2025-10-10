@@ -72,6 +72,16 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    frontendComponents: {
+      url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
+      healthPath: '/ping',
+      timeout: {
+        response: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
+        deadline: Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_SECONDS', 10000))),
+      enabled: get('COMMON_COMPONENTS_ENABLED', 'false') === 'true',
+    },
     exampleApi: {
       url: get('EXAMPLE_API_URL', 'http://localhost:8080', requiredInProduction),
       healthPath: '/health/ping',
