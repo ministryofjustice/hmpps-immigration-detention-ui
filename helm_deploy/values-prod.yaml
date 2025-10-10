@@ -9,7 +9,8 @@ generic-service:
     INGRESS_URL: "https://immigration-detention-ui.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
-    EXAMPLE_API_URL: 'https://template-kotlin.hmpps.service.justice.gov.uk'
+    COMPONENT_API_URL: "https://frontend-components-prod.hmpps.service.justice.gov.uk"
+    COMMON_COMPONENTS_ENABLED: 'true'
     AUDIT_ENABLED: "false"
 
 generic-prometheus-alerts:
