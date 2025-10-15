@@ -3,8 +3,11 @@ context('Healthcheck', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubAuthPing')
+      cy.task('stubAuthPing')
       cy.task('stubTokenVerificationPing')
-      cy.task('stubExamplePing')
+      cy.task('stubManageUsersPing')
+      cy.task('stubPrisonSearchApiPing')
+      cy.task('stubGetUserCasePing')
     })
 
     it('Health check page is visible and UP', () => {

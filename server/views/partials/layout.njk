@@ -31,7 +31,10 @@
   }}
 {% endblock %}
 
-{% block bodyStart %}
+{% block beforeContent %}
+    <aside role="complementary">
+      {% include "./prisonerProfileBanner.njk" %}
+    </aside>
 {% endblock %}
 
 {% block footer %}

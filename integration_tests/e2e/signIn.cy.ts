@@ -7,7 +7,9 @@ context('Sign In', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
-    cy.task('stubExampleTime')
+    cy.task('stubManageUser')
+    cy.task('stubGetUserCaseloads')
+    cy.task('stubGetPrisonerDetails')
   })
 
   it('Unauthenticated user directed to auth', () => {
