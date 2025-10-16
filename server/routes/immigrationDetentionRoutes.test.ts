@@ -161,7 +161,7 @@ describe('Immigration Detention routes', () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
     return request(app)
       .post(`/${NOMS_ID}/immigrationDetention/add/hoRef/${SESSION_ID}`)
-      .send({ hoRefNumber: 'ABC123' })
+      .send({ hoRefNumber: 'B1234567/12' })
       .type('form')
       .expect(302)
       .expect('Location', `/${NOMS_ID}/immigrationDetention/add/review/${SESSION_ID}`)

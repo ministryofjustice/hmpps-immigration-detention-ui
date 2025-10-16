@@ -36,7 +36,7 @@ context('Add Immigration Detention - Detention Order', () => {
     addDocumentDatePage.continueButton().click()
 
     const addHORefNo = new AddHORefNo('Record Deportation Order')
-    addHORefNo.enterHoRefNo('ABCD123')
+    addHORefNo.enterHoRefNo('111624058')
     addHORefNo.captionText().should('have.text', 'Record Deportation Order')
     addHORefNo.hinText().should('have.text', 'This will be at the top of the deportation order')
     addHORefNo.continueButton().click()

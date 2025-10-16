@@ -40,12 +40,10 @@
             <span data-qa="recordHORefQuestion">
               Enter the Home Office Reference Number
             </span>
+            <div data-qa=ho-ref-hint-text class=govuk-hint>{{ model.getHintText() }}</div>
         </h1>
         {{ govukInput({
-          label: {
-            html: model.getHintText()
-          },
-          classes: "govuk-input--width-5",
+          classes: "govuk-input govuk-input--width-15",
           id: "hoRefNumber",
           name: "hoRefNumber",
           inputmode: "numeric",

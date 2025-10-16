@@ -36,7 +36,7 @@ context('Add Immigration Detention - IS91', () => {
     addDocumentDatePage.continueButton().click()
 
     const addHORefNo = new AddHORefNo('Record IS91 Detention Authority')
-    addHORefNo.enterHoRefNo('ABCD123')
+    addHORefNo.enterHoRefNo('F3002497/003')
     addHORefNo.captionText().should('have.text', 'Record IS91 Detention Authority')
     addHORefNo.hinText().should('have.text', 'This can be found at the top of IS91 document')
     addHORefNo.continueButton().click()

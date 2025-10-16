@@ -25,9 +25,9 @@ export default class ImmigrationDetentionHORefModel {
 
   public getHintText() {
     if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.recordType === 'IS91') {
-      return '<strong data-qa=ho-ref-hint-text>This can be found at the top of IS91 document</strong>'
+      return 'This can be found at the top of IS91 document'
     }
-    return '<strong data-qa=ho-ref-hint-text>This will be at the top of the deportation order</strong>'
+    return 'This will be at the top of the deportation order'
   }
 
   public backLink(): string {
@@ -38,11 +38,25 @@ export default class ImmigrationDetentionHORefModel {
     return `${config.services.courtCasesReleaseDates.url}/prisoner/${this.nomsId}/overview`
   }
 
+  // validator.js
+  public validateHORefNumber(value: string) {
+    const pattern = /^[A-Z0-9/-]{8,15}$/
+    return pattern.test(value)
+  }
+
   async validation(): Promise<ValidationError[]> {
     if (!this.hoRefNumber) {
       return [
         {
           text: 'Enter the Home Office reference number',
+          fields: ['refNumber'],
+        },
+      ]
+    }
+    if (this.validateHORefNumber(this.hoRefNumber) === false) {
+      return [
+        {
+          text: 'The entered Home Office reference number is not valid',
           fields: ['refNumber'],
         },
       ]
