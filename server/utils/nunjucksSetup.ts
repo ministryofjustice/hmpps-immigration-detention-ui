@@ -3,6 +3,11 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
+import {
+  personDateOfBirth,
+  personProfileName,
+  personStatus,
+} from '@ministryofjustice/hmpps-court-cases-release-dates-design/hmpps/utils/utils'
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
@@ -37,6 +42,12 @@ export default function nunjucksSetup(app: express.Express): void {
       express: app,
     },
   )
+
+  // njkEnv.addGlobal('digitalCCARDUrl', config.services.courtCasesReleaseDates.url)
+
+  njkEnv.addFilter('personProfileName', personProfileName)
+  njkEnv.addFilter('personDateOfBirth', personDateOfBirth)
+  njkEnv.addFilter('personStatus', personStatus)
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)

@@ -1,0 +1,73 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Enter Immigration Detention Record Type" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <nav>
+    {{ govukBackLink({
+      attributes: { 'data-qa': 'back-link' },
+      text: "Back",
+      href: model.backLink()
+    }) }}
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+{% if model.errors.length %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errorList()
+      }) }}
+    </div>
+  </div>
+{% endif %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form class="form" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-xl" data-qa="caption-text">{{ model.getCaption() }}</span>
+            <span data-qa="recordHORefQuestion">
+              Enter the Home Office Reference Number
+            </span>
+            <div data-qa=ho-ref-hint-text class=govuk-hint>{{ model.getHintText() }}</div>
+        </h1>
+        {{ govukInput({
+          classes: "govuk-input govuk-input--width-15",
+          id: "hoRefNumber",
+          name: "hoRefNumber",
+          inputmode: "numeric",
+          value: model.hoRefNumber,
+          spellcheck: false
+        }) }}
+
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue",
+            type: submit,
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'submit-form' }
+          }) }}
+          {{ govukButton({
+            attributes: { 'data-qa': 'cancel-button' },
+            text: "Cancel",
+            classes: "govuk-button--secondary",
+            href: model.cancelLink()
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

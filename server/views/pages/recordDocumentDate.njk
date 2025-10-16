@@ -1,0 +1,77 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Enter Immigration Detention Record Type" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <nav>
+    {{ govukBackLink({
+      attributes: { 'data-qa': 'back-link' },
+      text: "Back",
+      href: model.backLink()
+    }) }}
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+{% if model.errors.length %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: model.errorList()
+      }) }}
+    </div>
+  </div>
+{% endif %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form class="form" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-xl" data-qa=caption-text>{{ model.getCaption() }}</span>
+            <span data-qa=doc-date>{{ model.getQuestion() }}</span>
+        </h1>
+        {{ govukDateInput({
+                id: "docDate",
+                namePrefix: "docDate",
+                items: model.docDateItems(),
+                fieldset: {
+                    legend: {
+                        text: "IS91 document date"
+                    }
+                },
+                hint: {
+                    text: "For example, 27 3 2022"
+                },
+                errorMessage: model.messageForField('docDate-day', 'docDate-month', 'docDate-year')
+                })
+            }}
+
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue",
+            type: submit,
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'submit-form' }
+          }) }}
+          {{ govukButton({
+            attributes: { 'data-qa': 'cancel-button' },
+            text: "Cancel",
+            classes: "govuk-button--secondary",
+            href: model.cancelLink()
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

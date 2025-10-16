@@ -1,12 +1,14 @@
+import express, { Router } from 'express'
 import { jwtDecode } from 'jwt-decode'
-import express from 'express'
 import { convertToTitleCase } from '../utils/utils'
 import logger from '../../logger'
+import type { Services } from '../services'
+import { PrisonUser } from '../interfaces/hmppsUser'
 
-export default function setUpCurrentUser() {
+export default function setUpCurrentUser({ userService }: Services): Router {
   const router = express.Router()
 
-  router.use((req, res, next) => {
+  router.use(async (req, res, next) => {
     try {
       const {
         name,
@@ -18,17 +20,16 @@ export default function setUpCurrentUser() {
         authorities?: string[]
       }
 
+      const user = await userService.getUser(res.locals.user.token)
+
       res.locals.user = {
         ...res.locals.user,
         userId,
         name,
+        ...user,
         displayName: convertToTitleCase(name),
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
-      }
-
-      if (res.locals.user.authSource === 'nomis') {
-        res.locals.user.staffId = parseInt(userId, 10) || undefined
-      }
+      } as PrisonUser
 
       next()
     } catch (error) {

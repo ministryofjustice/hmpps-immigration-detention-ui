@@ -16,9 +16,12 @@ import config from '../config'
 import logger from '../../logger'
 import HmppsAuditClient from './hmppsAuditClient'
 import FeComponentsClient from './feComponentsClient'
+import PrisonApiClient from './prisonApiClient'
+import PrisonerSearchApiClient from './prisonerSearchApiClient'
+import ManageUsersApiClient from './manageUsersApiClient'
 
 export const dataAccess = () => {
-  const hmppsAuthClient = new AuthenticationClient(
+  const authenticationClient = new AuthenticationClient(
     config.apis.hmppsAuth,
     logger,
     config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore(),
@@ -26,9 +29,12 @@ export const dataAccess = () => {
 
   return {
     applicationInfo,
-    hmppsAuthClient,
-    feComponentsClient: new FeComponentsClient(hmppsAuthClient),
+    authenticationClient,
+    feComponentsClient: new FeComponentsClient(authenticationClient),
     hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
+    manageUsersApiClient: new ManageUsersApiClient(),
+    prisonApiClient: new PrisonApiClient(authenticationClient),
+    prisonerSearchClient: new PrisonerSearchApiClient(authenticationClient),
   }
 }
 

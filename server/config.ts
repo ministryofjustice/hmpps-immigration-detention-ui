@@ -43,11 +43,46 @@ export default {
     password: process.env.REDIS_AUTH_TOKEN,
     tls_enabled: get('REDIS_TLS_ENABLED', 'false'),
   },
+  services: {
+    courtCasesReleaseDates: {
+      url: get('COURT_CASES_AND_RELEASE_DATES_URL', 'http://localhost:3000/ccard', requiredInProduction),
+    },
+    digitalPrisonServices: {
+      url: get('DIGITAL_PRISON_SERVICES_URL', 'http://localhost:3000/dps', requiredInProduction),
+    },
+  },
   session: {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
   apis: {
+    prisonApi: {
+      url: get('PRISON_API_URL', 'http://localhost:8080', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('PRISON_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('PRISON_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('PRISON_API_AGENT_TIMEOUT', 20000))),
+    },
+    manageUsersApi: {
+      url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000))),
+    },
+    prisonerSearchApi: {
+      url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8110', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('PRISONER_SEARCH_API_TIMEOUT', 10000))),
+    },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
       healthPath: '/health/ping',

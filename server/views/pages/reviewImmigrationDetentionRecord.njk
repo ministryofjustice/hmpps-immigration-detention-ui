@@ -1,0 +1,117 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = applicationName + " - Enter tagged bail dates" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <nav>
+    {{ govukBackLink({
+      text: "Back",
+      href: model.backLink()
+    }) }}
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-xl" data-qa="caption-text">{{ model.getCaption() }}</span>
+        Confirm and save
+      </h1>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-full govuk-!-padding-left-0">
+
+    {{ govukSummaryList({
+      rows: [
+        {
+          key: {
+            text: "Document Type"
+          },
+          value: {
+            html: model.recordTypeDesc
+          },
+          actions: {
+            items: [
+              {
+                href: "/" + model.nomsId + "/immigrationDetention/edit/recordType/" + model.id,
+                text: "Edit",
+                visuallyHiddenText: "record type",
+                attributes: {
+                  "data-qa": "edit-record-type-link"
+                }
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Date on document"
+          },
+          value: {
+            text: model.docDateFormatted
+          },
+          actions: {
+            items: [
+              {
+                href: "/" + model.nomsId + "/immigrationDetention/edit/documentDate/" + model.id,
+                text: "Edit",
+                visuallyHiddenText: "document date",
+                attributes: {
+                  "data-qa": "edit-document-date-link"
+                }
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Home office reference number"
+          },
+          value: {
+            text: model.hoRefNumber
+          },
+          actions: {
+            items: [
+              {
+                href: "/" + model.nomsId + "/immigrationDetention/edit/hoRef/" + model.id,
+                text: "Edit",
+                visuallyHiddenText: "home office reference number",
+                attributes: {
+                  "data-qa": "edit-ho-ref-link"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <div class="govuk-button-group">
+      <form class="form" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {{ govukButton({
+          text: "Confirm and save",
+          type: submit,
+          preventDoubleClick: true,
+          attributes: { 'data-qa': 'submit-form' }
+        }) }}
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: model.cancelLink()
+        }) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
