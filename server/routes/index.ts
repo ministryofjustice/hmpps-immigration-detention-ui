@@ -1,16 +1,29 @@
 import { Router } from 'express'
 
 import type { Services } from '../services'
-import { Page } from '../services/auditService'
+import ImmigrationDetentionRoutes from './immigrationDetentionRoutes'
 
-export default function routes({ auditService }: Services): Router {
+export default function routes(service: Services): Router {
   const router = Router()
+  const immigrationDetentionRoutes = new ImmigrationDetentionRoutes(service.immigrationDetentionStoreService)
 
-  router.get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
+  router.get('/', (req, res) => res.render('pages/index'))
 
-    return res.render('pages/index')
-  })
+  router.get('/:nomsId/immigrationDetention/add', immigrationDetentionRoutes.add)
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.addRecordType)
+  router.post('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.submitRecordType)
+
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id', immigrationDetentionRoutes.addDocumentDate)
+  router.post(
+    '/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id',
+    immigrationDetentionRoutes.submitDocumentDate,
+  )
+
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.addHORefNumber)
+  router.post('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.submitHORefNumber)
+
+  router.get('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.review)
+  router.post('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.submitReview)
 
   return router
 }

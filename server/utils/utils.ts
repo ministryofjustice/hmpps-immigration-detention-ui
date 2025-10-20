@@ -1,3 +1,5 @@
+import ValidationError from '../model/validationError'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -20,4 +22,31 @@ export const initialiseName = (fullName?: string): string | null => {
 
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
+}
+
+export const fieldHasErrors = (errors: ValidationError[], field: string) => {
+  return !!errors.find(error => error.fields.indexOf(field) !== -1)
+}
+
+export const dateItems = (year: string, month: string, day: string, prefix: string, errors: ValidationError[]) => {
+  return [
+    {
+      name: `day`,
+      classes: `govuk-input--width-2${fieldHasErrors(errors, `${prefix}-day`) ? ' govuk-input--error' : ''}`,
+      value: day,
+      attributes: { maxLength: 2 },
+    },
+    {
+      name: `month`,
+      classes: `govuk-input--width-2${fieldHasErrors(errors, `${prefix}-month`) ? ' govuk-input--error' : ''}`,
+      value: month,
+      attributes: { maxLength: 2 },
+    },
+    {
+      name: `year`,
+      classes: `govuk-input--width-4${fieldHasErrors(errors, `${prefix}-year`) ? ' govuk-input--error' : ''}`,
+      value: year,
+      attributes: { maxLength: 4 },
+    },
+  ]
 }
