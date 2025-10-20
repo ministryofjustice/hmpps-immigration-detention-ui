@@ -50,10 +50,7 @@ describe('prisonerSearchService', () => {
       })
 
       expect(result.read()).toEqual('image data')
-      expect(prisonApiClient.getPrisonerImage).toHaveBeenCalledWith('A1234AA', {
-        tokenType: 'SYSTEM_TOKEN',
-        user: { username: 'user1' },
-      })
+      expect(prisonApiClient.getPrisonerImage).toHaveBeenCalledWith('A1234AA', 'user1')
     })
   })
 

@@ -1,5 +1,4 @@
 import { Readable } from 'stream'
-import { asSystem } from '@ministryofjustice/hmpps-rest-client'
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonApiClient from '../data/prisonApiClient'
 
@@ -16,7 +15,7 @@ export default class PrisonerSearchService {
   ) {}
 
   async getPrisonerImage(prisonerNumber: string, user: Context): Promise<Readable> {
-    return this.prisonApiClient.getPrisonerImage(prisonerNumber, asSystem(user.username))
+    return this.prisonApiClient.getPrisonerImage(prisonerNumber, user.username)
   }
 
   async getUsersCaseloads(): Promise<PrisonApiUserCaseloads[]> {
@@ -33,7 +32,7 @@ export default class PrisonerSearchService {
 
   async getPrisonerDetails(nomsId: string, user: UserDetails): Promise<PrisonerSearchApiPrisoner> {
     try {
-      const prisonerDetails = await this.prisonerSearchApiClient.getPrisonerDetails(nomsId)
+      const prisonerDetails = await this.prisonerSearchApiClient.getPrisonerDetails(nomsId, user.username)
       if (this.isAccessiblePrisoner(prisonerDetails.prisonId, user)) {
         return prisonerDetails
       }

@@ -34,7 +34,7 @@ describe('prisonerSearchClient', () => {
   it('Test getting prisoner details', async () => {
     fakePrisonerSearchApi.get(`/prisoner/A1234AB`).reply(200, prisonerDetails)
 
-    const result = await client.getPrisonerDetails('A1234AB')
+    const result = await client.getPrisonerDetails('A1234AB', 'user1')
 
     expect(result).toEqual(prisonerDetails)
   })
@@ -43,7 +43,7 @@ describe('prisonerSearchClient', () => {
     fakePrisonerSearchApi.get(`/prisoner/A1234AB`).reply(200, { ...prisonerDetails, agencyId: 'LEX' })
 
     try {
-      await client.getPrisonerDetails('A1234AB')
+      await client.getPrisonerDetails('A1234AB', 'user1')
     } catch (error) {
       expect(error.errorKey).toBe(FullPageErrorType.NOT_IN_CASELOAD)
       expect(error.status).toBe(404)
@@ -53,7 +53,7 @@ describe('prisonerSearchClient', () => {
   it('Test getting released prisoner details when user has inactive booking role', async () => {
     fakePrisonerSearchApi.get(`/prisoner/A1234AB`).reply(200, { ...prisonerDetails, agencyId: 'OUT' })
 
-    const result = await client.getPrisonerDetails('A1234AB')
+    const result = await client.getPrisonerDetails('A1234AB', 'user1')
 
     expect(result.prisonerNumber).toEqual(prisonerDetails.prisonerNumber)
   })
@@ -62,7 +62,7 @@ describe('prisonerSearchClient', () => {
     fakePrisonerSearchApi.get(`/prisoner/A1234AB`).reply(200, { ...prisonerDetails, agencyId: 'OUT' })
 
     try {
-      await client.getPrisonerDetails('A1234AB')
+      await client.getPrisonerDetails('A1234AB', 'user1')
     } catch (error) {
       expect(error.errorKey).toBe(FullPageErrorType.NOT_IN_CASELOAD)
       expect(error.status).toBe(404)
@@ -72,7 +72,7 @@ describe('prisonerSearchClient', () => {
   it('Test getting transferred prisoner details', async () => {
     fakePrisonerSearchApi.get(`/prisoner/A1234AB`).reply(200, { ...prisonerDetails, agencyId: 'TRN' })
 
-    const result = await client.getPrisonerDetails('A1234AB')
+    const result = await client.getPrisonerDetails('A1234AB', 'user1')
 
     expect(result.prisonerNumber).toEqual(prisonerDetails.prisonerNumber)
   })

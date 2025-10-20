@@ -1,5 +1,5 @@
 import type { Readable } from 'stream'
-import { ApiConfig, AuthOptions, AuthenticationClient, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { ApiConfig, AuthenticationClient, RestClient, asSystem } from '@ministryofjustice/hmpps-rest-client'
 
 import config from '../config'
 import logger from '../../logger'
@@ -21,7 +21,7 @@ export default class PrisonApiClient extends RestClient {
     return this.get({ path: `/api/users/me/caseLoads` }) as Promise<PrisonApiUserCaseloads[]>
   }
 
-  getPrisonerImage(prisonerNumber: string, authOptions: AuthOptions): Promise<Readable> {
+  getPrisonerImage(prisonerNumber: string, username: string): Promise<Readable> {
     return this.stream(
       {
         path: `/api/bookings/offenderNo/${prisonerNumber}/image/data`,
@@ -33,7 +33,7 @@ export default class PrisonApiClient extends RestClient {
           }
         },
       },
-      authOptions,
+      asSystem(username),
     ) as Promise<Readable>
   }
 }

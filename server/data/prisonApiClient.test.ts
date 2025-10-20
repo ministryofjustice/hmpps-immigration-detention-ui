@@ -1,5 +1,5 @@
 import nock from 'nock'
-import { asUser, AuthenticationClient } from '@ministryofjustice/hmpps-rest-client'
+import { AuthenticationClient } from '@ministryofjustice/hmpps-rest-client'
 
 import config from '../config'
 import logger from '../../logger'
@@ -12,7 +12,7 @@ describe('prisonApiClient', () => {
   let client: PrisonApiClient
   let mockAuthenticationClient: jest.Mocked<AuthenticationClient>
 
-  const token = 'token-1'
+  const token = 'test-system-token'
 
   beforeEach(() => {
     fakePrisonApi = nock(config.apis.prisonApi.url)
@@ -33,7 +33,7 @@ describe('prisonApiClient', () => {
         .matchHeader('authorization', `Bearer ${token}`)
         .reply(200, 'image data', { 'Content-Type': 'image/jpeg' })
 
-      const response = await client.getPrisonerImage('A1234AA', asUser(token))
+      const response = await client.getPrisonerImage('A1234AA', 'user1')
 
       expect(response.read()).toEqual(Buffer.from('image data'))
       expect(nock.isDone()).toBe(true)
@@ -47,7 +47,7 @@ describe('prisonApiClient', () => {
 
       expect.assertions(4)
 
-      await expect(client.getPrisonerImage('A1234AA', asUser(token))).rejects.toEqual(new Error('Not Found'))
+      await expect(client.getPrisonerImage('A1234AA', 'user1')).rejects.toEqual(new Error('Not Found'))
 
       expect(logger.info).toHaveBeenCalled()
       expect(logger.warn).not.toHaveBeenCalled()

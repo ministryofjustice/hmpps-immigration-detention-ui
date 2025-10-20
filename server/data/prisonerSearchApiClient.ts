@@ -1,4 +1,4 @@
-import { ApiConfig, RestClient } from '@ministryofjustice/hmpps-rest-client'
+import { ApiConfig, asSystem, RestClient } from '@ministryofjustice/hmpps-rest-client'
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 
 import config from '../config'
@@ -10,7 +10,7 @@ export default class PrisonerSearchApiClient extends RestClient {
     super('Prisoner Search API Client', config.apis.prisonerSearchApi as ApiConfig, logger, authenticationClient)
   }
 
-  async getPrisonerDetails(nomsId: string): Promise<PrisonerSearchApiPrisoner> {
-    return this.get({ path: `/prisoner/${nomsId}` }) as Promise<PrisonerSearchApiPrisoner>
+  async getPrisonerDetails(nomsId: string, username: string): Promise<PrisonerSearchApiPrisoner> {
+    return this.get({ path: `/prisoner/${nomsId}` }, asSystem(username)) as Promise<PrisonerSearchApiPrisoner>
   }
 }
