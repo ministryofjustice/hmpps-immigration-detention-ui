@@ -1,30 +1,29 @@
-import { RequestHandler, Router } from 'express'
+import { Router } from 'express'
 
 import type { Services } from '../services'
-import asyncMiddleware from '../middleware/asyncMiddleware'
 import ImmigrationDetentionRoutes from './immigrationDetentionRoutes'
 
 export default function routes(service: Services): Router {
   const router = Router()
   const immigrationDetentionRoutes = new ImmigrationDetentionRoutes(service.immigrationDetentionStoreService)
 
-  const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
-  const post = (path: string, handler: RequestHandler) => router.post(path, asyncMiddleware(handler))
+  router.get('/', (req, res) => res.render('pages/index'))
 
-  get('/', (req, res) => res.render('pages/index'))
+  router.get('/:nomsId/immigrationDetention/add', immigrationDetentionRoutes.add)
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.addRecordType)
+  router.post('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.submitRecordType)
 
-  get('/:nomsId/immigrationDetention/add', immigrationDetentionRoutes.add)
-  get('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.addRecordType)
-  post('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.submitRecordType)
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id', immigrationDetentionRoutes.addDocumentDate)
+  router.post(
+    '/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id',
+    immigrationDetentionRoutes.submitDocumentDate,
+  )
 
-  get('/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id', immigrationDetentionRoutes.addDocumentDate)
-  post('/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id', immigrationDetentionRoutes.submitDocumentDate)
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.addHORefNumber)
+  router.post('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.submitHORefNumber)
 
-  get('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.addHORefNumber)
-  post('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.submitHORefNumber)
-
-  get('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.review)
-  post('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.submitReview)
+  router.get('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.review)
+  router.post('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.submitReview)
 
   return router
 }
