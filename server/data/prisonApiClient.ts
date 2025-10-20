@@ -1,5 +1,5 @@
 import type { Readable } from 'stream'
-import { ApiConfig, AuthenticationClient, RestClient, asSystem } from '@ministryofjustice/hmpps-rest-client'
+import { ApiConfig, AuthenticationClient, RestClient, asSystem, asUser } from '@ministryofjustice/hmpps-rest-client'
 
 import config from '../config'
 import logger from '../../logger'
@@ -17,8 +17,8 @@ export default class PrisonApiClient extends RestClient {
     super('Prison API', config.apis.prisonApi as ApiConfig, logger, authenticationClient)
   }
 
-  async getUsersCaseloads(): Promise<PrisonApiUserCaseloads[]> {
-    return this.get({ path: `/api/users/me/caseLoads` }) as Promise<PrisonApiUserCaseloads[]>
+  async getUsersCaseloads(userToken: string): Promise<PrisonApiUserCaseloads[]> {
+    return this.get({ path: `/api/users/me/caseLoads` }, asUser(userToken)) as Promise<PrisonApiUserCaseloads[]>
   }
 
   getPrisonerImage(prisonerNumber: string, username: string): Promise<Readable> {

@@ -12,7 +12,7 @@ export default class UserService {
 
   async getUser(userToken: string): Promise<UserDetails> {
     const user = await this.manageUsersApiClient.getUser(userToken)
-    const userCaseloads = await this.prisonerSearchService.getUsersCaseloads()
+    const userCaseloads = await this.prisonerSearchService.getUsersCaseloads(userToken)
     const roles = this.getUserRoles(userToken)
     return {
       ...user,

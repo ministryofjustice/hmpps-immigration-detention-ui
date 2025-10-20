@@ -18,8 +18,8 @@ export default class PrisonerSearchService {
     return this.prisonApiClient.getPrisonerImage(prisonerNumber, user.username)
   }
 
-  async getUsersCaseloads(): Promise<PrisonApiUserCaseloads[]> {
-    return this.prisonApiClient.getUsersCaseloads()
+  async getUsersCaseloads(userToken: string): Promise<PrisonApiUserCaseloads[]> {
+    return this.prisonApiClient.getUsersCaseloads(userToken)
   }
 
   private isAccessiblePrisoner(agencyId: string, user: UserDetails): boolean {
