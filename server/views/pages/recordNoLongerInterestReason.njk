@@ -48,8 +48,8 @@
          {% set commentHtml %}
             {{ govukTextarea({
             name: "otherReason",
-            id: "otherReason",
-            value: otherReason,
+            id: "model.otherReason",
+            value: model.otherReason,
             label: {
                 text: "Enter the reason the Home Office has provided."
             },
@@ -64,15 +64,18 @@
             items: [
                 {
                     value: "RTR",
-                    text: "Right to Remain"
+                    text: "Right to Remain",
+                    checked: model.getIsChecked('RTR')
                 },
                 {
                     value: "BN",
-                    text: "British National"
+                    text: "British National",
+                    checked: model.getIsChecked('BN')
                 },
                 {
                     value: "OTHER",
                     text: "Other",
+                    checked: model.getIsChecked('OTHER'),
                     conditional: {
                         html: commentHtml
                     }

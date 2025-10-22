@@ -14,7 +14,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
   ) {
     if (!isGet && !this.formValues.noLongerOfInterestReason) {
       this.formValues.noLongerOfInterestReason = immigrationDetention?.noLongerOfInterestReason
-      this.formValues.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
+      this.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
     } else if (!isGet) {
       this.immigrationDetention.noLongerOfInterestReason = this.formValues.noLongerOfInterestReason
       this.immigrationDetention.noLongerOfInterestOtherComment = this.formValues.otherReason
@@ -76,6 +76,10 @@ export default class ImmigrationDetentionNoLongerInterestModel {
       ]
     }
     return null
+  }
+
+  getIsChecked(code: string): boolean {
+    return this.immigrationDetention?.noLongerOfInterestReason === code
   }
 
   noLongerInterestTypes() {

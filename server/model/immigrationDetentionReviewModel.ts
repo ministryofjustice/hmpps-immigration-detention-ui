@@ -18,6 +18,9 @@ export default class ImmigrationDetentionReviewModel {
     this.noLongerInterestReasonDesc =
       immigrationDetentionNoLongerInterestTypes.find(it => it.value === immigrationDetention.noLongerOfInterestReason)
         ?.text || ''
+    if (immigrationDetention.noLongerOfInterestReason === 'OTHER') {
+      this.noLongerInterestReasonDesc += ` : ${immigrationDetention.noLongerOfInterestOtherComment}`
+    }
     this.confirmedDateFormatted = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).format('D MMMM YYYY')
   }
 
