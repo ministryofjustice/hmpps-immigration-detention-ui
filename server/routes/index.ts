@@ -2,12 +2,15 @@ import { Router } from 'express'
 
 import type { Services } from '../services'
 import ImmigrationDetentionRoutes from './immigrationDetentionRoutes'
+import PrisonerImageRoutes from './prisonerImageRoutes'
 
 export default function routes(service: Services): Router {
   const router = Router()
   const immigrationDetentionRoutes = new ImmigrationDetentionRoutes(service.immigrationDetentionStoreService)
+  const prisonerImageRoutes = new PrisonerImageRoutes(service.prisonerSearchService)
 
   router.get('/', (req, res) => res.render('pages/index'))
+  router.get('/:nomsId/image', prisonerImageRoutes.getImage)
 
   router.get('/:nomsId/immigration-detention/add', immigrationDetentionRoutes.add)
   router.get('/:nomsId/immigration-detention/:addOrEdit/record-type/:id', immigrationDetentionRoutes.addRecordType)

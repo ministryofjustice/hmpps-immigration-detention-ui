@@ -27,7 +27,9 @@ export default class PrisonApiClient extends RestClient {
         path: `/api/bookings/offenderNo/${prisonerNumber}/image/data`,
         errorLogger: (path, method, error) => {
           if (error.responseStatus === 404) {
-            logger.info(`No prisoner image available for prisonerNumber: ${prisonerNumber}`)
+            logger.info(
+              `No prisoner image available for prisonerNumber: ${prisonerNumber}, requested by user: ${username}`,
+            )
           } else {
             this.logError(path, method, error)
           }
