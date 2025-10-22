@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import ValidationError from '../model/validationError'
 
 const properCase = (word: string): string =>
@@ -49,4 +50,53 @@ export const dateItems = (year: string, month: string, day: string, prefix: stri
       attributes: { maxLength: 4 },
     },
   ]
+}
+
+export const validateDate = (day: string, month: string, year: string, fieldPrefix: string): ValidationError | null => {
+  if (!day && !month && !year) {
+    return {
+      text: 'This date must include a valid day, month and year.',
+      fields: [`${fieldPrefix}-day`, `${fieldPrefix}-month`, `${fieldPrefix}-year`],
+    }
+  }
+
+  if (year && year.length !== 4) {
+    return {
+      text: 'Year must include 4 numbers.',
+      fields: [`${fieldPrefix}-year`],
+    }
+  }
+
+  let text = 'This date must include a'
+  const fields: string[] = []
+
+  if (!day) {
+    text += ' day'
+    fields.push(`${fieldPrefix}-day`)
+  }
+  if (!month) {
+    text += `${fields.length ? ' and' : ''} month`
+    fields.push(`${fieldPrefix}-month`)
+  }
+  if (!year) {
+    text += `${fields.length ? ' and' : ''} year`
+    fields.push(`${fieldPrefix}-year`)
+  }
+
+  if (fields.length) {
+    text += '.'
+    return { text, fields }
+  }
+
+  const formatted = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+  const date = dayjs(formatted, 'YYYY-MM-DD', true)
+
+  if (!date.isValid()) {
+    return {
+      text: 'This date does not exist.',
+      fields: [`${fieldPrefix}-day`, `${fieldPrefix}-month`, `${fieldPrefix}-year`],
+    }
+  }
+
+  return null
 }

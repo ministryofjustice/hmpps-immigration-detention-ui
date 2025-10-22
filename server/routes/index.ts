@@ -25,5 +25,20 @@ export default function routes(service: Services): Router {
   router.get('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.review)
   router.post('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.submitReview)
 
+  router.get(
+    '/:nomsId/immigrationDetention/:addOrEdit/noLongerInterestReason/:id',
+    immigrationDetentionRoutes.addNoLongerOfInterestReason,
+  )
+  router.post(
+    '/:nomsId/immigrationDetention/:addOrEdit/noLongerInterestReason/:id',
+    immigrationDetentionRoutes.submitNoLongerOfInterestType,
+  )
+
+  router.get('/:nomsId/immigrationDetention/:addOrEdit/confirmedDate/:id', immigrationDetentionRoutes.addConfirmedDate)
+  router.post(
+    '/:nomsId/immigrationDetention/:addOrEdit/confirmedDate/:id',
+    immigrationDetentionRoutes.submitConfirmedDate,
+  )
+
   return router
 }

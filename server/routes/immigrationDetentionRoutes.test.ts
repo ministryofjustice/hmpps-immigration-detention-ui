@@ -4,6 +4,8 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ImmigrationDetentionStoreService from '../services/immigrationDetentionStoreService'
 import SessionImmigrationDetention from '../@types/ImmigrationDetentionTypes'
+import PrisonerSearchService from '../services/prisonerSearchService'
+import { PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi/prisonerSearchTypes'
 
 jest.mock('../services/immigrationDetentionStoreService')
 
@@ -34,7 +36,91 @@ afterEach(() => {
 })
 
 describe('Immigration Detention routes', () => {
-  it('GET /{nomsId}/immigrationDetention/add/recordType goes to the select recordType page', async () => {
+  it('GET /{nomsId}/immigrationDetention/add/noLongerInterestReason/:id goes to the select NoLongerOfInterest page', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const backLink = $('[data-qa="back-link"]').attr('href')
+        expect(backLink).toBe(`${NOMS_ID}/immigrationDetention/add/recordType/${SESSION_ID}`)
+
+        const cancelLink = $('[data-qa="cancel-button"]').attr('href')
+        expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
+      })
+  })
+
+  it('POST /{nomsId}/immigrationDetention/add/confirmedDate/{id} empty day, month and year', () => {
+    return request(app)
+      .post(`/${NOMS_ID}/immigrationDetention/add/confirmedDate/${SESSION_ID}`)
+      .send({})
+      .type('form')
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('This date must include a valid day, month and year.')
+      })
+  })
+
+  it('GET /{nomsId}/immigrationDetention/add/confirmedDate/:id renders confirmedDate page', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigrationDetention/add/confirmedDate/${SESSION_ID}`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const backLink = $('[data-qa="back-link"]').attr('href')
+        expect(backLink).toBe(`${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+
+        const cancelLink = $('[data-qa="cancel-button"]').attr('href')
+        expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
+      })
+  })
+
+  it('POST /{nomsId}/immigrationDetention/add/noLongerInterestReason/:id redirects to next page', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .post(`/${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+      .send({ noLongerOfInterestReason: 'OTHER', otherReason: 'Other comment' })
+      .expect(302)
+      .expect('Location', `/${NOMS_ID}/immigrationDetention/add/confirmedDate/${SESSION_ID}`)
+  })
+
+  it('POST /{nomsId}/immigrationDetention/add/noLongerInterestReason/:id renders error when value not entered', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .post(`/${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+      .send({ otherReason: 'Other comment' })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('You must select an option')
+      })
+  })
+
+  it('POST /{nomsId}/immigrationDetention/add/noLongerInterestReason/:id renders comment error when value not entered', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .post(`/${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+      .send({ noLongerOfInterestReason: 'OTHER' })
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Enter the reason the Home Office has provided.')
+      })
+  })
+
+  it('GET /{nomsId}/immigrationDetention/add/recordType renders the select recordType page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
 
     await request(app)
@@ -53,6 +139,7 @@ describe('Immigration Detention routes', () => {
         expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
       })
   })
+
   it('POST /{nomsId}/immigrationDetention/add/recordType throws error when no recordType is selected', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
 
@@ -167,7 +254,7 @@ describe('Immigration Detention routes', () => {
       .expect('Location', `/${NOMS_ID}/immigrationDetention/add/review/${SESSION_ID}`)
   })
 
-  it('GET /{nomsId}/immigrationDetention/add/review/{id} passes with valid HO Ref No', () => {
+  it('GET /{nomsId}/immigrationDetention/add/review/{id} renders review page successfully', () => {
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
     return request(app)
       .get(`/${NOMS_ID}/immigrationDetention/add/review/${SESSION_ID}`)
@@ -178,7 +265,6 @@ describe('Immigration Detention routes', () => {
         expect(res.text).toContain('ABC123')
         expect(res.text).toContain(`/${NOMS_ID}/immigrationDetention/edit/hoRef/${SESSION_ID}`)
         expect(res.text).toContain(`/${NOMS_ID}/immigrationDetention/edit/documentDate/${SESSION_ID}`)
-        expect(res.text).toContain(`/${NOMS_ID}/immigrationDetention/edit/recordType/${SESSION_ID}`)
       })
   })
 })

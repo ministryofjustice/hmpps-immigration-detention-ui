@@ -7,14 +7,14 @@ import config from '../config'
 
 dayjs.extend(customParseFormat)
 
-export default class ImmigrationDetentionDocumentDateModel {
+export default class ImmigrationDetentionConfirmedDateModel {
   public errors: ValidationError[] = []
 
-  public 'docDate-day'?: string
+  public 'confirmedDate-day'?: string
 
-  public 'docDate-month'?: string
+  public 'confirmedDate-month'?: string
 
-  public 'docDate-year'?: string
+  public 'confirmedDate-year'?: string
 
   constructor(
     public nomsId: string,
@@ -25,28 +25,16 @@ export default class ImmigrationDetentionDocumentDateModel {
     if (params) {
       Object.assign(this as object, params)
     } else {
-      this['docDate-day'] = dayjs(immigrationDetention.documentDate).get('date').toString()
-      this['docDate-month'] = (dayjs(immigrationDetention.documentDate).get('month') + 1).toString()
-      this['docDate-year'] = dayjs(immigrationDetention.documentDate).get('year').toString()
+      this['confirmedDate-day'] = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('date').toString()
+      this['confirmedDate-month'] = (
+        dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('month') + 1
+      ).toString()
+      this['confirmedDate-year'] = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('year').toString()
     }
-  }
-
-  public getCaption() {
-    if (this.immigrationDetention?.recordType === 'IS91') {
-      return 'Record IS91 Detention Authority'
-    }
-    return 'Record Deportation Order'
-  }
-
-  public getQuestion() {
-    if (this.immigrationDetention?.recordType === 'IS91') {
-      return 'Enter the date on the IS91 document'
-    }
-    return 'Enter the date on the deportation order'
   }
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/recordType/${this.id}`
+    return `${this.nomsId}/immigrationDetention/add/noLongerInterestReason/${this.id}`
   }
 
   public cancelLink(): string {
@@ -62,16 +50,29 @@ export default class ImmigrationDetentionDocumentDateModel {
   }
 
   toDateModelString() {
-    return dayjs(`${this['docDate-year']}-${this['docDate-month']}-${this['docDate-day']}`).format('YYYY-MM-DD')
+    return dayjs(`${this['confirmedDate-year']}-${this['confirmedDate-month']}-${this['confirmedDate-day']}`).format(
+      'YYYY-MM-DD',
+    )
   }
 
-  docDateItems() {
-    return dateItems(this['docDate-year'], this['docDate-month'], this['docDate-day'], 'docDate', this.errors)
+  confirmedDateDateItems() {
+    return dateItems(
+      this['confirmedDate-year'],
+      this['confirmedDate-month'],
+      this['confirmedDate-day'],
+      'confirmedDate',
+      this.errors,
+    )
   }
 
   async validation(): Promise<ValidationError[]> {
     const errors: ValidationError[] = []
-    const DocDateError = validateDate(this['docDate-day'], this['docDate-month'], this['docDate-year'], 'docDate')
+    const DocDateError = validateDate(
+      this['confirmedDate-day'],
+      this['confirmedDate-month'],
+      this['confirmedDate-year'],
+      'confirmedDate',
+    )
     if (DocDateError) {
       errors.push(DocDateError)
     }

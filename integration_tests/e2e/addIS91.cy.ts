@@ -43,8 +43,6 @@ context('Add Immigration Detention - IS91', () => {
 
     const immigrationDetentionSummary = AddImmigrationDetentionReview.verifyOnPage(AddImmigrationDetentionReview)
     immigrationDetentionSummary.captionText().should('have.text', 'Record IS91 Detention Authority')
-    immigrationDetentionSummary.editRecordType().click()
-    immigrationDetentionSummary.continueButton().click()
 
     immigrationDetentionSummary.editDocumentDate().click()
     immigrationDetentionSummary.continueButton().click()

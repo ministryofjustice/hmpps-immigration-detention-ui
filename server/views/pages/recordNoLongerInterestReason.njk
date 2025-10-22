@@ -1,0 +1,103 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set pageTitle = applicationName + " - Enter Immigration Detention Record Type" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <nav>
+    {{ govukBackLink({
+      attributes: { 'data-qa': 'back-link' },
+      text: "Back",
+      href: model.backlink()
+    }) }}
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+{% if model.errors.length %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          model.errorList()
+        ]
+      }) }}
+    </div>
+  </div>
+{% endif %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form class="form" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <h1 class="govuk-heading-l">
+            <span class="govuk-caption-xl">Record Immigration Information</span>
+            <span data-qa="noLongerOfInterestQuestion">
+              Why is {{prisoner.firstName | title}} {{prisoner.lastName | title}} no longer of interest?
+            </span>
+        </h1>
+
+         {% set commentHtml %}
+            {{ govukTextarea({
+            name: "otherReason",
+            id: "otherReason",
+            value: otherReason,
+            label: {
+                text: "Enter the reason the Home Office has provided."
+            },
+            errorMessage: model.messageForField('otherReason')
+            }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+            id: "noLongerOfInterestReason",
+            name: "noLongerOfInterestReason",
+            errorMessage: model.messageForField('noLongerInterestReason'),
+            items: [
+                {
+                    value: "RTR",
+                    text: "Right to Remain"
+                },
+                {
+                    value: "BN",
+                    text: "British National"
+                },
+                {
+                    value: "OTHER",
+                    text: "Other",
+                    conditional: {
+                        html: commentHtml
+                    }
+                }
+            ]
+       }) }}
+
+
+        <div class="govuk-button-group">
+          {{ govukButton({
+            text: "Continue",
+            type: submit,
+            preventDoubleClick: true,
+            attributes: { 'data-qa': 'submit-form' }
+          }) }}
+          {{ govukButton({
+            attributes: { 'data-qa': 'cancel-button' },
+            text: "Cancel",
+            classes: "govuk-button--secondary",
+            href: model.cancelLink()
+          }) }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+

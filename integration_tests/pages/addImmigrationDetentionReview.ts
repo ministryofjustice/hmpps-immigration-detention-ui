@@ -15,5 +15,9 @@ export default class AddImmigrationDetentionReview extends Page {
 
   public editDocumentDate = (): PageElement => cy.get('[data-qa=edit-document-date-link]')
 
+  public editConfirmedDate = (): PageElement => cy.get('[data-qa=edit-confirmed-date-link]')
+
   public editHoRef = (): PageElement => cy.get('[data-qa=edit-ho-ref-link]')
+
+  public editNoLongerInterestReason = (): PageElement => cy.get('[data-qa=edit-no-longer-interest-reason-link]')
 }
