@@ -22,7 +22,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
   }
 
   public backlink(): string {
-    return `/${this.nomsId}/immigrationDetention/add/recordType/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/record-type/${this.id}`
   }
 
   public cancelLink(): string {

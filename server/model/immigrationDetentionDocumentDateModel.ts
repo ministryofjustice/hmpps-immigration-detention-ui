@@ -46,7 +46,7 @@ export default class ImmigrationDetentionDocumentDateModel {
   }
 
   public backLink(): string {
-    return `/${this.nomsId}/immigrationDetention/add/recordType/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/record-type/${this.id}`
   }
 
   public cancelLink(): string {

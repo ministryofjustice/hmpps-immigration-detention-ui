@@ -35,7 +35,7 @@ export default class ImmigrationDetentionRoutes {
     const { nomsId } = req.params
     const sessionId = randomUUID()
 
-    res.redirect(`/${nomsId}/immigrationDetention/add/recordType/${sessionId}`)
+    res.redirect(`/${nomsId}/immigration-detention/add/record-type/${sessionId}`)
   }
 
   public addRecordType: RequestHandler = async (req, res): Promise<void> => {
@@ -94,10 +94,10 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (edit) {
-      return res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+      return res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
     }
 
-    return res.redirect(`/${nomsId}/immigrationDetention/add/hoRef/${id}`)
+    return res.redirect(`/${nomsId}/immigration-detention/add/ho-ref/${id}`)
   }
 
   public addHORefNumber: RequestHandler = async (req, res): Promise<void> => {
@@ -137,10 +137,10 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (edit) {
-      return res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+      return res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
     }
 
-    return res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+    return res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
   }
 
   public submitRecordType: RequestHandler = async (req, res): Promise<void> => {
@@ -162,16 +162,16 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (edit) {
-      res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+      res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
       return
     }
 
     if (req.body.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
-      res.redirect(`/${nomsId}/immigrationDetention/add/noLongerInterestReason/${id}`)
+      res.redirect(`/${nomsId}/immigration-detention/add/no-longer-interest-reason/${id}`)
       return
     }
 
-    res.redirect(`/${nomsId}/immigrationDetention/add/documentDate/${id}`)
+    res.redirect(`/${nomsId}/immigration-detention/add/document-date/${id}`)
   }
 
   public submitNoLongerOfInterestType: RequestHandler = async (req, res): Promise<void> => {
@@ -196,11 +196,11 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (edit) {
-      res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+      res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
       return
     }
 
-    res.redirect(`/${nomsId}/immigrationDetention/add/confirmedDate/${id}`)
+    res.redirect(`/${nomsId}/immigration-detention/add/confirmed-date/${id}`)
   }
 
   public addConfirmedDate: RequestHandler = async (req, res): Promise<void> => {
@@ -239,9 +239,9 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (edit) {
-      return res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+      return res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
     }
 
-    return res.redirect(`/${nomsId}/immigrationDetention/add/review/${id}`)
+    return res.redirect(`/${nomsId}/immigration-detention/add/review/${id}`)
   }
 }

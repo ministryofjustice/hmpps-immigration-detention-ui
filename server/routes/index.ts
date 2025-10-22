@@ -9,34 +9,37 @@ export default function routes(service: Services): Router {
 
   router.get('/', (req, res) => res.render('pages/index'))
 
-  router.get('/:nomsId/immigrationDetention/add', immigrationDetentionRoutes.add)
-  router.get('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.addRecordType)
-  router.post('/:nomsId/immigrationDetention/:addOrEdit/recordType/:id', immigrationDetentionRoutes.submitRecordType)
+  router.get('/:nomsId/immigration-detention/add', immigrationDetentionRoutes.add)
+  router.get('/:nomsId/immigration-detention/:addOrEdit/record-type/:id', immigrationDetentionRoutes.addRecordType)
+  router.post('/:nomsId/immigration-detention/:addOrEdit/record-type/:id', immigrationDetentionRoutes.submitRecordType)
 
-  router.get('/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id', immigrationDetentionRoutes.addDocumentDate)
+  router.get('/:nomsId/immigration-detention/:addOrEdit/document-date/:id', immigrationDetentionRoutes.addDocumentDate)
   router.post(
-    '/:nomsId/immigrationDetention/:addOrEdit/documentDate/:id',
+    '/:nomsId/immigration-detention/:addOrEdit/document-date/:id',
     immigrationDetentionRoutes.submitDocumentDate,
   )
 
-  router.get('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.addHORefNumber)
-  router.post('/:nomsId/immigrationDetention/:addOrEdit/hoRef/:id', immigrationDetentionRoutes.submitHORefNumber)
+  router.get('/:nomsId/immigration-detention/:addOrEdit/ho-ref/:id', immigrationDetentionRoutes.addHORefNumber)
+  router.post('/:nomsId/immigration-detention/:addOrEdit/ho-ref/:id', immigrationDetentionRoutes.submitHORefNumber)
 
-  router.get('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.review)
-  router.post('/:nomsId/immigrationDetention/add/review/:id', immigrationDetentionRoutes.submitReview)
+  router.get('/:nomsId/immigration-detention/add/review/:id', immigrationDetentionRoutes.review)
+  router.post('/:nomsId/immigration-detention/add/review/:id', immigrationDetentionRoutes.submitReview)
 
   router.get(
-    '/:nomsId/immigrationDetention/:addOrEdit/noLongerInterestReason/:id',
+    '/:nomsId/immigration-detention/:addOrEdit/no-longer-interest-reason/:id',
     immigrationDetentionRoutes.addNoLongerOfInterestReason,
   )
   router.post(
-    '/:nomsId/immigrationDetention/:addOrEdit/noLongerInterestReason/:id',
+    '/:nomsId/immigration-detention/:addOrEdit/no-longer-interest-reason/:id',
     immigrationDetentionRoutes.submitNoLongerOfInterestType,
   )
 
-  router.get('/:nomsId/immigrationDetention/:addOrEdit/confirmedDate/:id', immigrationDetentionRoutes.addConfirmedDate)
+  router.get(
+    '/:nomsId/immigration-detention/:addOrEdit/confirmed-date/:id',
+    immigrationDetentionRoutes.addConfirmedDate,
+  )
   router.post(
-    '/:nomsId/immigrationDetention/:addOrEdit/confirmedDate/:id',
+    '/:nomsId/immigration-detention/:addOrEdit/confirmed-date/:id',
     immigrationDetentionRoutes.submitConfirmedDate,
   )
 

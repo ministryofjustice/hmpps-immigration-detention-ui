@@ -34,7 +34,7 @@ export default class ImmigrationDetentionConfirmedDateModel {
   }
 
   public backLink(): string {
-    return `/${this.nomsId}/immigrationDetention/add/noLongerInterestReason/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/no-longer-interest-reason/${this.id}`
   }
 
   public cancelLink(): string {

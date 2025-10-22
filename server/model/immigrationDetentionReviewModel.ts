@@ -34,7 +34,7 @@ export default class ImmigrationDetentionReviewModel {
   errors: ValidationError[] = []
 
   public backLink(): string {
-    return `/${this.nomsId}/immigrationDetention/add/hoRef/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/ho-ref/${this.id}`
   }
 
   public isNoLongerOfInterest(): boolean {
