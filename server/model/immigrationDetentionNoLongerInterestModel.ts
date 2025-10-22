@@ -1,6 +1,5 @@
 import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
 import config from '../config'
-import immigrationDetentionNoLongerInterestTypes from './immigrationDetentionNoLongerInterestTypes'
 import ValidationError from './validationError'
 import NoLongerInterestForm from './NoLongerInterestForm'
 
