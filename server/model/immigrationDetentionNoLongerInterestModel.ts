@@ -12,7 +12,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
     public isGet: boolean = false,
     public formValues: NoLongerInterestForm = {},
   ) {
-    if (!isGet && !this.formValues.noLongerOfInterestReason) {
+    if (isGet && !this.formValues.noLongerOfInterestReason) {
       this.formValues.noLongerOfInterestReason = immigrationDetention?.noLongerOfInterestReason
       this.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
     } else if (!isGet) {

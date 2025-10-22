@@ -37,6 +37,9 @@ export default class ImmigrationDetentionReviewModel {
   errors: ValidationError[] = []
 
   public backLink(): string {
+    if (this.immigrationDetention?.recordType === 'NO_LONGER_OF_INTEREST') {
+      return `/${this.nomsId}/immigration-detention/add/confirmed-date/${this.id}`
+    }
     return `/${this.nomsId}/immigration-detention/add/ho-ref/${this.id}`
   }
 
