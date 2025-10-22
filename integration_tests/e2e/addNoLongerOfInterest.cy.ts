@@ -59,7 +59,7 @@ context('Add Immigration Detention - No Longer Of Interest', () => {
     const immigrationDetentionResult = new AddImmigrationDetentionResultPage(
       'No longer of interest successfully recorded',
     )
-    immigrationDetentionResult.successMessage().should('have.text', 'IS91 Detention Authority successfully recorded')
+    immigrationDetentionResult.successMessage().should('have.text', 'No longer of interest successfully recorded')
     immigrationDetentionResult
       .followInfo()
       .should(
