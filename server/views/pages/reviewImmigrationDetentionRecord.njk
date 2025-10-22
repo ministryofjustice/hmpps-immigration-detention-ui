@@ -32,70 +32,119 @@
 
   <div class="govuk-grid-column-full govuk-!-padding-left-0">
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: "Document Type"
-          },
-          value: {
-            html: model.recordTypeDesc
-          },
-          actions: {
-            items: [
-              {
-                href: "/" + model.nomsId + "/immigrationDetention/edit/recordType/" + model.id,
-                text: "Edit",
-                visuallyHiddenText: "record type",
-                attributes: {
-                  "data-qa": "edit-record-type-link"
-                }
+   {% if model.isNoLongerOfInterest() %}
+       {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Immigration Information"
+              },
+              value: {
+                html: model.recordTypeDesc
+              },
+              actions: {
+                items: []
               }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Date on document"
-          },
-          value: {
-            text: model.docDateFormatted
-          },
-          actions: {
-            items: [
-              {
-                href: "/" + model.nomsId + "/immigrationDetention/edit/documentDate/" + model.id,
-                text: "Edit",
-                visuallyHiddenText: "document date",
-                attributes: {
-                  "data-qa": "edit-document-date-link"
-                }
+            },
+            {
+              key: {
+                text: "Date received from the Home Office"
+              },
+              value: {
+                text: model.confirmedDateFormatted
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/" + model.nomsId + "/immigration-detention/edit/confirmed-date/" + model.id,
+                    text: "Edit",
+                    visuallyHiddenText: "Date no longer of interest confirmed",
+                    attributes: {
+                      "data-qa": "edit-confirmed-date-link"
+                    }
+                  }
+                ]
               }
-            ]
-          }
-        },
-        {
-          key: {
-            text: "Home office reference number"
-          },
-          value: {
-            text: model.hoRefNumber
-          },
-          actions: {
-            items: [
-              {
-                href: "/" + model.nomsId + "/immigrationDetention/edit/hoRef/" + model.id,
-                text: "Edit",
-                visuallyHiddenText: "home office reference number",
-                attributes: {
-                  "data-qa": "edit-ho-ref-link"
-                }
+            },
+            {
+              key: {
+                text: "Reason"
+              },
+              value: {
+                text: model.noLongerInterestReasonDesc
+              },
+              actions: {
+                items: [
+                  {
+                    href: "/" + model.nomsId + "/immigration-detention/edit/no-longer-interest-reason/" + model.id,
+                    text: "Edit",
+                    visuallyHiddenText: "No longer of interest reason",
+                    attributes: {
+                      "data-qa": "edit-no-longer-interest-reason-link"
+                    }
+                  }
+                ]
               }
-            ]
-          }
-        }
-      ]
-    }) }}
+            }
+          ]
+        }) }}
+     {% else %}
+       {{ govukSummaryList({
+             rows: [
+               {
+                 key: {
+                   text: "Document Type"
+                 },
+                 value: {
+                   html: model.recordTypeDesc
+                 },
+                 actions: {
+                   items: [ ]
+                 }
+               },
+               {
+                 key: {
+                   text: "Date on document"
+                 },
+                 value: {
+                   text: model.docDateFormatted
+                 },
+                 actions: {
+                   items: [
+                     {
+                       href: "/" + model.nomsId + "/immigration-detention/edit/document-date/" + model.id,
+                       text: "Edit",
+                       visuallyHiddenText: "document date",
+                       attributes: {
+                         "data-qa": "edit-document-date-link"
+                       }
+                     }
+                   ]
+                 }
+               },
+               {
+                 key: {
+                   text: "Home office reference number"
+                 },
+                 value: {
+                   text: model.hoRefNumber
+                 },
+                 actions: {
+                   items: [
+                     {
+                       href: "/" + model.nomsId + "/immigration-detention/edit/ho-ref/" + model.id,
+                       text: "Edit",
+                       visuallyHiddenText: "home office reference number",
+                       attributes: {
+                         "data-qa": "edit-ho-ref-link"
+                       }
+                     }
+                   ]
+                 }
+               }
+             ]
+           }) }}
+     {% endif %}
 
     <div class="govuk-button-group">
       <form class="form" method="post">

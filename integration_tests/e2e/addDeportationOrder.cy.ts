@@ -43,8 +43,6 @@ context('Add Immigration Detention - Detention Order', () => {
 
     const immigrationDetentionSummary = AddImmigrationDetentionReview.verifyOnPage(AddImmigrationDetentionReview)
     immigrationDetentionSummary.captionText().should('have.text', 'Record Deportation Order')
-    immigrationDetentionSummary.editRecordType().click()
-    immigrationDetentionSummary.continueButton().click()
 
     immigrationDetentionSummary.editDocumentDate().click()
     immigrationDetentionSummary.continueButton().click()

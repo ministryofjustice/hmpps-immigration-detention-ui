@@ -3,6 +3,7 @@ import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
 import config from '../config'
 import immigrationDetentionRecordTypes from './immigrationDetentionRecordTypes'
 import ValidationError from './validationError'
+import immigrationDetentionNoLongerInterestTypes from './immigrationDetentionNoLongerInterestTypes'
 
 export default class ImmigrationDetentionReviewModel {
   constructor(
@@ -14,6 +15,10 @@ export default class ImmigrationDetentionReviewModel {
       immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.recordType)?.text || ''
     this.docDateFormatted = dayjs(immigrationDetention.documentDate).format('D MMMM YYYY')
     this.hoRefNumber = immigrationDetention.homeOfficeRefNo
+    this.noLongerInterestReasonDesc =
+      immigrationDetentionNoLongerInterestTypes.find(it => it.value === immigrationDetention.noLongerOfInterestReason)
+        ?.text || ''
+    this.confirmedDateFormatted = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).format('D MMMM YYYY')
   }
 
   recordTypeDesc: string
@@ -22,17 +27,28 @@ export default class ImmigrationDetentionReviewModel {
 
   hoRefNumber: string
 
+  noLongerInterestReasonDesc: string
+
+  confirmedDateFormatted: string
+
   errors: ValidationError[] = []
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/hoRef/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/ho-ref/${this.id}`
+  }
+
+  public isNoLongerOfInterest(): boolean {
+    return this.immigrationDetention.recordType === 'NO_LONGER_OF_INTEREST'
   }
 
   public getCaption() {
-    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.recordType === 'IS91') {
+    if (this.immigrationDetention?.recordType === 'IS91') {
       return 'Record IS91 Detention Authority'
     }
-    return 'Record Deportation Order'
+    if (this.immigrationDetention?.recordType === 'DEPORTATION_ORDER') {
+      return 'Record Deportation Order'
+    }
+    return 'Record Immigration Information'
   }
 
   public cancelLink(): string {

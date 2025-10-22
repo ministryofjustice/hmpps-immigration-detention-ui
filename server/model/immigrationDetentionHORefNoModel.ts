@@ -31,7 +31,7 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/documentDate/${this.id}`
+    return `/${this.nomsId}/immigration-detention/add/document-date/${this.id}`
   }
 
   public cancelLink(): string {

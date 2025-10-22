@@ -6,7 +6,7 @@ export default class AddImmigrationDetentionTypePage extends Page {
   }
 
   public static goTo(prisonerId: string): AddImmigrationDetentionTypePage {
-    cy.visit(`/${prisonerId}/immigrationDetention/add`)
+    cy.visit(`/${prisonerId}/immigration-detention/add`)
     return new AddImmigrationDetentionTypePage()
   }
 
