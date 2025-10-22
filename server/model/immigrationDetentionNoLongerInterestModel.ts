@@ -81,12 +81,4 @@ export default class ImmigrationDetentionNoLongerInterestModel {
   getIsChecked(code: string): boolean {
     return this.immigrationDetention?.noLongerOfInterestReason === code
   }
-
-  noLongerInterestTypes() {
-    const noLongerInterestType = this.immigrationDetention?.noLongerOfInterestReason
-    return immigrationDetentionNoLongerInterestTypes.map(it => ({
-      ...it,
-      checked: noLongerInterestType === it.value,
-    }))
-  }
 }
