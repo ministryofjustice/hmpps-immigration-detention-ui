@@ -24,7 +24,7 @@ export default class ImmigrationDetentionConfirmedDateModel {
   ) {
     if (params) {
       Object.assign(this as object, params)
-    } else {
+    } else if (immigrationDetention?.noLongerOfInterestConfirmedDate) {
       this['confirmedDate-day'] = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('date').toString()
       this['confirmedDate-month'] = (
         dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('month') + 1
@@ -34,7 +34,7 @@ export default class ImmigrationDetentionConfirmedDateModel {
   }
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/noLongerInterestReason/${this.id}`
+    return `/${this.nomsId}/immigrationDetention/add/noLongerInterestReason/${this.id}`
   }
 
   public cancelLink(): string {

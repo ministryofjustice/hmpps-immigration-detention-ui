@@ -1,6 +1,4 @@
 import AddImmigrationDetentionTypePage from '../pages/addImmigrationDetentionType'
-import AddDocumentDatePage from '../pages/addImmigrationDetentionDocDate'
-import AddHORefNo from '../pages/addImmigrationDetentionHORefNo'
 import AddImmigrationDetentionReview from '../pages/addImmigrationDetentionReview'
 import AddImmigrationDetentionResultPage from '../pages/addImmigrationDetentionResultPage'
 import AddImmigrationDetentionNoLongerOfInterestTypePage from '../pages/addNoLongerOfInterestType'

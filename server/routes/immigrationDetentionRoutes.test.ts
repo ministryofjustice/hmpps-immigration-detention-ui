@@ -4,8 +4,6 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ImmigrationDetentionStoreService from '../services/immigrationDetentionStoreService'
 import SessionImmigrationDetention from '../@types/ImmigrationDetentionTypes'
-import PrisonerSearchService from '../services/prisonerSearchService'
-import { PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi/prisonerSearchTypes'
 
 jest.mock('../services/immigrationDetentionStoreService')
 
@@ -47,7 +45,7 @@ describe('Immigration Detention routes', () => {
         const $: cheerio.CheerioAPI = cheerio.load(res.text)
 
         const backLink = $('[data-qa="back-link"]').attr('href')
-        expect(backLink).toBe(`${NOMS_ID}/immigrationDetention/add/recordType/${SESSION_ID}`)
+        expect(backLink).toBe(`/${NOMS_ID}/immigrationDetention/add/recordType/${SESSION_ID}`)
 
         const cancelLink = $('[data-qa="cancel-button"]').attr('href')
         expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
@@ -76,7 +74,7 @@ describe('Immigration Detention routes', () => {
         const $: cheerio.CheerioAPI = cheerio.load(res.text)
 
         const backLink = $('[data-qa="back-link"]').attr('href')
-        expect(backLink).toBe(`${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
+        expect(backLink).toBe(`/${NOMS_ID}/immigrationDetention/add/noLongerInterestReason/${SESSION_ID}`)
 
         const cancelLink = $('[data-qa="cancel-button"]').attr('href')
         expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
@@ -134,6 +132,24 @@ describe('Immigration Detention routes', () => {
 
         const backLink = $('[data-qa="back-link"]').attr('href')
         expect(backLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
+
+        const cancelLink = $('[data-qa="cancel-button"]').attr('href')
+        expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
+      })
+  })
+
+  it('GET /{nomsId}/immigrationDetention/add/documentDate renders the documentDate page', async () => {
+    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue({})
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigrationDetention/add/documentDate/${SESSION_ID}`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const backLink = $('[data-qa="back-link"]').attr('href')
+        expect(backLink).toBe(`/${NOMS_ID}/immigrationDetention/add/recordType/${SESSION_ID}`)
 
         const cancelLink = $('[data-qa="cancel-button"]').attr('href')
         expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')

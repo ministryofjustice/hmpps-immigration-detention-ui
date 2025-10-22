@@ -29,7 +29,7 @@ export default class ImmigrationDetentionResultPageModel {
   }
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/review/${this.id}`
+    return `${config.services.courtCasesReleaseDates.url}/prisoner/${this.nomsId}/overview`
   }
 
   public cancelLink(): string {

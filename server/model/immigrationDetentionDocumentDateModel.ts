@@ -24,7 +24,7 @@ export default class ImmigrationDetentionDocumentDateModel {
   ) {
     if (params) {
       Object.assign(this as object, params)
-    } else {
+    } else if (immigrationDetention?.documentDate) {
       this['docDate-day'] = dayjs(immigrationDetention.documentDate).get('date').toString()
       this['docDate-month'] = (dayjs(immigrationDetention.documentDate).get('month') + 1).toString()
       this['docDate-year'] = dayjs(immigrationDetention.documentDate).get('year').toString()
@@ -46,7 +46,7 @@ export default class ImmigrationDetentionDocumentDateModel {
   }
 
   public backLink(): string {
-    return `${this.nomsId}/immigrationDetention/add/recordType/${this.id}`
+    return `/${this.nomsId}/immigrationDetention/add/recordType/${this.id}`
   }
 
   public cancelLink(): string {
