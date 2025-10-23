@@ -1,6 +1,5 @@
 import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
 import config from '../config'
-import immigrationDetentionNoLongerInterestTypes from './immigrationDetentionNoLongerInterestTypes'
 import ValidationError from './validationError'
 import NoLongerInterestForm from './NoLongerInterestForm'
 
@@ -12,9 +11,9 @@ export default class ImmigrationDetentionNoLongerInterestModel {
     public isGet: boolean = false,
     public formValues: NoLongerInterestForm = {},
   ) {
-    if (!isGet && !this.formValues.noLongerOfInterestReason) {
+    if (isGet && !this.formValues.noLongerOfInterestReason) {
       this.formValues.noLongerOfInterestReason = immigrationDetention?.noLongerOfInterestReason
-      this.formValues.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
+      this.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
     } else if (!isGet) {
       this.immigrationDetention.noLongerOfInterestReason = this.formValues.noLongerOfInterestReason
       this.immigrationDetention.noLongerOfInterestOtherComment = this.formValues.otherReason
@@ -78,11 +77,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
     return null
   }
 
-  noLongerInterestTypes() {
-    const noLongerInterestType = this.immigrationDetention?.noLongerOfInterestReason
-    return immigrationDetentionNoLongerInterestTypes.map(it => ({
-      ...it,
-      checked: noLongerInterestType === it.value,
-    }))
+  getIsChecked(code: string): boolean {
+    return this.immigrationDetention?.noLongerOfInterestReason === code
   }
 }
