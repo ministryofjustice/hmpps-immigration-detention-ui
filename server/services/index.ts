@@ -5,6 +5,7 @@ import UserService from './userService'
 import PrisonerSearchService from './prisonerSearchService'
 import ImmigrationDetentionStoreService from './immigrationDetentionStoreService'
 import ImmigrationDetentionService from './immigrationDetentionService'
+import ParamStoreService from './paramStoreService'
 
 export const services = () => {
   const {
@@ -19,6 +20,7 @@ export const services = () => {
   const prisonerSearchService = new PrisonerSearchService(prisonApiClient, prisonerSearchClient)
   const immigrationDetentionStoreService = new ImmigrationDetentionStoreService()
   const immigrationDetentionService = new ImmigrationDetentionService(remandAndSentencingApiClient)
+  const paramStoreService = new ParamStoreService()
 
   return {
     applicationInfo,
@@ -28,6 +30,7 @@ export const services = () => {
     prisonerSearchService,
     immigrationDetentionStoreService,
     immigrationDetentionService,
+    paramsStoreService: paramStoreService,
   }
 }
 

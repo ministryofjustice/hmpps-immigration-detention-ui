@@ -5,12 +5,16 @@ import { appWithAllRoutes } from './testutils/appSetup'
 import ImmigrationDetentionStoreService from '../services/immigrationDetentionStoreService'
 import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
+import ParamStoreService from '../services/paramStoreService'
 
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
+jest.mock('../services/paramStoreService')
 
 const immigrationDetentionStoreService =
   new ImmigrationDetentionStoreService() as jest.Mocked<ImmigrationDetentionStoreService>
+
+const paramsService = new ParamStoreService() as jest.Mocked<ParamStoreService>
 
 const immigrationDetentionService = new ImmigrationDetentionService(null) as jest.Mocked<ImmigrationDetentionService>
 
@@ -45,6 +49,7 @@ beforeEach(() => {
     services: {
       immigrationDetentionStoreService,
       immigrationDetentionService,
+      paramsStoreService: paramsService,
     },
   })
 })
@@ -309,7 +314,7 @@ describe('Immigration Detention routes', () => {
     // Mock the service methods to return expected data
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
     immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
-      Promise.resolve([IMMIGRATION_DETENTION_NLI_OBJECT, IMMIGRATION_DETENTION_OBJECT]),
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]),
     )
 
     // Perform the request and validate the response

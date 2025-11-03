@@ -11,8 +11,12 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     public prisonerName: string,
     public immigrationDetentionRecords: ImmigrationDetention[],
   ) {
-    super(immigrationDetentionRecords[immigrationDetentionRecords.length - 1])
-    this.latestRecord = immigrationDetentionRecords[immigrationDetentionRecords.length - 1]
+    const [firstRecord] = immigrationDetentionRecords // Destructure the first element
+    super(firstRecord || ({} as ImmigrationDetention))
+
+    if (firstRecord) {
+      this.latestRecord = firstRecord
+    }
   }
 
   latestRecord: ImmigrationDetention
@@ -49,7 +53,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   public rows() {
-    return this.immigrationDetentionRecords.map(it => {
+    return this.immigrationDetentionRecords.slice(1).map(it => {
       let details
       const date = it.recordDate
       if (it.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
@@ -99,10 +103,24 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private actionCell(immigrationDetention: ImmigrationDetention) {
+    if (
+      immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
+      immigrationDetention.immigrationDetentionRecordType === 'IS91'
+    ) {
+      return {
+        html: `
+      <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
+        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/document-date/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+          Edit
+        </a>
+      </div>
+    `,
+      }
+    }
     return {
       html: `
       <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-        <a class="govuk-link" href="/${this.nomsId}/immigration-dentention/update/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
           Edit
         </a>
       </div>

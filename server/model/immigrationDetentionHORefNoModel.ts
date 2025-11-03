@@ -45,23 +45,31 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   async validation(): Promise<ValidationError[]> {
+    const validPattern = /^[A-Z0-9/]+$/ // Allows only uppercase letters, numbers, and forward slash '/'
+    const errors: ValidationError[] = []
+
     if (!this.hoRefNumber) {
-      return [
-        {
-          text: 'Enter the Home Office reference number',
-          fields: ['refNumber'],
-        },
-      ]
+      errors.push({
+        text: 'Enter the Home Office reference number',
+        fields: ['refNumber'],
+      })
     }
-    if (this.validateHORefNumber(this.hoRefNumber) === false) {
-      return [
-        {
-          text: 'The entered Home Office reference number is not valid',
-          fields: ['refNumber'],
-        },
-      ]
+
+    if (this.hoRefNumber && (this.hoRefNumber.length < 8 || this.hoRefNumber.length > 16)) {
+      errors.push({
+        text: 'The Home Office reference number should be between 8 to 16 characters.',
+        fields: ['refNumber'],
+      })
     }
-    return []
+
+    if (this.hoRefNumber && !validPattern.test(this.hoRefNumber)) {
+      errors.push({
+        text: "The Home Office reference number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters (e.g. '@', '#', '%', '&', '-').",
+        fields: ['refNumber'],
+      })
+    }
+
+    return errors
   }
 
   errorList() {

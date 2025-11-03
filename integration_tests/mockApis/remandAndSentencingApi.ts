@@ -11,14 +11,14 @@ const stubGetImmigrationDetentionByUUID = () =>
       headers: { 'Content-Type': 'application/json;charset=UTF-8' },
       jsonBody: {
         immigrationDetentionUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        prisonerId: 'ABC1234',
+        prisonerId: 'A1234AB',
         immigrationDetentionRecordType: 'IS91',
         recordDate: '2025-11-03',
-        homeOfficeReferenceNumber: 'string',
+        homeOfficeReferenceNumber: 'A12345678900',
         noLongerOfInterestReason: 'BRITISH_CITIZEN',
         noLongerOfInterestComment: 'string',
         createdAt: '2025-11-03T08:06:37.123Z',
-        source: 'NOMIS',
+        source: 'DPS',
       },
     },
   })
@@ -60,7 +60,18 @@ const stubGetImmigrationDetentionByPrisoner = () =>
           prisonerId: 'string',
           immigrationDetentionRecordType: 'IS91',
           recordDate: '2025-11-03',
-          homeOfficeReferenceNumber: 'string',
+          homeOfficeReferenceNumber: 'A12345678900',
+          noLongerOfInterestReason: 'BRITISH_CITIZEN',
+          noLongerOfInterestComment: 'string',
+          createdAt: '2025-11-03T08:12:44.525Z',
+          source: 'NOMIS',
+        },
+        {
+          immigrationDetentionUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          prisonerId: 'string',
+          immigrationDetentionRecordType: 'IS91',
+          recordDate: '2025-11-03',
+          homeOfficeReferenceNumber: 'A12345678900',
           noLongerOfInterestReason: 'BRITISH_CITIZEN',
           noLongerOfInterestComment: 'string',
           createdAt: '2025-11-03T08:12:44.525Z',
@@ -73,7 +84,7 @@ const stubGetImmigrationDetentionByPrisoner = () =>
 const stubPutImmigrationDetentionByUUID = () =>
   stubFor({
     request: {
-      method: 'POST',
+      method: 'PUT',
       urlPattern: '/ras-api/immigration-detention/3fa85f64-5717-4562-b3fc-2c963f66afa6',
     },
     response: {

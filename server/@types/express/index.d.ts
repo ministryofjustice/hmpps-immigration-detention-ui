@@ -7,6 +7,7 @@ export declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     immigrationDetention?: Record<string, Record<string, SessionImmigrationDetention>>
+    params?: Record<string, boolean>
   }
 }
 

@@ -110,7 +110,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
 
-      {% if model.immigrationDetentionRecords and model.immigrationDetentionRecords.length > 0 %}
+      {% if model.immigrationDetentionRecords and model.immigrationDetentionRecords.length > 1 %}
         {{ govukTable(model.overviewTable()) }}
       {% endif %}
 

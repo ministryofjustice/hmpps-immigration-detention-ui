@@ -11,28 +11,38 @@ export default class ImmigrationDetentionService {
 
   public async createImmigrationDetention(
     immigrationDetention: CreateImmigrationDetention,
+    token: string,
   ): Promise<SaveImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.createImmigrationDetention(immigrationDetention)
+    return this.remandAndSentencingApiClient.createImmigrationDetention(immigrationDetention, token)
   }
 
   public async updateImmigrationDetention(
     immigrationDetentionUuid: string,
     immigrationDetention: CreateImmigrationDetention,
+    token: string,
   ): Promise<SaveImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.updateImmigrationDetention(immigrationDetentionUuid, immigrationDetention)
+    return this.remandAndSentencingApiClient.updateImmigrationDetention(
+      immigrationDetentionUuid,
+      immigrationDetention,
+      token,
+    )
   }
 
-  public async getImmigrationDetentionByUUID(immigrationDetentionUUId: string): Promise<ImmigrationDetention> {
-    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId)
+  public async getImmigrationDetentionByUUID(
+    immigrationDetentionUUId: string,
+    token: string,
+  ): Promise<ImmigrationDetention> {
+    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, token)
   }
 
   public async deleteImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
+    token: string,
   ): Promise<DeleteImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId)
+    return this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId, token)
   }
 
-  public getImmigrationDetentionRecordsForPrisoner(prisonerId: string): Promise<ImmigrationDetention[]> {
-    return this.remandAndSentencingApiClient.findByPerson(prisonerId)
+  public getImmigrationDetentionRecordsForPrisoner(prisonerId: string, token: string): Promise<ImmigrationDetention[]> {
+    return this.remandAndSentencingApiClient.findByPerson(prisonerId, token)
   }
 }

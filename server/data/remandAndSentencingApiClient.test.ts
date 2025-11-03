@@ -74,7 +74,7 @@ describe('remandAndSentencingApiClient', () => {
       .get(`/immigration-detention/${immigrationDetentionUuid}`)
       .reply(200, IMMIGRATION_DETENTION_OBJECT)
 
-    const result = await client.getImmigrationDetentionRecord(immigrationDetentionUuid)
+    const result = await client.getImmigrationDetentionRecord(immigrationDetentionUuid, 'test-token')
 
     expect(result).toEqual(IMMIGRATION_DETENTION_OBJECT)
   })
@@ -84,7 +84,7 @@ describe('remandAndSentencingApiClient', () => {
       .get(`/immigration-detention/person/ABC123`)
       .reply(200, [IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT])
 
-    const result = await client.findByPerson('ABC123')
+    const result = await client.findByPerson('ABC123', 'test-token')
 
     expect(result).toEqual([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT])
   })
@@ -97,6 +97,7 @@ describe('remandAndSentencingApiClient', () => {
     const result = await client.updateImmigrationDetention(
       immigrationDetentionUuid,
       CREATE_IMMIGRATION_DETENTION_OBJECT,
+      'test-token',
     )
 
     expect(result).toEqual(SAVED_IMMIGRATION_DETENTION_OBJECT)
@@ -107,7 +108,7 @@ describe('remandAndSentencingApiClient', () => {
       .post(`/immigration-detention`, CREATE_IMMIGRATION_DETENTION_OBJECT)
       .reply(200, SAVED_IMMIGRATION_DETENTION_OBJECT)
 
-    const result = await client.createImmigrationDetention(CREATE_IMMIGRATION_DETENTION_OBJECT)
+    const result = await client.createImmigrationDetention(CREATE_IMMIGRATION_DETENTION_OBJECT, 'test-token')
 
     expect(result).toEqual(SAVED_IMMIGRATION_DETENTION_OBJECT)
   })
@@ -117,7 +118,7 @@ describe('remandAndSentencingApiClient', () => {
       .delete(`/immigration-detention/${immigrationDetentionUuid}`)
       .reply(200, DELETED_IMMIGRATION_DETENTION_OBJECT)
 
-    const result = await client.deleteImmigrationDetention(immigrationDetentionUuid)
+    const result = await client.deleteImmigrationDetention(immigrationDetentionUuid, 'test-token')
 
     expect(result).toEqual(DELETED_IMMIGRATION_DETENTION_OBJECT)
   })

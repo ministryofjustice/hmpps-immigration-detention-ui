@@ -66,9 +66,12 @@ describe('immigrationDetentionService', () => {
     it('GetImmigrationDetentionByUUID', async () => {
       remandAndSentencingApiClient.getImmigrationDetentionRecord.mockResolvedValue(IMMIGRATION_DETENTION_OBJECT)
 
-      const result = await immigrationDetentionService.getImmigrationDetentionByUUID('IMM-DET-UUID-1234')
+      const result = await immigrationDetentionService.getImmigrationDetentionByUUID('IMM-DET-UUID-1234', 'test-token')
 
-      expect(remandAndSentencingApiClient.getImmigrationDetentionRecord).toHaveBeenCalledWith('IMM-DET-UUID-1234')
+      expect(remandAndSentencingApiClient.getImmigrationDetentionRecord).toHaveBeenCalledWith(
+        'IMM-DET-UUID-1234',
+        'test-token',
+      )
       expect(result).toEqual(IMMIGRATION_DETENTION_OBJECT)
     })
 
@@ -76,19 +79,26 @@ describe('immigrationDetentionService', () => {
       const immigrationDetentionList = [IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]
       remandAndSentencingApiClient.findByPerson.mockResolvedValue(immigrationDetentionList)
 
-      const result = await immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner('ABC1234')
+      const result = await immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(
+        'ABC1234',
+        'test-token',
+      )
 
-      expect(remandAndSentencingApiClient.findByPerson).toHaveBeenCalledWith('ABC1234')
+      expect(remandAndSentencingApiClient.findByPerson).toHaveBeenCalledWith('ABC1234', 'test-token')
       expect(result).toEqual(immigrationDetentionList)
     })
 
     it('Create a Immigration Detention Record', async () => {
       remandAndSentencingApiClient.createImmigrationDetention.mockResolvedValue(SAVED_IMMIGRATION_DETENTION_OBJECT)
 
-      const result = await immigrationDetentionService.createImmigrationDetention(CREATE_IMMIGRATION_DETENTION_OBJECT)
+      const result = await immigrationDetentionService.createImmigrationDetention(
+        CREATE_IMMIGRATION_DETENTION_OBJECT,
+        'test-token',
+      )
 
       expect(remandAndSentencingApiClient.createImmigrationDetention).toHaveBeenCalledWith(
         CREATE_IMMIGRATION_DETENTION_OBJECT,
+        'test-token',
       )
       expect(result).toEqual(SAVED_IMMIGRATION_DETENTION_OBJECT)
     })
@@ -99,11 +109,13 @@ describe('immigrationDetentionService', () => {
       const result = await immigrationDetentionService.updateImmigrationDetention(
         'IMM-DET-UUID-1234',
         CREATE_IMMIGRATION_DETENTION_OBJECT,
+        'test-token',
       )
 
       expect(remandAndSentencingApiClient.updateImmigrationDetention).toHaveBeenCalledWith(
         'IMM-DET-UUID-1234',
         CREATE_IMMIGRATION_DETENTION_OBJECT,
+        'test-token',
       )
       expect(result).toEqual(SAVED_IMMIGRATION_DETENTION_OBJECT)
     })
@@ -111,9 +123,15 @@ describe('immigrationDetentionService', () => {
     it('Delete a Immigration Detention Record', async () => {
       remandAndSentencingApiClient.deleteImmigrationDetention.mockResolvedValue(DELETED_IMMIGRATION_DETENTION_OBJECT)
 
-      const result = await immigrationDetentionService.deleteImmigrationDetentionByUUID('IMM-DET-UUID-1234')
+      const result = await immigrationDetentionService.deleteImmigrationDetentionByUUID(
+        'IMM-DET-UUID-1234',
+        'test-token',
+      )
 
-      expect(remandAndSentencingApiClient.deleteImmigrationDetention).toHaveBeenCalledWith('IMM-DET-UUID-1234')
+      expect(remandAndSentencingApiClient.deleteImmigrationDetention).toHaveBeenCalledWith(
+        'IMM-DET-UUID-1234',
+        'test-token',
+      )
       expect(result).toEqual(DELETED_IMMIGRATION_DETENTION_OBJECT)
     })
   })
