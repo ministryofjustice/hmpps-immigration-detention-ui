@@ -16,6 +16,9 @@ context('Add Immigration Detention - No Longer Of Interest', () => {
     cy.task('stubGetUserCasePing')
     cy.task('stubGetPrisonerDetails')
     cy.task('stubPrisonSearchApiPing')
+    cy.task('stubRASApiPing')
+    cy.task('stubPostImmigrationDetention')
+    cy.task('stubGetPrisonerImage')
   })
 
   it('Enter No Longer Of Interest', () => {
@@ -31,7 +34,7 @@ context('Add Immigration Detention - No Longer Of Interest', () => {
       .should(text => {
         expect(text.trim()).to.eq('Why is Marvin Haggler no longer of interest?')
       })
-    addNoLongerOfInterestTypePage.selectRecordType('RTR').click()
+    addNoLongerOfInterestTypePage.selectRecordType('RIGHT_TO_REMAIN').click()
     addNoLongerOfInterestTypePage.continueButton().click()
 
     const addConfirmedDatePage = new AddConfirmedDatePage()

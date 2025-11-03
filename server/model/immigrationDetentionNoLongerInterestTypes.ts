@@ -1,14 +1,14 @@
 const immigrationDetentionNoLongerInterestTypes = [
   {
-    value: 'RTR',
+    value: 'RIGHT_TO_REMAIN',
     text: 'Right to remain',
   },
   {
-    value: 'BN',
+    value: 'BRITISH_CITIZEN',
     text: 'British National',
   },
   {
-    value: 'OTHER',
+    value: 'OTHER_REASON',
     text: 'Other',
   },
 ]

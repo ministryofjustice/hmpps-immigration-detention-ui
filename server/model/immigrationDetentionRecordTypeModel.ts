@@ -1,4 +1,4 @@
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import config from '../config'
 import immigrationDetentionRecordTypes from './immigrationDetentionRecordTypes'
 
@@ -6,7 +6,7 @@ export default class ImmigrationDetentionRecordTypeModel {
   constructor(
     public nomsId: string,
     public id: string,
-    public immigrationDetention: ImmigrationDetentionTypes,
+    public immigrationDetention: ImmigrationDetention,
     public notSelected?: boolean,
   ) {}
 
@@ -28,7 +28,7 @@ export default class ImmigrationDetentionRecordTypeModel {
   }
 
   recordTypes() {
-    const recordType = this.immigrationDetention?.recordType
+    const recordType = this.immigrationDetention?.immigrationDetentionRecordType
     return immigrationDetentionRecordTypes.map(it => ({
       ...it,
       checked: recordType === it.value,

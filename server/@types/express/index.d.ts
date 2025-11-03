@@ -1,5 +1,5 @@
 import { HmppsUser } from '../../interfaces/hmppsUser'
-import SessionImmigrationDetention from '../ImmigrationDetentionTypes'
+import SessionImmigrationDetention from '../ImmigrationDetention'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields

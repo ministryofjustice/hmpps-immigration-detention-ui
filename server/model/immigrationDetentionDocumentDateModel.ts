@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ValidationError from './validationError'
 import { dateItems, validateDate } from '../utils/utils'
 import config from '../config'
@@ -20,26 +20,26 @@ export default class ImmigrationDetentionDocumentDateModel {
     public nomsId: string,
     public id: string,
     params?: object,
-    public immigrationDetention?: ImmigrationDetentionTypes,
+    public immigrationDetention?: ImmigrationDetention,
   ) {
     if (params) {
       Object.assign(this as object, params)
-    } else if (immigrationDetention?.documentDate) {
-      this['docDate-day'] = dayjs(immigrationDetention.documentDate).get('date').toString()
-      this['docDate-month'] = (dayjs(immigrationDetention.documentDate).get('month') + 1).toString()
-      this['docDate-year'] = dayjs(immigrationDetention.documentDate).get('year').toString()
+    } else if (immigrationDetention?.recordDate) {
+      this['docDate-day'] = dayjs(immigrationDetention.recordDate).get('date').toString()
+      this['docDate-month'] = (dayjs(immigrationDetention.recordDate).get('month') + 1).toString()
+      this['docDate-year'] = dayjs(immigrationDetention.recordDate).get('year').toString()
     }
   }
 
   public getCaption() {
-    if (this.immigrationDetention?.recordType === 'IS91') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Record IS91 Detention Authority'
     }
     return 'Record Deportation Order'
   }
 
   public getQuestion() {
-    if (this.immigrationDetention?.recordType === 'IS91') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Enter the date on the IS91 document'
     }
     return 'Enter the date on the deportation order'

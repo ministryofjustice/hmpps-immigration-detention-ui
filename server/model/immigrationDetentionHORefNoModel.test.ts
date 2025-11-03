@@ -5,8 +5,13 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
 
   beforeEach(() => {
     model = new ImmigrationDetentionHORefModel('A1234BC', '1', {
-      recordType: 'DEPORTATION',
-      homeOfficeRefNo: 'B1234567',
+      createdAt: '2025-11-03T08:06:37.123Z',
+      recordDate: '2022-06-22',
+      source: 'DPS',
+      immigrationDetentionRecordType: 'DEPORTATION_ORDER',
+      homeOfficeReferenceNumber: 'B1234567',
+      immigrationDetentionUuid: '123',
+      prisonerId: 'A1234',
     })
   })
 

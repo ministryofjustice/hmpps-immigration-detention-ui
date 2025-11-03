@@ -17,6 +17,19 @@ const stubGetUserCaseloads = () =>
     },
   })
 
+const stubGetPrisonerImage = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prison-api/api/bookings/offenderNo/A1234AB/image/data',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'image/jpeg' },
+      body: Buffer.from('fake-image-data', 'utf-8').toString('base64'),
+    },
+  })
+
 const ping = () =>
   stubFor({
     request: {
@@ -30,5 +43,6 @@ const ping = () =>
 
 export default {
   stubGetUserCaseloads,
+  stubGetPrisonerImage,
   stubGetUserCasePing: ping,
 }

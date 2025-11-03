@@ -3,19 +3,39 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from './testutils/appSetup'
 import ImmigrationDetentionStoreService from '../services/immigrationDetentionStoreService'
-import SessionImmigrationDetention from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
+import ImmigrationDetentionService from '../services/immigrationDetentionService'
 
 jest.mock('../services/immigrationDetentionStoreService')
+jest.mock('../services/immigrationDetentionService')
 
 const immigrationDetentionStoreService =
   new ImmigrationDetentionStoreService() as jest.Mocked<ImmigrationDetentionStoreService>
 
+const immigrationDetentionService = new ImmigrationDetentionService(null) as jest.Mocked<ImmigrationDetentionService>
+
 const NOMS_ID = 'ABC123'
 const SESSION_ID = '96c83672-8499-4a64-abc9-3e031b1747b3'
-const IMMIGRATION_DETENTION_OBJECT: SessionImmigrationDetention = {
-  recordType: 'IS91',
-  documentDate: '2022-06-22',
-  homeOfficeRefNo: 'ABC123',
+const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
+  prisonerId: 'ABC123',
+  immigrationDetentionUuid: '123-latest',
+  immigrationDetentionRecordType: 'IS91',
+  recordDate: '2022-06-22',
+  homeOfficeReferenceNumber: 'ABC123',
+  source: 'NOMIS',
+  createdAt: '2025-11-03T08:06:37.123Z',
+}
+
+const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
+  immigrationDetentionUuid: '123',
+  prisonerId: 'ABC123',
+  immigrationDetentionRecordType: 'NO_LONGER_OF_INTEREST',
+  recordDate: '2022-06-22',
+  homeOfficeReferenceNumber: 'ABC123',
+  noLongerOfInterestReason: 'OTHER_REASON',
+  noLongerOfInterestComment: 'Confirmed not of interest',
+  createdAt: '2025-11-03T08:06:37.123Z',
+  source: 'NOMIS',
 }
 
 let app: Express
@@ -24,6 +44,7 @@ beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       immigrationDetentionStoreService,
+      immigrationDetentionService,
     },
   })
 })
@@ -36,7 +57,7 @@ afterEach(() => {
 describe('Immigration Detention routes', () => {
   it('GET /{nomsId}/immigration-detention/add/no-longer-interest-reason/:id goes to the select NoLongerOfInterest page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .get(`/${NOMS_ID}/immigration-detention/add/no-longer-interest-reason/${SESSION_ID}`)
@@ -65,7 +86,7 @@ describe('Immigration Detention routes', () => {
 
   it('GET /{nomsId}/immigration-detention/add/confirmed-date/:id renders confirmedDate page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .get(`/${NOMS_ID}/immigration-detention/add/confirmed-date/${SESSION_ID}`)
@@ -83,7 +104,7 @@ describe('Immigration Detention routes', () => {
 
   it('POST /{nomsId}/immigration-detention/add/no-longer-interest-reason/:id redirects to next page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/no-longer-interest-reason/${SESSION_ID}`)
@@ -94,7 +115,7 @@ describe('Immigration Detention routes', () => {
 
   it('POST /{nomsId}/immigration-detention/add/no-longer-interest-reason/:id renders error when value not entered', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/no-longer-interest-reason/${SESSION_ID}`)
@@ -107,11 +128,11 @@ describe('Immigration Detention routes', () => {
 
   it('POST /{nomsId}/immigrationDetention/add/no-longer-interest-reason/:id renders comment error when value not entered', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/no-longer-interest-reason/${SESSION_ID}`)
-      .send({ noLongerOfInterestReason: 'OTHER' })
+      .send({ noLongerOfInterestReason: 'OTHER_REASON' })
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Enter the reason the Home Office has provided.')
@@ -140,7 +161,7 @@ describe('Immigration Detention routes', () => {
 
   it('GET /{nomsId}/immigration-detention/add/document-date renders the documentDate page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    immigrationDetentionStoreService.getById.mockReturnValue({})
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .get(`/${NOMS_ID}/immigration-detention/add/document-date/${SESSION_ID}`)
@@ -281,6 +302,54 @@ describe('Immigration Detention routes', () => {
         expect(res.text).toContain('ABC123')
         expect(res.text).toContain(`/${NOMS_ID}/immigration-detention/edit/ho-ref/${SESSION_ID}`)
         expect(res.text).toContain(`/${NOMS_ID}/immigration-detention/edit/document-date/${SESSION_ID}`)
+      })
+  })
+
+  it('GET /{nomsId}/immigration-detention/overview renders review page successfully', async () => {
+    // Mock the service methods to return expected data
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_NLI_OBJECT, IMMIGRATION_DETENTION_OBJECT]),
+    )
+
+    // Perform the request and validate the response
+    await request(app)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+        expect(headingOverview).toBe(`Immigration documents overview`)
+
+        const messageOverview = $('[data-qa="message-heading"]').text().trim()
+        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+        const editLinkLatestRecord = $('[data-qa="edit-latest-link"]').attr('href')
+        expect(editLinkLatestRecord).toBe(
+          `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
+        )
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBe(
+          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
+        )
+
+        expect(res.text).toContain('IS91 Detention Authority')
+        expect(res.text).toContain('IS91 recorded on ')
+        expect(res.text).toContain('ABC123')
+      })
+  })
+
+  it('GET /{nomsId}/immigration-detention/delete/{id} renders review page successfully', () => {
+    return request(app)
+      .get(`/${NOMS_ID}/immigration-detention/delete/${SESSION_ID}`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const cancelLink = $('[data-qa="cancel-link"]').attr('href')
+        expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
       })
   })
 })

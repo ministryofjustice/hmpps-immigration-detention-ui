@@ -1,4 +1,4 @@
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import config from '../config'
 import ValidationError from './validationError'
 import NoLongerInterestForm from './NoLongerInterestForm'
@@ -7,16 +7,20 @@ export default class ImmigrationDetentionNoLongerInterestModel {
   constructor(
     public nomsId: string,
     public id: string,
-    public immigrationDetention: ImmigrationDetentionTypes,
+    public immigrationDetention: ImmigrationDetention,
     public isGet: boolean = false,
     public formValues: NoLongerInterestForm = {},
   ) {
     if (isGet && !this.formValues.noLongerOfInterestReason) {
       this.formValues.noLongerOfInterestReason = immigrationDetention?.noLongerOfInterestReason
-      this.otherReason = immigrationDetention?.noLongerOfInterestOtherComment
+      this.otherReason = immigrationDetention?.noLongerOfInterestComment
     } else if (!isGet) {
-      this.immigrationDetention.noLongerOfInterestReason = this.formValues.noLongerOfInterestReason
-      this.immigrationDetention.noLongerOfInterestOtherComment = this.formValues.otherReason
+      this.immigrationDetention.noLongerOfInterestReason = this.formValues.noLongerOfInterestReason as
+        | 'BRITISH_CITIZEN'
+        | 'RIGHT_TO_REMAIN'
+        | 'OTHER_REASON'
+        | undefined
+      this.immigrationDetention.noLongerOfInterestComment = this.formValues.otherReason
     }
   }
 
@@ -64,8 +68,8 @@ export default class ImmigrationDetentionNoLongerInterestModel {
       ]
     }
     if (
-      this.immigrationDetention?.noLongerOfInterestReason === 'OTHER' &&
-      !this.immigrationDetention.noLongerOfInterestOtherComment
+      this.immigrationDetention?.noLongerOfInterestReason === 'OTHER_REASON' &&
+      !this.immigrationDetention.noLongerOfInterestComment
     ) {
       return [
         {

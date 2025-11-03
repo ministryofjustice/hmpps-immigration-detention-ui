@@ -19,6 +19,7 @@ import FeComponentsClient from './feComponentsClient'
 import PrisonApiClient from './prisonApiClient'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
 import ManageUsersApiClient from './manageUsersApiClient'
+import RemandAndSentencingApiClient from './remandAndSentencingApiClient'
 
 export const dataAccess = () => {
   const authenticationClient = new AuthenticationClient(
@@ -35,6 +36,7 @@ export const dataAccess = () => {
     manageUsersApiClient: new ManageUsersApiClient(),
     prisonApiClient: new PrisonApiClient(authenticationClient),
     prisonerSearchClient: new PrisonerSearchApiClient(authenticationClient),
+    remandAndSentencingApiClient: new RemandAndSentencingApiClient(authenticationClient),
   }
 }
 

@@ -17,6 +17,7 @@ generic-service:
     DIGITAL_PRISON_SERVICES_URL: "https://digital-dev.prison.service.justice.gov.uk"
     COURT_CASES_AND_RELEASE_DATES_URL: "https://court-cases-release-dates-dev.hmpps.service.justice.gov.uk"
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
+    REMAND_AND_SENTENCING_API_URL: "https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk"
     COMMON_COMPONENTS_ENABLED: 'true'
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"

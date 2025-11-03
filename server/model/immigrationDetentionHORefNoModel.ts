@@ -1,4 +1,4 @@
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import config from '../config'
 import ValidationError from './validationError'
 
@@ -6,25 +6,25 @@ export default class ImmigrationDetentionHORefModel {
   constructor(
     public nomsId: string,
     public id: string,
-    public immigrationDetention: ImmigrationDetentionTypes,
+    public immigrationDetention: ImmigrationDetention,
     public hoRefNumber?: string,
   ) {
     if (!this.hoRefNumber) {
-      this.hoRefNumber = immigrationDetention?.homeOfficeRefNo
+      this.hoRefNumber = immigrationDetention?.homeOfficeReferenceNumber
     }
   }
 
   errors: ValidationError[] = []
 
   public getCaption() {
-    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.recordType === 'IS91') {
+    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Record IS91 Detention Authority'
     }
     return 'Record Deportation Order'
   }
 
   public getHintText() {
-    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.recordType === 'IS91') {
+    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'This can be found at the top of IS91 document'
     }
     return 'This will be at the top of the deportation order'

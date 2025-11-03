@@ -1,0 +1,128 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitle = applicationName + " - Enter Immigration Detention Record Type" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  <nav>
+    {{ govukBackLink({
+      attributes: { 'data-qa': 'back-link' },
+      text: "Back",
+      href: model.backlink()
+    }) }}
+  </nav>
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l" data-qa='overview-heading'>
+        Immigration documents overview</h1>
+    </div>
+</div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+     <div class="moj-banner moj-banner--success" role="region" aria-label="Success">
+     <svg class="moj-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
+        <path d="M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z"></path>
+     </svg>
+    <div class="moj-banner__message" data-qa='message-heading'><b>{{ model.getMessageOfLatestRecord() }}</b></div>
+  </div>
+  <div class="govuk-summary-card">
+      <div class="govuk-summary-card__title-wrapper">
+        <h2 class="govuk-summary-card__title">
+        {{ model.getCardTitle() }}
+        </h2>
+        <ul class="govuk-summary-card__actions">
+          <li class="govuk-summary-card__action">
+              <a class="govuk-link" data-qa='edit-latest-link' href="{{ model.editLinkForLatestRecord() }}">
+                Edit
+              </a>
+          </li>
+          <li class="govuk-summary-card__action">
+              <a class="govuk-link" data-qa='delete-latest-link' href={{ model.deleteLinkForLatestRecord() }}>
+                Delete
+              </a>
+          </li>
+      </ul>
+      </div>
+    <div class="govuk-summary-card__content">
+      {% if model.isNoLongerOfInterest() %}
+      {{ govukSummaryList({
+          rows: [
+            {
+              key: {
+                text: "Date of confirmation from Home Office"
+              },
+              value: {
+                text: model.confirmedDateFormatted
+              },
+              actions: { items: [] }
+            },
+            {
+              key: {
+                text: "Reason"
+              },
+              value: {
+                text: model.noLongerInterestReasonDesc
+              },
+              actions: { items: [] }
+            }
+          ]
+        }) }}
+     {% else %}
+       {{ govukSummaryList({
+             rows: [
+               {
+                 key: {
+                   text: "Date on document"
+                 },
+                 value: {
+                   text: model.docDateFormatted
+                 },
+                 actions: { items: [] }
+               },
+               {
+                 key: {
+                   text: "Home office reference number"
+                 },
+                 value: {
+                   text: model.hoRefNumber
+                 },
+                 actions: { items: [] }
+               }
+             ]
+           }) }}
+        {% endif %}
+      </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+
+      {% if model.immigrationDetentionRecords and model.immigrationDetentionRecords.length > 0 %}
+        {{ govukTable(model.overviewTable()) }}
+      {% endif %}
+
+      <br>
+
+      <div class="govuk-button-group">
+        <a href={{ model.addImmigrationDetentionLink() }} class="govuk-button" data-module="govuk-button">
+            Record new immigration document
+        </a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+

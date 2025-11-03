@@ -8,9 +8,16 @@ import ImmigrationDetentionReviewModel from '../model/immigrationDetentionReview
 import ImmigrationDetentionResultPageModel from '../model/immigrationDetentionResultPageModel'
 import ImmigrationDetentionNoLongerInterestModel from '../model/immigrationDetentionNoLongerInterestModel'
 import ImmigrationDetentionConfirmedDateModel from '../model/immigrationDetentionConfirmedDateModel'
+import ImmigrationDetentionOverviewModel from '../model/ImmigrationDetentionOverviewModel'
+import ImmigrationDetentionService from '../services/immigrationDetentionService'
+import ImmigrationDetentionDeleteModel from '../model/immigrationDetentionDeleteModel'
+import { CreateImmigrationDetention } from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
 
 export default class ImmigrationDetentionRoutes {
-  constructor(private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService) {}
+  constructor(
+    private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
+    private readonly immigrationDetentionService: ImmigrationDetentionService,
+  ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
@@ -21,9 +28,68 @@ export default class ImmigrationDetentionRoutes {
     })
   }
 
-  public submitReview: RequestHandler = async (req, res): Promise<void> => {
+  public delete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
+
+    return res.render('pages/deleteImmigrationDetentionRecord', {
+      model: new ImmigrationDetentionDeleteModel(nomsId, id),
+    })
+  }
+
+  public submitDelete: RequestHandler = async (req, res): Promise<void> => {
+    const { nomsId, id } = req.params
+    await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id)
+
+    res.redirect(`/${nomsId}/immigration-detention/overview`)
+  }
+
+  public overview: RequestHandler = async (req, res): Promise<void> => {
+    const { nomsId } = req.params
+    const { firstName = 'Unknown', lastName = 'Unknown' } = res.locals.prisoner || {}
+    const immigrationDetentionList =
+      await this.immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(nomsId)
+
+    return res.render('pages/immigrationDetentionOverview', {
+      model: new ImmigrationDetentionOverviewModel(nomsId, `${firstName} ${lastName}`, immigrationDetentionList),
+    })
+  }
+
+  public submitReview: RequestHandler = async (req, res): Promise<void> => {
+    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { username = 'Unknown' } = res.locals.user
+    const { prisonId = 'Unknown' } = res.locals.prisoner
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
+    let createdImmigrationDetention: CreateImmigrationDetention = {} as CreateImmigrationDetention
+
+    if (immigrationDetention.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
+      createdImmigrationDetention = {
+        createdByPrison: prisonId,
+        createdByUsername: username,
+        noLongerOfInterestComment: immigrationDetention.noLongerOfInterestComment,
+        noLongerOfInterestReason: immigrationDetention.noLongerOfInterestReason,
+        prisonerId: nomsId,
+        recordDate: immigrationDetention.recordDate,
+        immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+      }
+    } else if (
+      immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
+      immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
+    ) {
+      createdImmigrationDetention = {
+        createdByPrison: prisonId,
+        createdByUsername: username,
+        homeOfficeReferenceNumber: immigrationDetention.homeOfficeReferenceNumber,
+        prisonerId: nomsId,
+        recordDate: immigrationDetention.recordDate,
+        immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+      }
+    }
+
+    if (addOrEditOrUpdate === 'add') {
+      await this.immigrationDetentionService.createImmigrationDetention(createdImmigrationDetention)
+    } else if (addOrEditOrUpdate === 'update') {
+      await this.immigrationDetentionService.updateImmigrationDetention(id, createdImmigrationDetention)
+    }
 
     return res.render('pages/resultPage', {
       model: new ImmigrationDetentionResultPageModel(nomsId, id, immigrationDetention),
@@ -89,7 +155,7 @@ export default class ImmigrationDetentionRoutes {
 
     immigrationDetention = {
       ...immigrationDetention,
-      documentDate: immigrationDetentionDocumentDate.toDateModelString(),
+      recordDate: immigrationDetentionDocumentDate.toDateModelString(),
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
@@ -132,7 +198,7 @@ export default class ImmigrationDetentionRoutes {
 
     immigrationDetention = {
       ...immigrationDetention,
-      homeOfficeRefNo: immigrationDetentionHomeOfficeRefNo.hoRefNumber,
+      homeOfficeReferenceNumber: immigrationDetentionHomeOfficeRefNo.hoRefNumber,
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
@@ -157,7 +223,7 @@ export default class ImmigrationDetentionRoutes {
 
     immigrationDetention = {
       ...immigrationDetention,
-      recordType: req?.body?.immigrationDetentionRecordType,
+      immigrationDetentionRecordType: req?.body?.immigrationDetentionRecordType,
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
@@ -191,7 +257,7 @@ export default class ImmigrationDetentionRoutes {
     immigrationDetention = {
       ...immigrationDetention,
       noLongerOfInterestReason: req?.body?.noLongerOfInterestReason,
-      noLongerOfInterestOtherComment: req?.body?.otherReason,
+      noLongerOfInterestComment: req?.body?.otherReason,
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
@@ -234,7 +300,7 @@ export default class ImmigrationDetentionRoutes {
 
     immigrationDetention = {
       ...immigrationDetention,
-      noLongerOfInterestConfirmedDate: immigrationDetentionConfirmedDateModel.toDateModelString(),
+      recordDate: immigrationDetentionConfirmedDateModel.toDateModelString(),
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
