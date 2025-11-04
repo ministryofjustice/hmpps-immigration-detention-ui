@@ -11,9 +11,13 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     public prisonerName: string,
     public immigrationDetentionRecords: ImmigrationDetention[],
   ) {
-    const [firstRecord] = immigrationDetentionRecords // Destructure the first element
+    const sortedRecords = immigrationDetentionRecords.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
+    const [firstRecord] = sortedRecords
     super(firstRecord || ({} as ImmigrationDetention))
 
+    this.immigrationDetentionRecords = sortedRecords
     if (firstRecord) {
       this.latestRecord = firstRecord
     }
@@ -103,6 +107,12 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private actionCell(immigrationDetention: ImmigrationDetention) {
+    const deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
+    <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+      Delete
+      </a>
+      </div>`
+
     if (
       immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
       immigrationDetention.immigrationDetentionRecordType === 'IS91'
@@ -114,16 +124,18 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
           Edit
         </a>
       </div>
+      ${deleteLink}
     `,
       }
     }
     return {
       html: `
       <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
           Edit
         </a>
       </div>
+      ${deleteLink}
     `,
     }
   }

@@ -21,6 +21,7 @@ export default class ImmigrationDetentionDocumentDateModel {
     public id: string,
     params?: object,
     public immigrationDetention?: ImmigrationDetention,
+    public addOrEditOrUpdate?: string,
   ) {
     if (params) {
       Object.assign(this as object, params)
@@ -46,6 +47,12 @@ export default class ImmigrationDetentionDocumentDateModel {
   }
 
   public backLink(): string {
+    if (this.addOrEditOrUpdate === 'edit') {
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/review/${this.id}`
+    }
+    if (this.addOrEditOrUpdate === 'update') {
+      return `/${this.nomsId}/immigration-detention/overview`
+    }
     return `/${this.nomsId}/immigration-detention/add/record-type/${this.id}`
   }
 

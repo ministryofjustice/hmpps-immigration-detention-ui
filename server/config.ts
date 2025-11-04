@@ -47,8 +47,11 @@ export default {
     courtCasesReleaseDates: {
       url: get('COURT_CASES_AND_RELEASE_DATES_URL', 'http://localhost:3000/ccard', requiredInProduction),
     },
-    digitalPrisonServices: {
+    dpsHome: {
       url: get('DIGITAL_PRISON_SERVICES_URL', 'http://localhost:3000/dps', requiredInProduction),
+    },
+    dpsPrisoner: {
+      url: get('DPS_PRISONER_URL', 'https://localhost:3000/dpsPrisoner', requiredInProduction),
     },
   },
   session: {

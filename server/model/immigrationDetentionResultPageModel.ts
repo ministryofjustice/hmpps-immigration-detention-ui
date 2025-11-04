@@ -18,14 +18,18 @@ export default class ImmigrationDetentionResultPageModel {
     return 'No longer of interest successfully recorded'
   }
 
+  public getAlertsUrl() {
+    return `${config.services.dpsPrisoner.url}/prisoner/${this.nomsId}/alerts/active`
+  }
+
   public getFollowInfo(): string {
-    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
-      return 'To prevent release when a IS91 Detention Authority has been issued, you need to:'
+    if (
+      this.immigrationDetention?.immigrationDetentionRecordType === 'IS91' ||
+      this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
+    ) {
+      return 'If this person will be detained under immigration powers after their release date, you need to:'
     }
-    if (this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
-      return 'If this deportation order will impact the release schedule, you need to:'
-    }
-    return 'This person will not be held under immigration powers. You need to check if there are any alerts that might prevent a release.'
+    return 'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.'
   }
 
   public backLink(): string {

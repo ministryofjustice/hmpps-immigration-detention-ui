@@ -10,6 +10,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
     public immigrationDetention: ImmigrationDetention,
     public isGet: boolean = false,
     public formValues: NoLongerInterestForm = {},
+    public addOrEditOrUpdate?: string,
   ) {
     if (isGet && !this.formValues.noLongerOfInterestReason) {
       this.formValues.noLongerOfInterestReason = immigrationDetention?.noLongerOfInterestReason
@@ -25,6 +26,12 @@ export default class ImmigrationDetentionNoLongerInterestModel {
   }
 
   public backlink(): string {
+    if (this.addOrEditOrUpdate === 'edit') {
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/review/${this.id}`
+    }
+    if (this.addOrEditOrUpdate === 'update') {
+      return `/${this.nomsId}/immigration-detention/overview`
+    }
     return `/${this.nomsId}/immigration-detention/add/record-type/${this.id}`
   }
 

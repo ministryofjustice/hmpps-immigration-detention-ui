@@ -21,6 +21,7 @@ export default class ImmigrationDetentionConfirmedDateModel {
     public id: string,
     params?: object,
     public immigrationDetention?: ImmigrationDetention,
+    public addOrEditOrUpdate?: string,
   ) {
     if (params) {
       Object.assign(this as object, params)
@@ -32,7 +33,10 @@ export default class ImmigrationDetentionConfirmedDateModel {
   }
 
   public backLink(): string {
-    return `/${this.nomsId}/immigration-detention/add/no-longer-interest-reason/${this.id}`
+    if (this.addOrEditOrUpdate === 'edit') {
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/review/${this.id}`
+    }
+    return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/no-longer-interest-reason/${this.id}`
   }
 
   public cancelLink(): string {

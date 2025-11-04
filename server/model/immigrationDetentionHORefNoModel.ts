@@ -7,6 +7,7 @@ export default class ImmigrationDetentionHORefModel {
     public nomsId: string,
     public id: string,
     public immigrationDetention: ImmigrationDetention,
+    public addOrEditOrUpdate?: string,
     public hoRefNumber?: string,
   ) {
     if (!this.hoRefNumber) {
@@ -31,7 +32,10 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   public backLink(): string {
-    return `/${this.nomsId}/immigration-detention/add/document-date/${this.id}`
+    if (this.addOrEditOrUpdate === 'edit') {
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/review/${this.id}`
+    }
+    return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/document-date/${this.id}`
   }
 
   public cancelLink(): string {

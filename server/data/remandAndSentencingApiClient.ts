@@ -21,52 +21,55 @@ export default class RemandAndSentencingApiClient extends RestClient {
 
   async createImmigrationDetention(
     createImmigrationDetention: CreateImmigrationDetention,
-    token: string,
+    username: string,
   ): Promise<SaveImmigrationDetentionResponse> {
     return this.post(
       {
         path: '/immigration-detention',
         data: createImmigrationDetention,
       },
-      asSystem(token),
+      asSystem(username),
     ) as Promise<SaveImmigrationDetentionResponse>
   }
 
   async updateImmigrationDetention(
     immigrationDetentionUuId: string,
     createImmigrationDetention: CreateImmigrationDetention,
-    token: string,
+    username: string,
   ): Promise<SaveImmigrationDetentionResponse> {
     return this.put(
       {
         path: `/immigration-detention/${immigrationDetentionUuId}`,
         data: createImmigrationDetention,
       },
-      asSystem(token),
+      asSystem(username),
     ) as Promise<SaveImmigrationDetentionResponse>
   }
 
   async deleteImmigrationDetention(
     immigrationDetentionUUId: string,
-    token: string,
+    username: string,
   ): Promise<DeleteImmigrationDetentionResponse> {
     return this.delete(
       {
         path: `/immigration-detention/${immigrationDetentionUUId}`,
       },
-      asSystem(token),
+      asSystem(username),
     ) as Promise<DeleteImmigrationDetentionResponse>
   }
 
-  async getImmigrationDetentionRecord(immigrationDetentionUUId: string, token: string): Promise<ImmigrationDetention> {
+  async getImmigrationDetentionRecord(
+    immigrationDetentionUUId: string,
+    username: string,
+  ): Promise<ImmigrationDetention> {
     return this.get(
       { path: `/immigration-detention/${immigrationDetentionUUId}` },
-      asSystem(token),
+      asSystem(username),
     ) as Promise<ImmigrationDetention>
   }
 
-  async findByPerson(person: string, token: string): Promise<ImmigrationDetention[]> {
-    return this.get({ path: `/immigration-detention/person/${person}` }, asSystem(token)) as Promise<
+  async findByPerson(person: string, username: string): Promise<ImmigrationDetention[]> {
+    return this.get({ path: `/immigration-detention/person/${person}` }, asSystem(username)) as Promise<
       ImmigrationDetention[]
     >
   }

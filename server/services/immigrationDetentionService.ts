@@ -11,38 +11,41 @@ export default class ImmigrationDetentionService {
 
   public async createImmigrationDetention(
     immigrationDetention: CreateImmigrationDetention,
-    token: string,
+    username: string,
   ): Promise<SaveImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.createImmigrationDetention(immigrationDetention, token)
+    return this.remandAndSentencingApiClient.createImmigrationDetention(immigrationDetention, username)
   }
 
   public async updateImmigrationDetention(
     immigrationDetentionUuid: string,
     immigrationDetention: CreateImmigrationDetention,
-    token: string,
+    username: string,
   ): Promise<SaveImmigrationDetentionResponse> {
     return this.remandAndSentencingApiClient.updateImmigrationDetention(
       immigrationDetentionUuid,
       immigrationDetention,
-      token,
+      username,
     )
   }
 
   public async getImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
-    token: string,
+    username: string,
   ): Promise<ImmigrationDetention> {
-    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, token)
+    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, username)
   }
 
   public async deleteImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
-    token: string,
+    username: string,
   ): Promise<DeleteImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId, token)
+    return this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId, username)
   }
 
-  public getImmigrationDetentionRecordsForPrisoner(prisonerId: string, token: string): Promise<ImmigrationDetention[]> {
-    return this.remandAndSentencingApiClient.findByPerson(prisonerId, token)
+  public getImmigrationDetentionRecordsForPrisoner(
+    prisonerId: string,
+    username: string,
+  ): Promise<ImmigrationDetention[]> {
+    return this.remandAndSentencingApiClient.findByPerson(prisonerId, username)
   }
 }

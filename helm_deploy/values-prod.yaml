@@ -11,6 +11,8 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     COMPONENT_API_URL: "https://frontend-components-prod.hmpps.service.justice.gov.uk"
     COURT_CASES_AND_RELEASE_DATES_URL: "https://court-cases-release-dates.hmpps.service.justice.gov.uk"
+    REMAND_AND_SENTENCING_API_URL: "https://remand-and-sentencing-api.hmpps.service.justice.gov.uk"
+    DPS_PRISONER_URL: 'https://prisoner.digital.prison.service.justice.gov.uk'
     COMMON_COMPONENTS_ENABLED: 'true'
     AUDIT_ENABLED: "false"
 

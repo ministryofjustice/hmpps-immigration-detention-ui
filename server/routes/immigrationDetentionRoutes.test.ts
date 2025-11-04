@@ -310,6 +310,22 @@ describe('Immigration Detention routes', () => {
       })
   })
 
+  it('POST /{nomsId}/immigration-detention/add/review/{id} renders result page successfully', () => {
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+    return request(app)
+      .post(`/${NOMS_ID}/immigration-detention/add/review/${SESSION_ID}`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const alertUrlForPrisoner = $('[data-qa="prisoner-alert-url"]').attr('href')
+        expect(alertUrlForPrisoner).toBe(`https://localhost:3000/dpsPrisoner/prisoner/ABC123/alerts/active`)
+
+        const nomisReleaseText = $('[data-qa="nomis-release-text"]').text().trim()
+        expect(nomisReleaseText).toBe(`2. Go to NOMIS to update the release schedule`)
+      })
+  })
+
   it('GET /{nomsId}/immigration-detention/overview renders review page successfully', async () => {
     // Mock the service methods to return expected data
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
@@ -346,7 +362,13 @@ describe('Immigration Detention routes', () => {
       })
   })
 
-  it('GET /{nomsId}/immigration-detention/delete/{id} renders review page successfully', () => {
+  it('GET /{nomsId}/immigration-detention/delete/{id} renders delete page successfully', () => {
+    immigrationDetentionService.getImmigrationDetentionByUUID.mockReturnValue(
+      Promise.resolve(IMMIGRATION_DETENTION_OBJECT),
+    )
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT]),
+    )
     return request(app)
       .get(`/${NOMS_ID}/immigration-detention/delete/${SESSION_ID}`)
       .expect(200)
@@ -354,7 +376,31 @@ describe('Immigration Detention routes', () => {
         const $: cheerio.CheerioAPI = cheerio.load(res.text)
 
         const cancelLink = $('[data-qa="cancel-link"]').attr('href')
-        expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
+        expect(cancelLink).toBe(`/${NOMS_ID}/immigration-detention/overview`)
       })
+  })
+
+  it('POST /{nomsId}/immigration-detention/delete/{id} redirects to overview page successfully', () => {
+    immigrationDetentionService.deleteImmigrationDetentionByUUID.mockReturnValue(
+      Promise.resolve({
+        immigrationDetentionUuid: SESSION_ID,
+      }),
+    )
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT]),
+    )
+    return request(app)
+      .post(`/${NOMS_ID}/immigration-detention/delete/${SESSION_ID}`)
+      .expect(302)
+      .expect('Location', `/${NOMS_ID}/immigration-detention/overview`)
+  })
+
+  it('GET /{nomsId}/immigration-detention/overview redirects to ccard overview if there are no ', async () => {
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(Promise.resolve([]))
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(302)
+      .expect('Location', `http://localhost:3000/ccard/prisoner/ABC123/overview`)
   })
 })
