@@ -1,57 +1,35 @@
-import dayjs from 'dayjs'
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import config from '../config'
-import immigrationDetentionRecordTypes from './immigrationDetentionRecordTypes'
 import ValidationError from './validationError'
-import immigrationDetentionNoLongerInterestTypes from './immigrationDetentionNoLongerInterestTypes'
+import ImmigrationDetentionReviewCommonModel from './immigrationDetentionReviewCommonModel'
 
-export default class ImmigrationDetentionReviewModel {
+export default class ImmigrationDetentionReviewModel extends ImmigrationDetentionReviewCommonModel {
   constructor(
     public nomsId: string,
     public id: string,
-    public immigrationDetention: ImmigrationDetentionTypes,
+    public immigrationDetention: ImmigrationDetention,
   ) {
-    this.recordTypeDesc =
-      immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.recordType)?.text || ''
-    this.docDateFormatted = dayjs(immigrationDetention.documentDate).format('D MMMM YYYY')
-    this.hoRefNumber = immigrationDetention.homeOfficeRefNo
-    this.noLongerInterestReasonDesc =
-      immigrationDetentionNoLongerInterestTypes.find(it => it.value === immigrationDetention.noLongerOfInterestReason)
-        ?.text || ''
-    if (immigrationDetention.noLongerOfInterestReason === 'OTHER') {
-      this.noLongerInterestReasonDesc += ` : ${immigrationDetention.noLongerOfInterestOtherComment}`
-    }
-    this.confirmedDateFormatted = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).format('D MMMM YYYY')
+    super(immigrationDetention)
   }
-
-  recordTypeDesc: string
-
-  docDateFormatted: string
-
-  hoRefNumber: string
-
-  noLongerInterestReasonDesc: string
-
-  confirmedDateFormatted: string
 
   errors: ValidationError[] = []
 
   public backLink(): string {
-    if (this.immigrationDetention?.recordType === 'NO_LONGER_OF_INTEREST') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
       return `/${this.nomsId}/immigration-detention/add/confirmed-date/${this.id}`
     }
     return `/${this.nomsId}/immigration-detention/add/ho-ref/${this.id}`
   }
 
   public isNoLongerOfInterest(): boolean {
-    return this.immigrationDetention.recordType === 'NO_LONGER_OF_INTEREST'
+    return this.immigrationDetention.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST'
   }
 
   public getCaption() {
-    if (this.immigrationDetention?.recordType === 'IS91') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Record IS91 Detention Authority'
     }
-    if (this.immigrationDetention?.recordType === 'DEPORTATION_ORDER') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       return 'Record Deportation Order'
     }
     return 'Record Immigration Information'

@@ -26,7 +26,8 @@
     "precommit:lint": "node_modules/.bin/lint-staged",
     "precommit:verify": "npm run typecheck && npm test",
     "generate-prison-api-types": "openapi-typescript https://prison-api-dev.prison.service.justice.gov.uk/v3/api-docs > ../server/@types/prisonApi/index.d.ts",
-    "generate-prisoner-search-api-types": "openapi-typescript https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonerSearchApi/index.d.ts"
+    "generate-prisoner-search-api-types": "openapi-typescript https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonerSearchApi/index.d.ts",
+    "generate-ras-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts"
   },
   "engines": {
     "node": "^22",
@@ -108,7 +109,8 @@
     "prettier-plugin-jinja-template": "^2.1.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "openapi-typescript": "^7.8.0"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {

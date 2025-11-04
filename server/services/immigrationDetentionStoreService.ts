@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { randomUUID } from 'crypto'
-import SessionImmigrationDetention from '../@types/ImmigrationDetentionTypes'
+import SessionImmigrationDetention from '../@types/ImmigrationDetention'
 
 export default class ImmigrationDetentionStoreService {
   private initSessionForNomsId(req: Request, nomsId: string) {

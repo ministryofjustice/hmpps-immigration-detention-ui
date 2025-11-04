@@ -1,5 +1,5 @@
 import { HmppsUser } from '../../interfaces/hmppsUser'
-import SessionImmigrationDetention from '../ImmigrationDetentionTypes'
+import SessionImmigrationDetention from '../ImmigrationDetention'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -7,6 +7,7 @@ export declare module 'express-session' {
     returnTo: string
     nowInMinutes: number
     immigrationDetention?: Record<string, Record<string, SessionImmigrationDetention>>
+    params?: Record<string, boolean>
   }
 }
 

@@ -26,8 +26,8 @@
       <br>
       <div class="govuk-heading-l">What you need to do next</div>
         <p class="govuk-body govuk" data-qa=follow-info>{{ model.getFollowInfo () }}</p>
-        <ol class="govuk-body"><a href="#">Add or update an alert</a></ol>
-        <ol class="govuk-body"><a href="#">Amend Release schedule</a></ol>
+        <ol class="govuk-body">1. <a data-qa="prisoner-alert-url" href="{{ model.getAlertsUrl() }}">Add or update an alert on the person's profile</a></ol>
+        <ol class="govuk-body" data-qa="nomis-release-text">2. Go to NOMIS to update the release schedule</ol>
         <br>
          {{ govukButton({
             attributes: { 'data-qa': 'cancel-button' },

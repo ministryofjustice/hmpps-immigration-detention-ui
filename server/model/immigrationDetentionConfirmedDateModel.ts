@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ValidationError from './validationError'
 import { dateItems, validateDate } from '../utils/utils'
 import config from '../config'
@@ -20,21 +20,23 @@ export default class ImmigrationDetentionConfirmedDateModel {
     public nomsId: string,
     public id: string,
     params?: object,
-    public immigrationDetention?: ImmigrationDetentionTypes,
+    public immigrationDetention?: ImmigrationDetention,
+    public addOrEditOrUpdate?: string,
   ) {
     if (params) {
       Object.assign(this as object, params)
-    } else if (immigrationDetention?.noLongerOfInterestConfirmedDate) {
-      this['confirmedDate-day'] = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('date').toString()
-      this['confirmedDate-month'] = (
-        dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('month') + 1
-      ).toString()
-      this['confirmedDate-year'] = dayjs(immigrationDetention.noLongerOfInterestConfirmedDate).get('year').toString()
+    } else if (immigrationDetention?.recordDate) {
+      this['confirmedDate-day'] = dayjs(immigrationDetention.recordDate).get('date').toString()
+      this['confirmedDate-month'] = (dayjs(immigrationDetention.recordDate).get('month') + 1).toString()
+      this['confirmedDate-year'] = dayjs(immigrationDetention.recordDate).get('year').toString()
     }
   }
 
   public backLink(): string {
-    return `/${this.nomsId}/immigration-detention/add/no-longer-interest-reason/${this.id}`
+    if (this.addOrEditOrUpdate === 'edit') {
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/review/${this.id}`
+    }
+    return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/no-longer-interest-reason/${this.id}`
   }
 
   public cancelLink(): string {

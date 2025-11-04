@@ -63,19 +63,19 @@
             errorMessage: model.messageForField('noLongerInterestReason'),
             items: [
                 {
-                    value: "RTR",
+                    value: "RIGHT_TO_REMAIN",
                     text: "Right to Remain",
-                    checked: model.getIsChecked('RTR')
+                    checked: model.getIsChecked('RIGHT_TO_REMAIN')
                 },
                 {
-                    value: "BN",
+                    value: "BRITISH_CITIZEN",
                     text: "British National",
-                    checked: model.getIsChecked('BN')
+                    checked: model.getIsChecked('BRITISH_CITIZEN')
                 },
                 {
-                    value: "OTHER",
+                    value: "OTHER_REASON",
                     text: "Other",
-                    checked: model.getIsChecked('OTHER'),
+                    checked: model.getIsChecked('OTHER_REASON'),
                     conditional: {
                         html: commentHtml
                     }

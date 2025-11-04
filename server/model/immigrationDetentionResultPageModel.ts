@@ -1,31 +1,35 @@
-import ImmigrationDetentionTypes from '../@types/ImmigrationDetentionTypes'
+import ImmigrationDetention from '../@types/ImmigrationDetention'
 import config from '../config'
 
 export default class ImmigrationDetentionResultPageModel {
   constructor(
     public nomsId: string,
     public id: string,
-    public immigrationDetention: ImmigrationDetentionTypes,
+    public immigrationDetention: ImmigrationDetention,
   ) {}
 
   public getSuccessMessage(): string {
-    if (this.immigrationDetention?.recordType === 'IS91') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'IS91 Detention Authority successfully recorded'
     }
-    if (this.immigrationDetention?.recordType === 'DEPORTATION_ORDER') {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       return 'Deportation order successfully recorded'
     }
     return 'No longer of interest successfully recorded'
   }
 
+  public getAlertsUrl() {
+    return `${config.services.dpsPrisoner.url}/prisoner/${this.nomsId}/alerts/active`
+  }
+
   public getFollowInfo(): string {
-    if (this.immigrationDetention?.recordType === 'IS91') {
-      return 'To prevent release when a IS91 Detention Authority has been issued, you need to:'
+    if (
+      this.immigrationDetention?.immigrationDetentionRecordType === 'IS91' ||
+      this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
+    ) {
+      return 'If this person will be detained under immigration powers after their release date, you need to:'
     }
-    if (this.immigrationDetention?.recordType === 'DEPORTATION_ORDER') {
-      return 'If this deportation order will impact the release schedule, you need to:'
-    }
-    return 'This person will not be held under immigration powers. You need to check if there are any alerts that might prevent a release.'
+    return 'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.'
   }
 
   public backLink(): string {

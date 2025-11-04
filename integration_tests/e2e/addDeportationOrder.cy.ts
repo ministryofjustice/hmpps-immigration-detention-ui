@@ -16,6 +16,9 @@ context('Add Immigration Detention - Detention Order', () => {
     cy.task('stubGetUserCasePing')
     cy.task('stubGetPrisonerDetails')
     cy.task('stubPrisonSearchApiPing')
+    cy.task('stubRASApiPing')
+    cy.task('stubPostImmigrationDetention')
+    cy.task('stubGetPrisonerImage')
   })
 
   it('Enter Deportation Order', () => {
@@ -55,7 +58,10 @@ context('Add Immigration Detention - Detention Order', () => {
     const immigrationDetentionResult = new AddImmigrationDetentionResultPage('Deportation order successfully recorded')
     immigrationDetentionResult
       .followInfo()
-      .should('have.text', 'If this deportation order will impact the release schedule, you need to:')
+      .should(
+        'have.text',
+        'If this person will be detained under immigration powers after their release date, you need to:',
+      )
     immigrationDetentionResult.successMessage().should('have.text', 'Deportation order successfully recorded')
   })
 })
