@@ -61,6 +61,9 @@ context('Add Immigration Detention - IS91', () => {
     immigrationDetentionResult.successMessage().should('have.text', 'IS91 Detention Authority successfully recorded')
     immigrationDetentionResult
       .followInfo()
-      .should('have.text', 'To prevent release when a IS91 Detention Authority has been issued, you need to:')
+      .should(
+        'have.text',
+        'If this person will be detained under immigration powers after their release date, you need to:',
+      )
   })
 })

@@ -67,7 +67,7 @@ context('Add Immigration Detention - No Longer Of Interest', () => {
       .followInfo()
       .should(
         'have.text',
-        'This person will not be held under immigration powers. You need to check if there are any alerts that might prevent a release.',
+        'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.',
       )
   })
 })
