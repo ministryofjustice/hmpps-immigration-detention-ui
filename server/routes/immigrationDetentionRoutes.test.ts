@@ -338,6 +338,46 @@ describe('Immigration Detention routes', () => {
       })
   })
 
+  it('GET /{nomsId}/immigration-detention/overview does not show delete link for IMMIGRATION_DETENTION_USER role', async () => {
+    const testUser = {
+      ...mockUser,
+      userRoles: ['IMMIGRATION_DETENTION_USER'],
+    }
+    const localApp = appWithAllRoutes({
+      services: {
+        immigrationDetentionStoreService,
+        immigrationDetentionService,
+        paramsStoreService: paramsService,
+      },
+      userSupplier: () => testUser as HmppsUser,
+    })
+
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]),
+    )
+
+    await request(localApp)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+        expect(headingOverview).toBe(`Immigration documents overview`)
+
+        const messageOverview = $('[data-qa="message-heading"]').text().trim()
+        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBeUndefined()
+
+        expect(res.text).toContain('IS91 Detention Authority')
+        expect(res.text).toContain('IS91 recorded on ')
+        expect(res.text).toContain('ABC123')
+      })
+  })
+
   it('GET /{nomsId}/immigration-detention/overview renders review page successfully', async () => {
     // Mock the service methods to return expected data
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
