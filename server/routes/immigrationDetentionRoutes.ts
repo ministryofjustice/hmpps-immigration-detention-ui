@@ -51,7 +51,7 @@ export default class ImmigrationDetentionRoutes {
 
   public overview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId } = req.params
-    const { username = 'Unknown' } = res.locals.user
+    const { username = 'Unknown', userRoles = [] } = res.locals.user
     const { firstName = 'Unknown', lastName = 'Unknown' } = res.locals.prisoner || {}
     const immigrationDetentionList = await this.immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(
       nomsId,
@@ -60,7 +60,12 @@ export default class ImmigrationDetentionRoutes {
 
     if (immigrationDetentionList.length > 0) {
       return res.render('pages/immigrationDetentionOverview', {
-        model: new ImmigrationDetentionOverviewModel(nomsId, `${firstName} ${lastName}`, immigrationDetentionList),
+        model: new ImmigrationDetentionOverviewModel(
+          nomsId,
+          `${firstName} ${lastName}`,
+          immigrationDetentionList,
+          userRoles,
+        ),
       })
     }
 

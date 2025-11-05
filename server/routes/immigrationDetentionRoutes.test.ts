@@ -351,11 +351,6 @@ describe('Immigration Detention routes', () => {
           `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
         )
 
-        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
-        expect(deleteLinkLatestRecord).toBe(
-          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
-        )
-
         expect(res.text).toContain('IS91 Detention Authority')
         expect(res.text).toContain('IS91 recorded on ')
         expect(res.text).toContain('ABC123')

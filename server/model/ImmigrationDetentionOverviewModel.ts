@@ -10,6 +10,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     public nomsId: string,
     public prisonerName: string,
     public immigrationDetentionRecords: ImmigrationDetention[],
+    public roles: string[],
   ) {
     const sortedRecords = immigrationDetentionRecords.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -27,6 +28,10 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
 
   public isNoLongerOfInterest(): boolean {
     return this.latestRecord.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST'
+  }
+
+  private hasImmigrationDetentionAdminToolRole(): boolean {
+    return this.roles && this.roles.indexOf('IMMIGRATION_DETENTION_ADMIN') !== -1
   }
 
   public deleteLinkForLatestRecord(): string {
@@ -107,11 +112,15 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private actionCell(immigrationDetention: ImmigrationDetention) {
-    const deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-    <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
-      Delete
-      </a>
-      </div>`
+    let deleteLink
+
+    if (this.hasImmigrationDetentionAdminToolRole()) {
+      deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
+          <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+            Delete
+            </a>
+            </div>`
+    }
 
     if (
       immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
@@ -124,7 +133,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
           Edit
         </a>
       </div>
-      ${deleteLink}
+       ${deleteLink || ''}
     `,
       }
     }
@@ -135,7 +144,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
           Edit
         </a>
       </div>
-      ${deleteLink}
+       ${deleteLink || ''}
     `,
     }
   }
