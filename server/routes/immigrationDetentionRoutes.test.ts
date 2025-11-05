@@ -6,6 +6,7 @@ import ImmigrationDetentionStoreService from '../services/immigrationDetentionSt
 import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
 import ParamStoreService from '../services/paramStoreService'
+import { HmppsUser } from '../interfaces/hmppsUser'
 
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
@@ -30,6 +31,16 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   createdAt: '2025-11-03T08:06:37.123Z',
 }
 
+const mockUser = {
+  token: 'mockToken',
+  username: 'IMMIGRATION_DETENTION_ADMIN',
+  authSource: 'nomis',
+  userId: '488389',
+  name: 'Immigration Admin',
+  displayName: 'Immigration Admin',
+  userRoles: ['IMMIGRATION_DETENTION_ADMIN'],
+}
+
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   immigrationDetentionUuid: '123',
   prisonerId: 'ABC123',
@@ -51,6 +62,7 @@ beforeEach(() => {
       immigrationDetentionService,
       paramsStoreService: paramsService,
     },
+    userSupplier: () => mockUser as HmppsUser,
   })
 })
 
@@ -349,6 +361,11 @@ describe('Immigration Detention routes', () => {
         const editLinkLatestRecord = $('[data-qa="edit-latest-link"]').attr('href')
         expect(editLinkLatestRecord).toBe(
           `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
+        )
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBe(
+          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
         )
 
         expect(res.text).toContain('IS91 Detention Authority')
