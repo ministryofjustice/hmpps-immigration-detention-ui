@@ -6,6 +6,7 @@ import ImmigrationDetentionStoreService from '../services/immigrationDetentionSt
 import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
 import ParamStoreService from '../services/paramStoreService'
+import { HmppsUser } from '../interfaces/hmppsUser'
 
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
@@ -30,6 +31,16 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   createdAt: '2025-11-03T08:06:37.123Z',
 }
 
+const mockUser = {
+  token: 'mockToken',
+  username: 'IMMIGRATION_DETENTION_ADMIN',
+  authSource: 'nomis',
+  userId: '488389',
+  name: 'Immigration Admin',
+  displayName: 'Immigration Admin',
+  userRoles: ['IMMIGRATION_DETENTION_ADMIN'],
+}
+
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   immigrationDetentionUuid: '123',
   prisonerId: 'ABC123',
@@ -51,6 +62,7 @@ beforeEach(() => {
       immigrationDetentionService,
       paramsStoreService: paramsService,
     },
+    userSupplier: () => mockUser as HmppsUser,
   })
 })
 
@@ -323,6 +335,46 @@ describe('Immigration Detention routes', () => {
 
         const nomisReleaseText = $('[data-qa="nomis-release-text"]').text().trim()
         expect(nomisReleaseText).toBe(`2. Go to NOMIS to update the release schedule`)
+      })
+  })
+
+  it('GET /{nomsId}/immigration-detention/overview does not show delete link for IMMIGRATION_DETENTION_USER role', async () => {
+    const testUser = {
+      ...mockUser,
+      userRoles: ['IMMIGRATION_DETENTION_USER'],
+    }
+    const localApp = appWithAllRoutes({
+      services: {
+        immigrationDetentionStoreService,
+        immigrationDetentionService,
+        paramsStoreService: paramsService,
+      },
+      userSupplier: () => testUser as HmppsUser,
+    })
+
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]),
+    )
+
+    await request(localApp)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+        expect(headingOverview).toBe(`Immigration documents overview`)
+
+        const messageOverview = $('[data-qa="message-heading"]').text().trim()
+        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBeUndefined()
+
+        expect(res.text).toContain('IS91 Detention Authority')
+        expect(res.text).toContain('IS91 recorded on ')
+        expect(res.text).toContain('ABC123')
       })
   })
 
