@@ -49,7 +49,7 @@
                 Edit
               </a>
           </li>
-          {% if model.hasImmigrationDetentionAdminToolRole() %}
+          {% if model.hasImmigrationDetentionAdminRole() %}
             <li class="govuk-summary-card__action">
                 <a class="govuk-link" data-qa='delete-latest-link' href={{ model.deleteLinkForLatestRecord() }}>
                   Delete

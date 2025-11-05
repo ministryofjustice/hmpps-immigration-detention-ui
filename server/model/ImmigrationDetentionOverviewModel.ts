@@ -30,7 +30,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     return this.latestRecord.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST'
   }
 
-  private hasImmigrationDetentionAdminToolRole(): boolean {
+  private hasImmigrationDetentionAdminRole(): boolean {
     return this.roles && this.roles.indexOf('IMMIGRATION_DETENTION_ADMIN') !== -1
   }
 
@@ -114,7 +114,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   private actionCell(immigrationDetention: ImmigrationDetention) {
     let deleteLink
 
-    if (this.hasImmigrationDetentionAdminToolRole()) {
+    if (this.hasImmigrationDetentionAdminRole()) {
       deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
           <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
             Delete
