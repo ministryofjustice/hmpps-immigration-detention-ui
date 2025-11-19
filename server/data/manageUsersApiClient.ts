@@ -4,6 +4,8 @@ import logger from '../../logger'
 import config from '../config'
 
 export interface User {
+  userRoles?: string[]
+  token?: string
   username: string
   name?: string
   active?: boolean
