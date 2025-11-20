@@ -149,8 +149,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     `,
       }
     }
-    return {
-      html: `
+    if (immigrationDetention.source !== 'NOMIS') {
+      return {
+        html: `
       <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
         <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
           Edit
@@ -158,6 +159,10 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
       </div>
        ${deleteLink || ''}
     `,
+      }
+    }
+    return {
+      html: '',
     }
   }
 
