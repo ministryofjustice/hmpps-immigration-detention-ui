@@ -14,6 +14,7 @@ import ImmigrationDetentionDeleteModel from '../model/immigrationDetentionDelete
 import { CreateImmigrationDetention } from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
 import ParamStoreService from '../services/paramStoreService'
 import config from '../config'
+import { User } from '../data/manageUsersApiClient'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -74,14 +75,13 @@ export default class ImmigrationDetentionRoutes {
 
   public submitReview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
-    const { username = 'Unknown' } = res.locals.user
-    const { prisonId = 'Unknown' } = res.locals.prisoner || {}
+    const { username = 'Unknown', activeCaseLoadId = 'Unknown' } = res.locals.user as User
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     let createdImmigrationDetention: CreateImmigrationDetention = {} as CreateImmigrationDetention
 
     if (immigrationDetention.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
       createdImmigrationDetention = {
-        createdByPrison: prisonId,
+        createdByPrison: activeCaseLoadId,
         createdByUsername: username,
         noLongerOfInterestComment: immigrationDetention.noLongerOfInterestComment,
         noLongerOfInterestReason: immigrationDetention.noLongerOfInterestReason,
@@ -94,7 +94,7 @@ export default class ImmigrationDetentionRoutes {
       immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
     ) {
       createdImmigrationDetention = {
-        createdByPrison: prisonId,
+        createdByPrison: activeCaseLoadId,
         createdByUsername: username,
         homeOfficeReferenceNumber: immigrationDetention.homeOfficeReferenceNumber,
         prisonerId: nomsId,

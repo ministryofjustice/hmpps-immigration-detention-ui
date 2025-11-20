@@ -27,6 +27,16 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   immigrationDetentionRecordType: 'IS91',
   recordDate: '2022-06-22',
   homeOfficeReferenceNumber: 'ABC123',
+  source: 'DPS',
+  createdAt: '2025-11-03T08:06:37.123Z',
+}
+
+const IMMIGRATION_DETENTION_OBJECT_NOMIS: ImmigrationDetention = {
+  prisonerId: 'ABC123',
+  immigrationDetentionUuid: '123-latest',
+  immigrationDetentionRecordType: 'IS91',
+  recordDate: '2022-06-22',
+  homeOfficeReferenceNumber: 'ABC123',
   source: 'NOMIS',
   createdAt: '2025-11-03T08:06:37.123Z',
 }
@@ -50,7 +60,7 @@ const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   noLongerOfInterestReason: 'OTHER_REASON',
   noLongerOfInterestComment: 'Confirmed not of interest',
   createdAt: '2025-11-03T08:06:37.123Z',
-  source: 'NOMIS',
+  source: 'DPS',
 }
 
 let app: Express
@@ -371,6 +381,39 @@ describe('Immigration Detention routes', () => {
 
         const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
         expect(deleteLinkLatestRecord).toBeUndefined()
+
+        expect(res.text).toContain('IS91 Detention Authority')
+        expect(res.text).toContain('IS91 recorded on ')
+        expect(res.text).toContain('ABC123')
+      })
+  })
+
+  it('GET /{nomsId}/immigration-detention/overview does not show edit/delete link for NOMIS record', async () => {
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT_NOMIS)
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT_NOMIS]),
+    )
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+        expect(headingOverview).toBe(`Immigration documents overview`)
+
+        const messageOverview = $('[data-qa="message-heading"]').text().trim()
+        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+        const cardTitle = $('[data-qa="card-title"]').text().trim()
+        expect(cardTitle).toBe(`IS91 recorded on 3 November 2025 via NOMIS`)
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBeUndefined()
+
+        const editLinkLatestRecord = $('[data-qa="edit-latest-link"]').attr('href')
+        expect(editLinkLatestRecord).toBeUndefined()
 
         expect(res.text).toContain('IS91 Detention Authority')
         expect(res.text).toContain('IS91 recorded on ')

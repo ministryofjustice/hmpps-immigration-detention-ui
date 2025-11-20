@@ -34,15 +34,21 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     return this.roles && this.roles.indexOf('IMMIGRATION_DETENTION_ADMIN') !== -1
   }
 
-  public deleteLinkForLatestRecord(): string {
-    return `/${this.nomsId}/immigration-detention/delete/${this.latestRecord.immigrationDetentionUuid}`
+  public deleteLinkForLatestRecord(): string | undefined {
+    if (this.latestRecord.source !== 'NOMIS') {
+      return `/${this.nomsId}/immigration-detention/delete/${this.latestRecord.immigrationDetentionUuid}`
+    }
+    return undefined
   }
 
-  public editLinkForLatestRecord(): string {
-    if (this.latestRecord.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
-      return `/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}`
+  public editLinkForLatestRecord(): string | undefined {
+    if (this.latestRecord.source !== 'NOMIS') {
+      if (this.latestRecord.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
+        return `/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}`
+      }
+      return `/${this.nomsId}/immigration-detention/update/document-date/${this.latestRecord.immigrationDetentionUuid}`
     }
-    return `/${this.nomsId}/immigration-detention/update/document-date/${this.latestRecord.immigrationDetentionUuid}`
+    return undefined
   }
 
   public backlink(): string {
@@ -102,19 +108,24 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
 
   public getCardTitle() {
     const formattedCreatedAt = dayjs(this.latestRecord.createdAt).format('D MMMM YYYY')
+    let message
     if (this.latestRecord.immigrationDetentionRecordType === 'IS91') {
-      return `IS91 recorded on ${formattedCreatedAt}`
+      message = `IS91 recorded on ${formattedCreatedAt}`
+    } else if (this.latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
+      message = `Deportation order recorded on ${formattedCreatedAt}`
+    } else {
+      message = `No longer of interest recorded on ${formattedCreatedAt}`
     }
-    if (this.latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
-      return `Deportation order recorded on ${formattedCreatedAt}`
+    if (this.latestRecord.source === 'NOMIS') {
+      message += ' via NOMIS'
     }
-    return `No longer of interest recorded on ${formattedCreatedAt}`
+    return message
   }
 
   private actionCell(immigrationDetention: ImmigrationDetention) {
     let deleteLink
 
-    if (this.hasImmigrationDetentionAdminRole()) {
+    if (this.hasImmigrationDetentionAdminRole() && immigrationDetention.source !== 'NOMIS') {
       deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
           <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
             Delete
@@ -123,8 +134,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     }
 
     if (
-      immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
-      immigrationDetention.immigrationDetentionRecordType === 'IS91'
+      (immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
+        immigrationDetention.immigrationDetentionRecordType === 'IS91') &&
+      immigrationDetention.source !== 'NOMIS'
     ) {
       return {
         html: `

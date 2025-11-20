@@ -64,7 +64,7 @@ const stubGetImmigrationDetentionByPrisoner = () =>
           noLongerOfInterestReason: 'BRITISH_CITIZEN',
           noLongerOfInterestComment: 'string',
           createdAt: '2025-11-03T08:12:44.525Z',
-          source: 'NOMIS',
+          source: 'DPS',
         },
         {
           immigrationDetentionUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -75,7 +75,7 @@ const stubGetImmigrationDetentionByPrisoner = () =>
           noLongerOfInterestReason: 'BRITISH_CITIZEN',
           noLongerOfInterestComment: 'string',
           createdAt: '2025-11-03T08:12:44.525Z',
-          source: 'NOMIS',
+          source: 'DPS',
         },
       ],
     },
