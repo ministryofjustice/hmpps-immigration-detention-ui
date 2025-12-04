@@ -334,6 +334,20 @@ describe('Immigration Detention routes', () => {
 
   it('POST /{nomsId}/immigration-detention/add/review/{id} renders result page successfully', () => {
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+    immigrationDetentionService.getImmigrationDetentionAppearanceOutcomes.mockReturnValue(
+      Promise.resolve([
+        {
+          outcomeUuid: 'uuid-1',
+          outcomeName: 'Outcome Name',
+          nomisCode: '5500',
+          outcomeType: 'IMMIGRATION',
+          displayOrder: 1,
+          relatedChargeOutcomeUuid: 'related-uuid',
+          isSubList: false,
+          dispositionCode: 'DISP',
+        },
+      ]),
+    )
     return request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/review/${SESSION_ID}`)
       .expect(200)
