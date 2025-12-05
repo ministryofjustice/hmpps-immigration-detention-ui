@@ -36,6 +36,7 @@ const stubPostImmigrationDetention = () =>
         prisonerId: 'string',
         immigrationDetentionRecordType: 'IS91',
         recordDate: '2025-11-03',
+        appearanceOutcomeUuid: 'A1234AB',
         homeOfficeReferenceNumber: 'string',
         noLongerOfInterestReason: 'BRITISH_CITIZEN',
         noLongerOfInterestComment: 'string',
@@ -118,6 +119,55 @@ const stubDeleteImmigrationDetentionByUUID = () =>
     },
   })
 
+const stubGetAllAppearanceOutcomes = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPath: '/ras-api/appearance-outcome/status',
+      queryParameters: {
+        statuses: {
+          equalTo: 'ACTIVE',
+        },
+      },
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: [
+        {
+          outcomeUuid: '8316a91d-c154-4eff-87d1-75a42777677b',
+          outcomeName: 'Outcome Name',
+          nomisCode: '5500',
+          outcomeType: 'IMMIGRATION',
+          displayOrder: 1,
+          relatedChargeOutcomeUuid: 'c96fd611-c747-4de2-ae28-51d9f0a5416a',
+          isSubList: false,
+          dispositionCode: 'DISP',
+        },
+        {
+          outcomeUuid: '29093189-4cb7-4658-8301-e7e9e2b6958f',
+          outcomeName: 'Outcome Name',
+          nomisCode: '5502',
+          outcomeType: 'IMMIGRATION',
+          displayOrder: 1,
+          relatedChargeOutcomeUuid: 'a9cd6b02-942f-4686-9151-e46d620ca3b9',
+          isSubList: false,
+          dispositionCode: 'DISP',
+        },
+        {
+          outcomeUuid: '1661087d-84e8-45b5-a694-81732866f4a1',
+          outcomeName: 'Outcome Name',
+          nomisCode: '5503',
+          outcomeType: 'IMMIGRATION',
+          displayOrder: 1,
+          relatedChargeOutcomeUuid: '19789b21-16c4-43e7-ad66-13553545b6ea',
+          isSubList: false,
+          dispositionCode: 'DISP',
+        },
+      ],
+    },
+  })
+
 const ping = () =>
   stubFor({
     request: {
@@ -136,4 +186,5 @@ export default {
   stubDeleteImmigrationDetentionByUUID,
   stubPutImmigrationDetentionByUUID,
   stubRASApiPing: ping,
+  stubGetAllAppearanceOutcomes,
 }

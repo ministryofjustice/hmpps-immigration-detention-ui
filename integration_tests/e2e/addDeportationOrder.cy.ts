@@ -19,6 +19,7 @@ context('Add Immigration Detention - Detention Order', () => {
     cy.task('stubRASApiPing')
     cy.task('stubPostImmigrationDetention')
     cy.task('stubGetPrisonerImage')
+    cy.task('stubGetAllAppearanceOutcomes')
   })
 
   it('Enter Deportation Order', () => {

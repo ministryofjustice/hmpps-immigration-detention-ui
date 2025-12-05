@@ -20,6 +20,7 @@ context('Add Immigration Detention - IS91', () => {
     cy.task('stubGetImmigrationDetentionByPrisoner')
     cy.task('stubGetImmigrationDetentionByUUID')
     cy.task('stubPutImmigrationDetentionByUUID')
+    cy.task('stubGetAllAppearanceOutcomes')
   })
 
   it('Enter Immigration Detention IS91', () => {
