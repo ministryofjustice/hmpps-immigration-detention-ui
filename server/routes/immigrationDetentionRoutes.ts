@@ -15,6 +15,7 @@ import { CreateImmigrationDetention } from '../@types/remandAndSentencingApi/rem
 import ParamStoreService from '../services/paramStoreService'
 import config from '../config'
 import { User } from '../data/manageUsersApiClient'
+import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -77,10 +78,18 @@ export default class ImmigrationDetentionRoutes {
     const { nomsId, id } = req.params
     const { username = 'Unknown', activeCaseLoadId = 'Unknown' } = res.locals.user as User
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
+    const outcomes = await this.immigrationDetentionService.getImmigrationDetentionAppearanceOutcomes(username)
+
     let createdImmigrationDetention: CreateImmigrationDetention = {} as CreateImmigrationDetention
 
     if (immigrationDetention.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
       createdImmigrationDetention = {
+        appearanceOutcomeUuid: outcomes.find(
+          outcome =>
+            outcome.nomisCode ===
+            immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
+              .nomisCode,
+        ).outcomeUuid,
         createdByPrison: activeCaseLoadId,
         createdByUsername: username,
         noLongerOfInterestComment: immigrationDetention.noLongerOfInterestComment,
@@ -94,6 +103,12 @@ export default class ImmigrationDetentionRoutes {
       immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
     ) {
       createdImmigrationDetention = {
+        appearanceOutcomeUuid: outcomes.find(
+          outcome =>
+            outcome.nomisCode ===
+            immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
+              .nomisCode,
+        ).outcomeUuid,
         createdByPrison: activeCaseLoadId,
         createdByUsername: username,
         homeOfficeReferenceNumber: immigrationDetention.homeOfficeReferenceNumber,

@@ -43,6 +43,7 @@ const CREATE_IMMIGRATION_DETENTION_OBJECT: CreateImmigrationDetention = {
   recordDate: '2022-06-22',
   createdByPrison: 'KMI',
   createdByUsername: 'user-1',
+  appearanceOutcomeUuid: 'outcome-uuid-12345',
   immigrationDetentionRecordType: IMMIGRATION_DETENTION_OBJECT.immigrationDetentionRecordType,
   homeOfficeReferenceNumber: IMMIGRATION_DETENTION_OBJECT.homeOfficeReferenceNumber,
   prisonerId: 'ABC123',

@@ -19,6 +19,7 @@ context('Add Immigration Detention - IS91', () => {
     cy.task('stubRASApiPing')
     cy.task('stubPostImmigrationDetention')
     cy.task('stubGetPrisonerImage')
+    cy.task('stubGetAllAppearanceOutcomes')
   })
 
   it('Enter Immigration Detention IS91', () => {

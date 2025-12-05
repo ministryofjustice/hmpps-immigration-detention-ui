@@ -1,4 +1,4 @@
-import ImmigrationDetention from '../@types/ImmigrationDetention'
+import ImmigrationDetention, { AppearanceOutcome } from '../@types/ImmigrationDetention'
 import RemandAndSentencingApiClient from '../data/remandAndSentencingApiClient'
 import {
   CreateImmigrationDetention,
@@ -47,5 +47,11 @@ export default class ImmigrationDetentionService {
     username: string,
   ): Promise<ImmigrationDetention[]> {
     return this.remandAndSentencingApiClient.findByPerson(prisonerId, username)
+  }
+
+  public getImmigrationDetentionAppearanceOutcomes(username: string): Promise<AppearanceOutcome[]> {
+    return this.remandAndSentencingApiClient
+      .getAllAppearanceOutcomes(username)
+      .then(outcomes => outcomes.filter(outcome => outcome.outcomeType === 'IMMIGRATION'))
   }
 }

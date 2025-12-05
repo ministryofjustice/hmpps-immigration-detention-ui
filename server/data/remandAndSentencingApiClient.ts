@@ -2,7 +2,7 @@ import { ApiConfig, asSystem, RestClient } from '@ministryofjustice/hmpps-rest-c
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import logger from '../../logger'
-import ImmigrationDetention from '../@types/ImmigrationDetention'
+import ImmigrationDetention, { AppearanceOutcome } from '../@types/ImmigrationDetention'
 import {
   CreateImmigrationDetention,
   DeleteImmigrationDetentionResponse,
@@ -72,5 +72,17 @@ export default class RemandAndSentencingApiClient extends RestClient {
     return this.get({ path: `/immigration-detention/person/${person}` }, asSystem(username)) as Promise<
       ImmigrationDetention[]
     >
+  }
+
+  async getAllAppearanceOutcomes(username: string): Promise<AppearanceOutcome[]> {
+    return (await this.get(
+      {
+        path: `/appearance-outcome/status`,
+        query: {
+          statuses: 'ACTIVE',
+        },
+      },
+      asSystem(username),
+    )) as unknown as Promise<AppearanceOutcome[]>
   }
 }
