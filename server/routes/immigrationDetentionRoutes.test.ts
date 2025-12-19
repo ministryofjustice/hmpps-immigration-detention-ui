@@ -308,15 +308,65 @@ describe('Immigration Detention routes', () => {
       })
   })
 
-  it('POST /{nomsId}/immigration-detention/add/ho-ref/{id} passes with valid HO Ref No', () => {
-    immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
-    return request(app)
-      .post(`/${NOMS_ID}/immigration-detention/add/ho-ref/${SESSION_ID}`)
-      .send({ hoRefNumber: 'B1234567/12' })
-      .type('form')
-      .expect(302)
-      .expect('Location', `/${NOMS_ID}/immigration-detention/add/review/${SESSION_ID}`)
-  })
+  it.each([
+    { input: 'ABC12345@' },
+    { input: 'ABC-12345' },
+    { input: 'ABC#12345' },
+    { input: 'ABC%12345' },
+    { input: 'ABC&12345' },
+    { input: 'ABC 12345' },
+  ])(
+    'POST /{nomsId}/immigration-detention/add/ho-ref/{id} throws error for invalid HO Ref with special characters: "$input"',
+    ({ input }) => {
+      immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+      return request(app)
+        .post(`/${NOMS_ID}/immigration-detention/add/ho-ref/${SESSION_ID}`)
+        .send({ hoRefNumber: input })
+        .type('form')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain(
+            'The Home Office reference number should only contain numbers and letters. It might have a forward slash &#39;/&#39; but should not contain any other special characters',
+          )
+        })
+    },
+  )
+
+  it.each([
+    { input: '', expectedError: 'Enter the Home Office reference number' },
+    { input: 'ABC123', expectedError: 'The Home Office reference number should be between 8 to 16 characters.' },
+    { input: 'abc123', expectedError: 'The Home Office reference number should be between 8 to 16 characters.' },
+    {
+      input: 'ABCDEFGHIJKLMNOPQ',
+      expectedError: 'The Home Office reference number should be between 8 to 16 characters.',
+    },
+  ])(
+    'POST /{nomsId}/immigration-detention/add/ho-ref/{id} throws error for invalid HO Ref: "$input"',
+    ({ input, expectedError }) => {
+      immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+      return request(app)
+        .post(`/${NOMS_ID}/immigration-detention/add/ho-ref/${SESSION_ID}`)
+        .send({ hoRefNumber: input })
+        .type('form')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain(expectedError)
+        })
+    },
+  )
+
+  it.each([{ input: 'B1234567/12' }, { input: 'b1234567/12' }, { input: 'ABC12345' }, { input: 'abc12345' }])(
+    'POST /{nomsId}/immigration-detention/add/ho-ref/{id} passes with valid HO Ref: "$input"',
+    ({ input }) => {
+      immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+      return request(app)
+        .post(`/${NOMS_ID}/immigration-detention/add/ho-ref/${SESSION_ID}`)
+        .send({ hoRefNumber: input })
+        .type('form')
+        .expect(302)
+        .expect('Location', `/${NOMS_ID}/immigration-detention/add/review/${SESSION_ID}`)
+    },
+  )
 
   it('GET /{nomsId}/immigration-detention/add/review/{id} renders review page successfully', () => {
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
