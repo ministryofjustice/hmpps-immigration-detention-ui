@@ -49,7 +49,7 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   async validation(): Promise<ValidationError[]> {
-    const validPattern = /^[A-Z0-9/]+$/ // Allows only uppercase letters, numbers, and forward slash '/'
+    const validPattern = /^[a-zA-Z0-9/]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
     const errors: ValidationError[] = []
 
     if (!this.hoRefNumber) {
