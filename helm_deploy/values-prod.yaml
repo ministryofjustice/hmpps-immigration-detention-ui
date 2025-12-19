@@ -3,7 +3,7 @@
 
 generic-service:
   ingress:
-    host: immigration-detention-ui.hmpps.service.justice.gov.uk
+    host: immigration-detention.hmpps.service.justice.gov.uk
 
   env:
     COMPONENT_API_URL: "https://frontend-components-prod.hmpps.service.justice.gov.uk"
