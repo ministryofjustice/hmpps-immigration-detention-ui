@@ -98,5 +98,19 @@ export const validateDate = (day: string, month: string, year: string, fieldPref
     }
   }
 
+  if (date.isAfter(dayjs())) {
+    return {
+      text: 'The date cannot be in the future.',
+      fields: [`${fieldPrefix}-day`, `${fieldPrefix}-month`, `${fieldPrefix}-year`],
+    }
+  }
+
+  if (date.isBefore(dayjs().subtract(100, 'years'))) {
+    return {
+      text: 'The date must be within the last 100 years.',
+      fields: [`${fieldPrefix}-day`, `${fieldPrefix}-month`, `${fieldPrefix}-year`],
+    }
+  }
+
   return null
 }

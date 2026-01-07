@@ -296,6 +296,24 @@ describe('Immigration Detention routes', () => {
       })
   })
 
+  test.each`
+    year      | error
+    ${'2900'} | ${'The date cannot be in the future.'}
+    ${'1900'} | ${'The date must be within the last 100 years.'}
+  `(
+    'POST /{nomsId}/immigration-detention/add/document-date/{id} the date can not be in the future or more than 100 years ago',
+    ({ year, error }) => {
+      return request(app)
+        .post(`/${NOMS_ID}/immigration-detention/add/document-date/${SESSION_ID}`)
+        .send({ 'docDate-day': '20', 'docDate-month': '12', 'docDate-year': year })
+        .type('form')
+        .expect('Content-Type', /html/)
+        .expect(res => {
+          expect(res.text).toContain(error)
+        })
+    },
+  )
+
   it('POST /{nomsId}/immigration-detention/add/ho-ref/{id} throws error when no HO Ref is entered', () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
     return request(app)
