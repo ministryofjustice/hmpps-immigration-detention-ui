@@ -44,6 +44,7 @@ export default function nunjucksSetup(app: express.Express): void {
   )
 
   // njkEnv.addGlobal('digitalCCARDUrl', config.services.courtCasesReleaseDates.url)
+  njkEnv.addGlobal('digitalPrisonServicesUrl', config.services.dpsHome.url)
 
   njkEnv.addFilter('personProfileName', personProfileName)
   njkEnv.addFilter('personDateOfBirth', personDateOfBirth)
