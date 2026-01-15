@@ -1,6 +1,7 @@
 import IndexPage from '../pages/index'
 import AuthSignInPage from '../pages/authSignIn'
 import Page from '../pages/page'
+import AuthErrorPage from '../pages/authError'
 import AuthManageDetailsPage from '../pages/authManageDetails'
 
 context('Sign In', () => {
@@ -69,10 +70,22 @@ context('Sign In', () => {
     Page.verifyOnPage(AuthSignInPage)
 
     cy.task('stubVerifyToken', true)
-    cy.task('stubSignIn', { name: 'bobby brown' })
+    cy.task('stubSignIn', { name: 'bobby brown', roles: ['ROLE_IMMIGRATION_DETENTION_USER'] })
 
     cy.signIn()
 
     indexPage.headerUserName().contains('B. Brown')
+  })
+
+  it('User with admin role is also successful', () => {
+    cy.task('stubSignIn', { roles: ['ROLE_IMMIGRATION_DETENTION_ADMIN'] })
+    cy.signIn()
+    Page.verifyOnPage(IndexPage)
+  })
+
+  it('User with no roles is shown auth error page', () => {
+    cy.task('stubSignIn', { roles: [] })
+    cy.signIn({ failOnStatusCode: false })
+    Page.verifyOnPage(AuthErrorPage)
   })
 })
