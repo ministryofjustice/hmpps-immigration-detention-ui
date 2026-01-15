@@ -36,7 +36,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app)
   app.use(setUpAuthentication())
-  app.use(authorisationMiddleware())
+  app.use(authorisationMiddleware(['IMMIGRATION_DETENTION_USER', 'IMMIGRATION_DETENTION_ADMIN']))
   app.use(setUpCsrf())
 
   app.get(/.*/, getFrontendComponents(services))
