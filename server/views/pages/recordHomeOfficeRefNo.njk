@@ -37,9 +37,7 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         <h1 class="govuk-heading-l">
             <span class="govuk-caption-xl" data-qa="caption-text">{{ model.getCaption() }}</span>
-            <span data-qa="recordHORefQuestion">
-              Enter the Home Office Reference Number
-            </span>
+            <span data-qa="recordHORefQuestion">{{ model.getQuestion() }}</span>
             <div data-qa=ho-ref-hint-text class=govuk-hint>{{ model.getHintText() }}</div>
         </h1>
         {{ govukInput({

@@ -104,7 +104,7 @@
                },
                {
                  key: {
-                   text: "Date on document"
+                   text: model.getDocumentDateKeyText()
                  },
                  value: {
                    text: model.docDateFormatted
@@ -114,7 +114,7 @@
                      {
                        href: "/" + model.nomsId + "/immigration-detention/edit/document-date/" + model.id,
                        text: "Edit",
-                       visuallyHiddenText: "document date",
+                       visuallyHiddenText: model.getDocumentDateVisuallyHiddenText(),
                        attributes: {
                          "data-qa": "edit-document-date-link"
                        }
@@ -124,7 +124,7 @@
                },
                {
                  key: {
-                   text: "Home office reference number"
+                   text: model.getReferenceKeyText()
                  },
                  value: {
                    text: model.hoRefNumber
@@ -134,7 +134,7 @@
                      {
                        href: "/" + model.nomsId + "/immigration-detention/edit/ho-ref/" + model.id,
                        text: "Edit",
-                       visuallyHiddenText: "home office reference number",
+                       visuallyHiddenText: model.getReferenceVisuallyHiddenText(),
                        attributes: {
                          "data-qa": "edit-ho-ref-link"
                        }

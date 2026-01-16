@@ -25,8 +25,9 @@ const stubGetPrisonerImage = () =>
     },
     response: {
       status: 200,
-      headers: { 'Content-Type': 'image/jpeg' },
-      body: Buffer.from('fake-image-data', 'utf-8').toString('base64'),
+      headers: { 'Content-Type': 'image/png' },
+      base64Body:
+        'iVBORw0KGgoAAAANSUhEUgAAAQAAAAEAAQMAAABmvDolAAAAA1BMVEW10NBjBBbqAAAAH0lEQVRoge3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAvg0hAAABmmDh1QAAAABJRU5ErkJggg==',
     },
   })
 

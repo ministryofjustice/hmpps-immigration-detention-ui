@@ -101,7 +101,8 @@ export default class ImmigrationDetentionRoutes {
       }
     } else if (
       immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
-      immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
+      immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
+      immigrationDetention.immigrationDetentionRecordType === 'IMMIGRATION_BAIL'
     ) {
       createdImmigrationDetention = {
         appearanceOutcomeUuid: outcomes.find(
