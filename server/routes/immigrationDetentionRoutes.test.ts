@@ -168,6 +168,7 @@ describe('Immigration Detention routes', () => {
 
   it('GET /{nomsId}/immigration-detention/add/record-type renders the select recordType page', async () => {
     immigrationDetentionStoreService.store.mockReturnValue(SESSION_ID)
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
 
     await request(app)
       .get(`/${NOMS_ID}/immigration-detention/add/record-type/${SESSION_ID}`)
@@ -184,6 +185,19 @@ describe('Immigration Detention routes', () => {
         const cancelLink = $('[data-qa="cancel-button"]').attr('href')
         expect(cancelLink).toBe('http://localhost:3000/ccard/prisoner/ABC123/overview')
       })
+  })
+
+  it.each([
+    { page: 'record-type' },
+    { page: 'ho-ref' },
+    { page: 'confirmed-date' },
+    { page: 'document-date' },
+    { page: 'no-longer-interest-reason' },
+  ])('If the store does not return an immigration detention entry, redirect to the overview', ({ page }) => {
+    return request(app)
+      .get(`/${NOMS_ID}/immigration-detention/add/${page}/not-a-valid-uuid`)
+      .expect(302)
+      .expect('Location', `/${NOMS_ID}/immigration-detention/overview`)
   })
 
   it('GET /{nomsId}/immigration-detention/add/document-date renders the documentDate page', async () => {
