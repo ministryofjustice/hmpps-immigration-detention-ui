@@ -103,6 +103,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     if (this.latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       return 'A Deportation order has been recorded'
     }
+    if (this.latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Immigration bail has been recorded'
+    }
     return `${this.prisonerName} is no longer of interest to Home Office`
   }
 
@@ -113,6 +116,8 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
       message = `IS91 recorded on ${formattedCreatedAt}`
     } else if (this.latestRecord.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       message = `Deportation order recorded on ${formattedCreatedAt}`
+    } else if (this.latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      message = `Immigration bail recorded on ${formattedCreatedAt}`
     } else {
       message = `No longer of interest recorded on ${formattedCreatedAt}`
     }
@@ -120,6 +125,20 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
       message += ' via NOMIS'
     }
     return message
+  }
+
+  public getDocumentDateKeyText() {
+    if (this.latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Bail granted date'
+    }
+    return 'Date on document'
+  }
+
+  public getReferenceKeyText() {
+    if (this.latestRecord.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Document reference number'
+    }
+    return 'Home office reference number'
   }
 
   private actionCell(immigrationDetention: ImmigrationDetention) {
@@ -135,7 +154,8 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
 
     if (
       (immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
-        immigrationDetention.immigrationDetentionRecordType === 'IS91') &&
+        immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
+        immigrationDetention.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') &&
       immigrationDetention.source !== 'NOMIS'
     ) {
       return {
