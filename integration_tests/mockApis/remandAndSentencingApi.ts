@@ -145,6 +145,16 @@ const stubGetAllAppearanceOutcomes = () =>
           dispositionCode: 'DISP',
         },
         {
+          outcomeUuid: 'dd50ba6c-55cf-40d7-a640-db8830edf85f',
+          outcomeName: 'Outcome Name',
+          nomisCode: '5501',
+          outcomeType: 'IMMIGRATION',
+          displayOrder: 1,
+          relatedChargeOutcomeUuid: 'aa56837a-feda-4237-8603-041498bdefc4',
+          isSubList: false,
+          dispositionCode: 'DISP',
+        },
+        {
           outcomeUuid: '29093189-4cb7-4658-8301-e7e9e2b6958f',
           outcomeName: 'Outcome Name',
           nomisCode: '5502',
