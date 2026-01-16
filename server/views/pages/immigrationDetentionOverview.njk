@@ -54,7 +54,7 @@
           {% if model.hasImmigrationDetentionAdminRole() %}
             {% if model.deleteLinkForLatestRecord() %}
               <li class="govuk-summary-card__action">
-                  <a class="govuk-link" data-qa='delete-latest-link' href="{{ model.deleteLinkForLatestRecord() }}"">
+                  <a class="govuk-link" data-qa='delete-latest-link' href="{{ model.deleteLinkForLatestRecord() }}">
                     Delete
                   </a>
               </li>
@@ -91,7 +91,7 @@
              rows: [
                {
                  key: {
-                   text: "Date on document"
+                   text: model.getDocumentDateKeyText()
                  },
                  value: {
                    text: model.docDateFormatted
@@ -100,7 +100,7 @@
                },
                {
                  key: {
-                   text: "Home office reference number"
+                   text: model.getReferenceKeyText()
                  },
                  value: {
                    text: model.hoRefNumber
