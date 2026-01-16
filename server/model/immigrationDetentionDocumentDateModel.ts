@@ -36,12 +36,18 @@ export default class ImmigrationDetentionDocumentDateModel {
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Record IS91 Detention Authority'
     }
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Record Immigration Bail'
+    }
     return 'Record Deportation Order'
   }
 
   public getQuestion() {
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
       return 'Enter the date on the IS91 document'
+    }
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Enter the date that immigration bail was granted'
     }
     return 'Enter the date on the deportation order'
   }

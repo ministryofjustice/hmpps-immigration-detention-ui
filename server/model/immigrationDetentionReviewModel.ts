@@ -32,7 +32,38 @@ export default class ImmigrationDetentionReviewModel extends ImmigrationDetentio
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       return 'Record Deportation Order'
     }
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Record Immigration Bail'
+    }
     return 'Record Immigration Information'
+  }
+
+  public getDocumentDateKeyText() {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Date granted'
+    }
+    return 'Date on document'
+  }
+
+  public getDocumentDateVisuallyHiddenText() {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'granted date'
+    }
+    return 'document date'
+  }
+
+  public getReferenceKeyText() {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Reference number'
+    }
+    return 'Home office reference number'
+  }
+
+  public getReferenceVisuallyHiddenText() {
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'reference number'
+    }
+    return 'home office reference number'
   }
 
   public cancelLink(): string {

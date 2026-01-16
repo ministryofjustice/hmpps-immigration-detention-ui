@@ -15,6 +15,9 @@ export default class ImmigrationDetentionResultPageModel {
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER') {
       return 'Deportation order successfully recorded'
     }
+    if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
+      return 'Immigration bail successfully recorded'
+    }
     return 'No longer of interest successfully recorded'
   }
 
