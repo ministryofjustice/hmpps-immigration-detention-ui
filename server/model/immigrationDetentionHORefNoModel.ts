@@ -8,10 +8,12 @@ export default class ImmigrationDetentionHORefModel {
     public id: string,
     public immigrationDetention: ImmigrationDetention,
     public addOrEditOrUpdate?: string,
-    public hoRefNumber?: string,
+    public hoRefNumberForm?: { hoRefNumber: string },
   ) {
-    if (!this.hoRefNumber) {
-      this.hoRefNumber = immigrationDetention?.homeOfficeReferenceNumber
+    if (!this.hoRefNumberForm) {
+      this.hoRefNumberForm = {
+        hoRefNumber: immigrationDetention?.homeOfficeReferenceNumber,
+      }
     }
   }
 
@@ -19,7 +21,7 @@ export default class ImmigrationDetentionHORefModel {
 
   public getQuestion() {
     if (
-      this.hoRefNumber === 'IMMIGRATION_BAIL' ||
+      this.hoRefNumberForm.hoRefNumber === 'IMMIGRATION_BAIL' ||
       this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL'
     ) {
       return 'Enter the reference number on the immigration bail document'
@@ -28,11 +30,14 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   public getCaption() {
-    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
+    if (
+      this.hoRefNumberForm.hoRefNumber === 'IS91' ||
+      this.immigrationDetention?.immigrationDetentionRecordType === 'IS91'
+    ) {
       return 'Record IS91 Detention Authority'
     }
     if (
-      this.hoRefNumber === 'IMMIGRATION_BAIL' ||
+      this.hoRefNumberForm.hoRefNumber === 'IMMIGRATION_BAIL' ||
       this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL'
     ) {
       return 'Record Immigration Bail'
@@ -41,11 +46,14 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   public getHintText() {
-    if (this.hoRefNumber === 'IS91' || this.immigrationDetention?.immigrationDetentionRecordType === 'IS91') {
+    if (
+      this.hoRefNumberForm.hoRefNumber === 'IS91' ||
+      this.immigrationDetention?.immigrationDetentionRecordType === 'IS91'
+    ) {
       return 'This can be found at the top of IS91 document'
     }
     if (
-      this.hoRefNumber === 'IMMIGRATION_BAIL' ||
+      this.hoRefNumberForm.hoRefNumber === 'IMMIGRATION_BAIL' ||
       this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL'
     ) {
       return 'This will be at the top of the document'
@@ -84,21 +92,24 @@ export default class ImmigrationDetentionHORefModel {
   validateHomeOffenceReference(): ValidationError[] {
     const validPattern = /^[a-zA-Z0-9/]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
     const errors: ValidationError[] = []
-    if (!this.hoRefNumber) {
+    if (!this.hoRefNumberForm?.hoRefNumber) {
       errors.push({
         text: 'Enter the Home Office reference number',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && (this.hoRefNumber.length < 8 || this.hoRefNumber.length > 16)) {
+    if (
+      this.hoRefNumberForm?.hoRefNumber &&
+      (this.hoRefNumberForm?.hoRefNumber.length < 8 || this.hoRefNumberForm?.hoRefNumber.length > 16)
+    ) {
       errors.push({
         text: 'The Home Office reference number should be between 8 to 16 characters.',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && !validPattern.test(this.hoRefNumber)) {
+    if (this.hoRefNumberForm?.hoRefNumber && !validPattern.test(this.hoRefNumberForm?.hoRefNumber)) {
       errors.push({
         text: "The Home Office reference number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters (e.g. '@', '#', '%', '&', '-').",
         fields: ['refNumber'],
@@ -111,14 +122,14 @@ export default class ImmigrationDetentionHORefModel {
     const validPattern = /^[0-9-]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
     const errors: ValidationError[] = []
 
-    if (!this.hoRefNumber) {
+    if (!this.hoRefNumberForm?.hoRefNumber) {
       errors.push({
         text: 'Enter the reference on the immigration bail document',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && !validPattern.test(this.hoRefNumber)) {
+    if (this.hoRefNumberForm?.hoRefNumber && !validPattern.test(this.hoRefNumberForm?.hoRefNumber)) {
       errors.push({
         text: "The reference number should only contain numbers. It might have a dash '-' but should not contain any other special characters (e.g. '@', '#', '%', '&').",
         fields: ['refNumber'],
