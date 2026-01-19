@@ -264,15 +264,17 @@ export default class ImmigrationDetentionRoutes {
   public submitHORefNumber: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id, addOrEditOrUpdate } = req.params
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
-
+    const hoRefNumberForm = {
+      hoRefNumber: req.body.hoRefNumber,
+    }
     const immigrationDetentionHomeOfficeRefNo = new ImmigrationDetentionHORefModel(
       nomsId,
       id,
       immigrationDetention,
       addOrEditOrUpdate,
-      req.body.hoRefNumber,
+      hoRefNumberForm,
     )
-    const errors = await immigrationDetentionHomeOfficeRefNo.validation(req.body.hoRefNumber)
+    const errors = await immigrationDetentionHomeOfficeRefNo.validation()
     immigrationDetentionHomeOfficeRefNo.errors = errors
 
     if (errors.length > 0) {
@@ -283,7 +285,7 @@ export default class ImmigrationDetentionRoutes {
 
     immigrationDetention = {
       ...immigrationDetention,
-      homeOfficeReferenceNumber: immigrationDetentionHomeOfficeRefNo.hoRefNumber,
+      homeOfficeReferenceNumber: immigrationDetentionHomeOfficeRefNo.hoRefNumberForm.hoRefNumber,
     }
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
