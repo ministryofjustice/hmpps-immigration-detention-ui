@@ -272,7 +272,7 @@ export default class ImmigrationDetentionRoutes {
       addOrEditOrUpdate,
       req.body.hoRefNumber,
     )
-    const errors = await immigrationDetentionHomeOfficeRefNo.validation()
+    const errors = await immigrationDetentionHomeOfficeRefNo.validation(req.body.hoRefNumber)
     immigrationDetentionHomeOfficeRefNo.errors = errors
 
     if (errors.length > 0) {

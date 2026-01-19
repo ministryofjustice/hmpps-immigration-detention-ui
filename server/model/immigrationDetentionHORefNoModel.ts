@@ -70,35 +70,35 @@ export default class ImmigrationDetentionHORefModel {
     return pattern.test(value)
   }
 
-  async validation(): Promise<ValidationError[]> {
+  async validation(hoReferenceNumber?: string): Promise<ValidationError[]> {
     const errors: ValidationError[] = []
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {
-      errors.push(...this.validateImmigrationBail())
+      errors.push(...this.validateImmigrationBail(hoReferenceNumber))
     } else {
-      errors.push(...this.validateHomeOffenceReference())
+      errors.push(...this.validateHomeOffenceReference(hoReferenceNumber))
     }
 
     return errors
   }
 
-  validateHomeOffenceReference(): ValidationError[] {
+  validateHomeOffenceReference(hoReferenceNumber?: string): ValidationError[] {
     const validPattern = /^[a-zA-Z0-9/]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
     const errors: ValidationError[] = []
-    if (!this.hoRefNumber) {
+    if (!hoReferenceNumber) {
       errors.push({
         text: 'Enter the Home Office reference number',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && (this.hoRefNumber.length < 8 || this.hoRefNumber.length > 16)) {
+    if (hoReferenceNumber && (hoReferenceNumber.length < 8 || hoReferenceNumber.length > 16)) {
       errors.push({
         text: 'The Home Office reference number should be between 8 to 16 characters.',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && !validPattern.test(this.hoRefNumber)) {
+    if (hoReferenceNumber && !validPattern.test(hoReferenceNumber)) {
       errors.push({
         text: "The Home Office reference number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters (e.g. '@', '#', '%', '&', '-').",
         fields: ['refNumber'],
@@ -107,18 +107,18 @@ export default class ImmigrationDetentionHORefModel {
     return errors
   }
 
-  validateImmigrationBail(): ValidationError[] {
+  validateImmigrationBail(hoReferenceNumber?: string): ValidationError[] {
     const validPattern = /^[0-9-]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
     const errors: ValidationError[] = []
 
-    if (!this.hoRefNumber) {
+    if (hoReferenceNumber) {
       errors.push({
         text: 'Enter the reference on the immigration bail document',
         fields: ['refNumber'],
       })
     }
 
-    if (this.hoRefNumber && !validPattern.test(this.hoRefNumber)) {
+    if (hoReferenceNumber && !validPattern.test(hoReferenceNumber)) {
       errors.push({
         text: "The reference number should only contain numbers. It might have a dash '-' but should not contain any other special characters (e.g. '@', '#', '%', '&').",
         fields: ['refNumber'],
