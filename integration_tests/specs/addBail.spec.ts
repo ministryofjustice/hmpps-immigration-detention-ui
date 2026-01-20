@@ -13,7 +13,6 @@ import remandAndSentencingApi from '../mockApis/remandAndSentencingApi'
 
 test.describe('Add Immigration Detention - Bail', () => {
   test.beforeEach(async () => {
-    await resetStubs()
     await Promise.all([
       manageUsersApi.stubManageUser(),
       prisonApi.stubGetUserCaseloads(),
@@ -26,6 +25,10 @@ test.describe('Add Immigration Detention - Bail', () => {
       prisonerSearchApi.stubPrisonSearchApiPing(),
       remandAndSentencingApi.stubRASApiPing(),
     ])
+  })
+
+  test.afterEach(async () => {
+    await resetStubs()
   })
 
   test('Enter bail', async ({ page }) => {
