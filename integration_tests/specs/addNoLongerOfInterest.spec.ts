@@ -21,6 +21,10 @@ test.describe('Add Immigration Detention - No Longer Of Interest', () => {
       remandAndSentencingApi.stubPostImmigrationDetention(),
       prisonApi.stubGetPrisonerImage(),
       remandAndSentencingApi.stubGetAllAppearanceOutcomes(),
+      manageUsersApi.stubManageUsersPing(),
+      prisonApi.stubGetUserCasePing(),
+      prisonerSearchApi.stubPrisonSearchApiPing(),
+      remandAndSentencingApi.stubRASApiPing(),
     ])
   })
 
