@@ -38,7 +38,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpAuthentication())
   app.use(authorisationMiddleware(['IMMIGRATION_DETENTION_USER', 'IMMIGRATION_DETENTION_ADMIN']))
   app.use(setUpCsrf())
-  app.use(setUpCurrentUser())
+  app.use(setUpCurrentUser(services))
 
   app.get(/.*/, getFrontendComponents(services))
 
