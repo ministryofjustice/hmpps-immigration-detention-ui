@@ -52,5 +52,6 @@ context('Add Immigration Detention - Bail', () => {
 
     const immigrationDetentionResult = new AddImmigrationDetentionResultPage('Immigration bail successfully recorded')
     immigrationDetentionResult.successMessage().should('have.text', 'Immigration bail successfully recorded')
+    immigrationDetentionResult.followInfo().should('not.exist')
   })
 })

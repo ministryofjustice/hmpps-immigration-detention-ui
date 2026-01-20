@@ -24,11 +24,13 @@
         <h1 class="govuk-panel__title" data-qa=success-message>{{ model.getSuccessMessage() }}</h1>
       </div>
       <br>
-      <div class="govuk-heading-l">What you need to do next</div>
-        <p class="govuk-body govuk" data-qa=follow-info>{{ model.getFollowInfo () }}</p>
+      {% if model.getFollowInfo() %}
+        <div class="govuk-heading-l">What you need to do next</div>
+        <p class="govuk-body govuk" data-qa=follow-info>{{ model.getFollowInfo() }}</p>
         <ol class="govuk-body">1. <a data-qa="prisoner-alert-url" href="{{ model.getAlertsUrl() }}">Add or update an alert on the person's profile</a></ol>
         <ol class="govuk-body" data-qa="nomis-release-text">2. Go to NOMIS to update the release schedule</ol>
         <br>
+      {% endif %}
          {{ govukButton({
             attributes: { 'data-qa': 'cancel-button' },
             text: "Continue to overview",
