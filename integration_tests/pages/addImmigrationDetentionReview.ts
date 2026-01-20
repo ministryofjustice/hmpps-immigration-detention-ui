@@ -1,23 +1,33 @@
-import Page, { PageElement } from './page'
+import { expect, type Locator, type Page } from '@playwright/test'
+import AbstractPage from './abstractPage'
 
-export default class AddImmigrationDetentionReview extends Page {
-  constructor() {
-    super('Confirm and save')
+export default class AddImmigrationDetentionReview extends AbstractPage {
+  readonly header: Locator
+
+  constructor(page: Page) {
+    super(page)
+    this.header = page.locator('h1', { hasText: 'Confirm and save' })
   }
 
-  public submit = (): PageElement => cy.get('[data-qa=submit-form]')
+  static async verifyOnPage(page: Page): Promise<AddImmigrationDetentionReview> {
+    const addImmigrationDetentionReviewPage = new AddImmigrationDetentionReview(page)
+    await expect(addImmigrationDetentionReviewPage.header).toBeVisible()
+    return addImmigrationDetentionReviewPage
+  }
 
-  public captionText = (): PageElement => cy.get('[data-qa=caption-text]')
+  public submit = (): Locator => this.page.locator('[data-qa=submit-form]')
 
-  public continueButton = (): PageElement => cy.get('[data-qa=submit-form]')
+  public captionText = (): Locator => this.page.locator('[data-qa=caption-text]')
 
-  public editRecordType = (): PageElement => cy.get('[data-qa=edit-record-type-link]')
+  public continueButton = (): Locator => this.page.locator('[data-qa=submit-form]')
 
-  public editDocumentDate = (): PageElement => cy.get('[data-qa=edit-document-date-link]')
+  public editRecordType = (): Locator => this.page.locator('[data-qa=edit-record-type-link]')
 
-  public editConfirmedDate = (): PageElement => cy.get('[data-qa=edit-confirmed-date-link]')
+  public editDocumentDate = (): Locator => this.page.locator('[data-qa=edit-document-date-link]')
 
-  public editHoRef = (): PageElement => cy.get('[data-qa=edit-ho-ref-link]')
+  public editConfirmedDate = (): Locator => this.page.locator('[data-qa=edit-confirmed-date-link]')
 
-  public editNoLongerInterestReason = (): PageElement => cy.get('[data-qa=edit-no-longer-interest-reason-link]')
+  public editHoRef = (): Locator => this.page.locator('[data-qa=edit-ho-ref-link]')
+
+  public editNoLongerInterestReason = (): Locator => this.page.locator('[data-qa=edit-no-longer-interest-reason-link]')
 }

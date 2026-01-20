@@ -1,13 +1,25 @@
-import Page, { PageElement } from './page'
+import { expect, type Locator, type Page } from '@playwright/test'
+import AbstractPage from './abstractPage'
 
-export default class AddImmigrationDetentionNoLongerOfInterestTypePage extends Page {
-  constructor() {
-    super('Record Immigration Information')
+export default class AddImmigrationDetentionNoLongerOfInterestTypePage extends AbstractPage {
+  readonly header: Locator
+
+  constructor(page: Page) {
+    super(page)
+    this.header = page.locator('h1', { hasText: 'Record Immigration Information' })
   }
 
-  public continueButton = (): PageElement => cy.get('[data-qa=submit-form]')
+  static async verifyOnPage(page: Page): Promise<AddImmigrationDetentionNoLongerOfInterestTypePage> {
+    const addImmigrationDetentionNoLongerOfInterestTypePage = new AddImmigrationDetentionNoLongerOfInterestTypePage(
+      page,
+    )
+    await expect(addImmigrationDetentionNoLongerOfInterestTypePage.header).toBeVisible()
+    return addImmigrationDetentionNoLongerOfInterestTypePage
+  }
 
-  public noLongerOfInterestQuestion = (): PageElement => cy.get('[data-qa=noLongerOfInterestQuestion]')
+  public continueButton = (): Locator => this.page.locator('[data-qa=submit-form]')
 
-  public selectRecordType = (type: string): PageElement => cy.get(`[value=${type}]`)
+  public noLongerOfInterestQuestion = (): Locator => this.page.locator('[data-qa=noLongerOfInterestQuestion]')
+
+  public selectRecordType = (type: string): Locator => this.page.locator(`[value=${type}]`)
 }

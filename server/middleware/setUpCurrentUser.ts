@@ -31,6 +31,10 @@ export default function setUpCurrentUser({ userService }: Services): Router {
         userRoles: roles.map(role => role.substring(role.indexOf('_') + 1)),
       } as PrisonUser
 
+      if (res.locals.user.authSource === 'nomis') {
+        res.locals.user.staffId = parseInt(userId, 10) || undefined
+      }
+
       next()
     } catch (error) {
       logger.error(error, `Failed to populate user details for: ${res.locals.user && res.locals.user.username}`)
