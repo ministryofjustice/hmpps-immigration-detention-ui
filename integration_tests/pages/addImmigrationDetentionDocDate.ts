@@ -1,24 +1,34 @@
 import dayjs from 'dayjs'
-import Page, { PageElement } from './page'
+import { expect, type Locator, type Page } from '@playwright/test'
+import AbstractPage from './abstractPage'
 
-export default class AddDocumentDatePage extends Page {
-  constructor(title: string) {
-    super(title || 'Record IS91 Detention Authority')
+export default class AddDocumentDatePage extends AbstractPage {
+  readonly header: Locator
+
+  constructor(page: Page, title: string) {
+    super(page)
+    this.header = page.locator('h1', { hasText: title || 'Record Immigration Information' })
   }
 
-  public continueButton = (): PageElement => cy.get('[data-qa=submit-form]')
+  static async verifyOnPage(page: Page, title: string): Promise<AddDocumentDatePage> {
+    const addConfirmedDatePage = new AddDocumentDatePage(page, title)
+    await expect(addConfirmedDatePage.header).toBeVisible()
+    return addConfirmedDatePage
+  }
 
-  public captionText = (): PageElement => cy.get('[data-qa=caption-text]')
+  public continueButton = (): Locator => this.page.locator('[data-qa=submit-form]')
 
-  public docQuestion = (): PageElement => cy.get('[data-qa=doc-date]')
+  public captionText = (): Locator => this.page.locator('[data-qa=caption-text]')
 
-  public enterDocDate = (date: string): void => {
+  public docQuestion = (): Locator => this.page.locator('[data-qa=doc-date]')
+
+  public enterDocDate = async (date: string): Promise<void> => {
     const days = dayjs(date).get('date').toString()
     const months = (dayjs(date).get('month') + 1).toString()
     const years = dayjs(date).get('year').toString()
 
-    cy.get('[name=docDate-day]').type(days)
-    cy.get('[name=docDate-month]').type(months)
-    cy.get('[name=docDate-year]').type(years)
+    await this.page.locator('[name=docDate-day]').fill(days)
+    await this.page.locator('[name=docDate-month]').fill(months)
+    await this.page.locator('[name=docDate-year]').fill(years)
   }
 }

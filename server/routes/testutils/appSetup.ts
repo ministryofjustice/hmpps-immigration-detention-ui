@@ -36,7 +36,9 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
   app.use((req, res, next) => {
     req.user = userSupplier() as Express.User
     req.flash = flashProvider
-    res.locals.user = { ...req.user } as HmppsUser
+    res.locals = {
+      user: { ...req.user } as HmppsUser,
+    }
     next()
   })
   app.use((req, res, next) => {
