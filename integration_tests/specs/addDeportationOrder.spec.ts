@@ -20,10 +20,6 @@ test.describe('Add Immigration Detention - Detention Order', () => {
       remandAndSentencingApi.stubPostImmigrationDetention(),
       prisonApi.stubGetPrisonerImage(),
       remandAndSentencingApi.stubGetAllAppearanceOutcomes(),
-      manageUsersApi.stubManageUsersPing(),
-      prisonApi.stubGetUserCasePing(),
-      prisonerSearchApi.stubPrisonSearchApiPing(),
-      remandAndSentencingApi.stubRASApiPing(),
     ])
   })
 
