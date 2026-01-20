@@ -3,9 +3,13 @@ import hmppsAuth from '../mockApis/hmppsAuth'
 
 import { login, resetStubs } from '../testUtils'
 import HomePage from '../pages/homePage'
+import manageUsersApi from '../mockApis/manageUsersApi'
+import prisonApi from '../mockApis/prisonApi'
 
 test.describe('SignIn', () => {
-  test.beforeEach(async () => {})
+  test.beforeEach(async () => {
+    await Promise.all([manageUsersApi.stubManageUser(), prisonApi.stubGetUserCaseloads()])
+  })
 
   test.afterEach(async () => {
     await resetStubs()
