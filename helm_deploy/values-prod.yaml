@@ -6,7 +6,7 @@ generic-service:
     host: immigration-detention.hmpps.service.justice.gov.uk
 
   env:
-    COMPONENT_API_URL: "https://frontend-components-prod.hmpps.service.justice.gov.uk"
+    COMPONENT_API_URL: "https://frontend-components.hmpps.service.justice.gov.uk"
     COURT_CASES_AND_RELEASE_DATES_URL: "https://court-cases-release-dates.hmpps.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICES_URL: "https://digital.prison.service.justice.gov.uk"
     DPS_PRISONER_URL: 'https://prisoner.digital.prison.service.justice.gov.uk'
