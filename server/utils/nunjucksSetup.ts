@@ -23,6 +23,17 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.appInsightsConnectionString = config.appInsightsConnectionString
   app.locals.appInsightsApplicationName = applicationInfo.applicationName
   app.locals.buildNumber = config.buildNumber
+
+  if (config.environmentName === 'LOCAL') {
+    app.locals.environment = 'local'
+  } else if (config.environmentName === 'DEV') {
+    app.locals.environment = 'dev'
+  } else if (config.environmentName === 'PRE-PRODUCTION') {
+    app.locals.environment = 'pre'
+  } else {
+    app.locals.environment = 'prod'
+  }
+
   let assetManifest: Record<string, string> = {}
 
   try {
