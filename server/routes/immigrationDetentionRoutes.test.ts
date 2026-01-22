@@ -188,14 +188,15 @@ describe('Immigration Detention routes', () => {
   })
 
   it.each([
-    { page: 'record-type' },
-    { page: 'ho-ref' },
-    { page: 'confirmed-date' },
-    { page: 'document-date' },
-    { page: 'no-longer-interest-reason' },
-  ])('If the store does not return an immigration detention entry, redirect to the overview', ({ page }) => {
+    'add/record-type',
+    'add/ho-ref',
+    'add/confirmed-date',
+    'add/document-date',
+    'add/no-longer-interest-reason',
+    'delete',
+  ])('Redirect to overview when entity does not exist - %s', path => {
     return request(app)
-      .get(`/${NOMS_ID}/immigration-detention/add/${page}/not-a-valid-uuid`)
+      .get(`/${NOMS_ID}/immigration-detention/${path}/not-a-valid-uuid`)
       .expect(302)
       .expect('Location', `/${NOMS_ID}/immigration-detention/overview`)
   })

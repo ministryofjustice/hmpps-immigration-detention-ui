@@ -37,11 +37,16 @@ export default class ImmigrationDetentionRoutes {
   public delete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
     const { username = 'Unknown' } = res.locals.user
+
     const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
 
-    return res.render('pages/deleteImmigrationDetentionRecord', {
-      model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention),
-    })
+    if (immigrationDetention != null) {
+      return res.render('pages/deleteImmigrationDetentionRecord', {
+        model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention),
+      })
+    }
+
+    return res.redirect(`/${nomsId}/immigration-detention/overview`)
   }
 
   public submitDelete: RequestHandler = async (req, res): Promise<void> => {
