@@ -13,7 +13,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     public roles: string[],
   ) {
     const sortedRecords = immigrationDetentionRecords.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      (a, b) =>
+        new Date(b.recordDate).getTime() - new Date(a.recordDate).getTime() ||
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
     const [firstRecord] = sortedRecords
     super(firstRecord || ({} as ImmigrationDetention))
