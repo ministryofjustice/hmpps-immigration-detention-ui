@@ -20,6 +20,7 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   immigrationDetentionRecordType: 'IS91',
   homeOfficeReferenceNumber: 'ABC123',
   recordDate: '2022-06-22',
+  courtAppearanceUuid: '1234',
 }
 
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
@@ -32,6 +33,7 @@ const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   noLongerOfInterestReason: 'OTHER_REASON',
   noLongerOfInterestComment: 'Confirmed not of interest',
   createdAt: '2025-11-03T08:06:37.123Z',
+  courtAppearanceUuid: '1234',
 }
 
 const SAVED_IMMIGRATION_DETENTION_OBJECT: SaveImmigrationDetentionResponse = {
