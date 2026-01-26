@@ -82,7 +82,8 @@ export default class ImmigrationDetentionRoutes {
 
   public submitReview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
-    const { username = 'Unknown', activeCaseLoadId = 'Unknown' } = res.locals.user as User
+    const { username = 'Unknown' } = res.locals.user as User
+    const { prisonId = 'Unknown' } = res.locals.prisoner
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const outcomes = await this.immigrationDetentionService.getImmigrationDetentionAppearanceOutcomes(username)
 
@@ -96,7 +97,7 @@ export default class ImmigrationDetentionRoutes {
             immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
               .nomisCode,
         ).outcomeUuid,
-        createdByPrison: activeCaseLoadId,
+        createdByPrison: prisonId,
         createdByUsername: username,
         noLongerOfInterestComment: immigrationDetention.noLongerOfInterestComment,
         noLongerOfInterestReason: immigrationDetention.noLongerOfInterestReason,
@@ -116,7 +117,7 @@ export default class ImmigrationDetentionRoutes {
             immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
               .nomisCode,
         ).outcomeUuid,
-        createdByPrison: activeCaseLoadId,
+        createdByPrison: prisonId,
         createdByUsername: username,
         homeOfficeReferenceNumber: immigrationDetention.homeOfficeReferenceNumber,
         prisonerId: nomsId,
