@@ -22,6 +22,7 @@ generic-service:
     COMMON_COMPONENTS_ENABLED: 'true'
     ENVIRONMENT_NAME: PRE-PRODUCTION
     AUDIT_ENABLED: "false"
+    FEATURES_MODIFY_NOMIS_RECORDS_ENABLED: "false"
 
 generic-prometheus-alerts:
   alertSeverity: legacy-replacement-alerts-non-prod

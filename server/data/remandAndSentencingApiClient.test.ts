@@ -12,6 +12,7 @@ import {
 } from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
 
 const immigrationDetentionUuid = '123e4567-e89b-12d3-a456-426614174000'
+const courtAppearanceUuid = 'bd4f0d5c-b1c7-4183-8d19-e22048bdd34a'
 
 const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   createdAt: '2025-11-03T08:06:37.123Z',
@@ -21,6 +22,7 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   immigrationDetentionUuid,
   immigrationDetentionRecordType: 'IS91',
   homeOfficeReferenceNumber: 'ABC123',
+  courtAppearanceUuid,
 }
 
 const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
@@ -33,6 +35,7 @@ const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   noLongerOfInterestReason: 'OTHER_REASON',
   noLongerOfInterestComment: 'Confirmed not of interest',
   createdAt: '2025-11-03T08:06:37.123Z',
+  courtAppearanceUuid,
 }
 
 const DELETED_IMMIGRATION_DETENTION_OBJECT: DeleteImmigrationDetentionResponse = {

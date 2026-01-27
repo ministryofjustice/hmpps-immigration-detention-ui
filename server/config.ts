@@ -136,4 +136,7 @@ export default {
   ingressUrl: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   appInsightsConnectionString: get('APPLICATIONINSIGHTS_CONNECTION_STRING', '', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  featureToggles: {
+    modifyNomisRecordsEnabled: get('FEATURES_MODIFY_NOMIS_RECORDS_ENABLED', false, requiredInProduction) === 'true',
+  },
 }

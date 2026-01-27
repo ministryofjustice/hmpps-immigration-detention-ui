@@ -37,8 +37,13 @@ export default class ImmigrationDetentionRoutes {
   public delete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
     const { username = 'Unknown' } = res.locals.user
-
-    const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+    const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
+    const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+      id,
+      source,
+      courtAppearanceUuid,
+      username,
+    )
 
     if (immigrationDetention != null) {
       return res.render('pages/deleteImmigrationDetentionRecord', {
@@ -104,6 +109,7 @@ export default class ImmigrationDetentionRoutes {
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     } else if (
       immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
@@ -123,6 +129,7 @@ export default class ImmigrationDetentionRoutes {
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     }
 
@@ -172,8 +179,14 @@ export default class ImmigrationDetentionRoutes {
     const { username = 'Unknown' } = res.locals.user
     let immigrationDetention
     if (addOrEditOrUpdate === 'update') {
+      const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
-      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+        id,
+        source,
+        courtAppearanceUuid,
+        username,
+      )
     } else {
       immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     }
@@ -200,8 +213,14 @@ export default class ImmigrationDetentionRoutes {
 
     let immigrationDetention
     if (addOrEditOrUpdate === 'update') {
+      const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
-      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+        id,
+        source,
+        courtAppearanceUuid,
+        username,
+      )
     } else {
       immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     }

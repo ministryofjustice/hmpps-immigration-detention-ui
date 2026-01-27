@@ -30,9 +30,16 @@ export default class ImmigrationDetentionService {
 
   public async getImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
+    source: 'NOMIS' | 'DPS',
+    courtAppearanceUuid: string,
     username: string,
   ): Promise<ImmigrationDetention> {
-    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, username)
+    return source === 'NOMIS'
+      ? this.remandAndSentencingApiClient.getImmigrationDetentionRecordFromCourtAppearance(
+          courtAppearanceUuid,
+          username,
+        )
+      : this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, username)
   }
 
   public async deleteImmigrationDetentionByUUID(
