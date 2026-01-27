@@ -154,6 +154,9 @@ describe('Immigration Detention routes', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('You must select an option')
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+        const errorSummary = $('.govuk-error-summary')
+        expect(errorSummary.text()).toContain('You must select an option')
       })
   })
 
