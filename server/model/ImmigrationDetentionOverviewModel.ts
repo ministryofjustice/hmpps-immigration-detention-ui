@@ -37,18 +37,18 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   public deleteLinkForLatestRecord(): string | undefined {
-    if (this.latestRecord.source !== 'NOMIS') {
-      return `/${this.nomsId}/immigration-detention/delete/${this.latestRecord.immigrationDetentionUuid}`
+    if (this.canModifyRecord(this.latestRecord)) {
+      return `/${this.nomsId}/immigration-detention/delete/${this.latestRecord.immigrationDetentionUuid}${this.modifyQueryParameters(this.latestRecord)}`
     }
     return undefined
   }
 
   public editLinkForLatestRecord(): string | undefined {
-    if (this.latestRecord.source !== 'NOMIS') {
+    if (this.canModifyRecord(this.latestRecord)) {
       if (this.latestRecord.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
-        return `/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}`
+        return `/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${this.latestRecord.immigrationDetentionUuid}${this.modifyQueryParameters(this.latestRecord)}`
       }
-      return `/${this.nomsId}/immigration-detention/update/document-date/${this.latestRecord.immigrationDetentionUuid}`
+      return `/${this.nomsId}/immigration-detention/update/document-date/${this.latestRecord.immigrationDetentionUuid}${this.modifyQueryParameters(this.latestRecord)}`
     }
     return undefined
   }
@@ -146,9 +146,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   private actionCell(immigrationDetention: ImmigrationDetention) {
     let deleteLink
 
-    if (this.hasImmigrationDetentionAdminRole() && immigrationDetention.source !== 'NOMIS') {
+    if (this.hasImmigrationDetentionAdminRole() && this.canModifyRecord(immigrationDetention)) {
       deleteLink = `<div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-          <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+          <a class="govuk-link" href="/${this.nomsId}/immigration-detention/delete/${immigrationDetention.immigrationDetentionUuid}${this.modifyQueryParameters(immigrationDetention)}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
             Delete
             </a>
             </div>`
@@ -158,12 +158,12 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
       (immigrationDetention.immigrationDetentionRecordType === 'DEPORTATION_ORDER' ||
         immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
         immigrationDetention.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') &&
-      immigrationDetention.source !== 'NOMIS'
+      this.canModifyRecord(immigrationDetention)
     ) {
       return {
         html: `
       <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/document-date/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/document-date/${immigrationDetention.immigrationDetentionUuid}${this.modifyQueryParameters(immigrationDetention)}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
           Edit
         </a>
       </div>
@@ -171,11 +171,11 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
     `,
       }
     }
-    if (immigrationDetention.source !== 'NOMIS') {
+    if (this.canModifyRecord(immigrationDetention)) {
       return {
         html: `
       <div class="govuk-grid-column-one-quarter govuk-!-margin-right-4 govuk-!-padding-0">
-        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${immigrationDetention.immigrationDetentionUuid}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
+        <a class="govuk-link" href="/${this.nomsId}/immigration-detention/update/no-longer-interest-reason/${immigrationDetention.immigrationDetentionUuid}${this.modifyQueryParameters(immigrationDetention)}" data-qa="edit-${immigrationDetention.immigrationDetentionUuid}">
           Edit
         </a>
       </div>
@@ -189,7 +189,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private isNOMIS(immigrationDetention: ImmigrationDetention) {
-    if (immigrationDetention.source === 'NOMIS') {
+    if (immigrationDetention.source === 'NOMIS' && !config.featureToggles.modifyNomisRecordsEnabled) {
       return {
         html: `<strong class="govuk-tag">NOMIS</strong>`,
       }
@@ -199,5 +199,13 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
 
   public addImmigrationDetentionLink(): string {
     return `/${this.nomsId}/immigration-detention/add`
+  }
+
+  private canModifyRecord(immigrationDetention: ImmigrationDetention) {
+    return immigrationDetention.source !== 'NOMIS' || config.featureToggles.modifyNomisRecordsEnabled
+  }
+
+  private modifyQueryParameters(immigrationDetention: ImmigrationDetention): string {
+    return `?source=${immigrationDetention.source}&courtAppearanceUuid=${immigrationDetention.courtAppearanceUuid}`
   }
 }

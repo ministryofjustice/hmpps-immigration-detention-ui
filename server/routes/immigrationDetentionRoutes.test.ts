@@ -7,6 +7,7 @@ import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
 import ParamStoreService from '../services/paramStoreService'
 import { HmppsUser } from '../interfaces/hmppsUser'
+import config from '../config'
 
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
@@ -29,6 +30,7 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   homeOfficeReferenceNumber: 'ABC123',
   source: 'DPS',
   createdAt: '2025-11-03T08:06:37.123Z',
+  courtAppearanceUuid: '123',
 }
 
 const IMMIGRATION_DETENTION_OBJECT_NOMIS: ImmigrationDetention = {
@@ -39,6 +41,7 @@ const IMMIGRATION_DETENTION_OBJECT_NOMIS: ImmigrationDetention = {
   homeOfficeReferenceNumber: 'ABC123',
   source: 'NOMIS',
   createdAt: '2025-11-03T08:06:37.123Z',
+  courtAppearanceUuid: '123',
 }
 
 const mockUser = {
@@ -61,6 +64,7 @@ const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   noLongerOfInterestComment: 'Confirmed not of interest',
   createdAt: '2025-11-03T08:06:37.123Z',
   source: 'DPS',
+  courtAppearanceUuid: '123',
 }
 
 let app: Express
@@ -150,6 +154,9 @@ describe('Immigration Detention routes', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('You must select an option')
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+        const errorSummary = $('.govuk-error-summary')
+        expect(errorSummary.text()).toContain('You must select an option')
       })
   })
 
@@ -485,7 +492,7 @@ describe('Immigration Detention routes', () => {
       })
   })
 
-  it('GET /{nomsId}/immigration-detention/overview does not show edit/delete link for NOMIS record', async () => {
+  it('GET /{nomsId}/immigration-detention/overview does not show edit/delete link for NOMIS record with feature toggle false', async () => {
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT_NOMIS)
     immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
       Promise.resolve([IMMIGRATION_DETENTION_OBJECT_NOMIS]),
@@ -518,6 +525,44 @@ describe('Immigration Detention routes', () => {
       })
   })
 
+  it('GET /{nomsId}/immigration-detention/overview does not show edit/delete link for NOMIS record with feature toggle true', async () => {
+    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT_NOMIS)
+    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+      Promise.resolve([IMMIGRATION_DETENTION_OBJECT_NOMIS]),
+    )
+    config.featureToggles.modifyNomisRecordsEnabled = true
+
+    await request(app)
+      .get(`/${NOMS_ID}/immigration-detention/overview`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+        expect(headingOverview).toBe(`Immigration documents overview`)
+
+        const messageOverview = $('[data-qa="message-heading"]').text().trim()
+        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+        const cardTitle = $('[data-qa="card-title"]').text().trim()
+        expect(cardTitle).toBe(`IS91 recorded on 3 November 2025 via NOMIS`)
+
+        const editLinkLatestRecord = $('[data-qa="edit-latest-link"]').attr('href')
+        expect(editLinkLatestRecord).toBe(
+          `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT_NOMIS.immigrationDetentionUuid}?source=NOMIS&courtAppearanceUuid=123`,
+        )
+
+        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+        expect(deleteLinkLatestRecord).toBe(
+          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT_NOMIS.immigrationDetentionUuid}?source=NOMIS&courtAppearanceUuid=123`,
+        )
+
+        expect(res.text).toContain('IS91 Detention Authority')
+        expect(res.text).toContain('IS91 recorded on ')
+        expect(res.text).toContain('ABC123')
+      })
+  })
+
   it('GET /{nomsId}/immigration-detention/overview renders review page successfully', async () => {
     // Mock the service methods to return expected data
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
@@ -540,12 +585,12 @@ describe('Immigration Detention routes', () => {
 
         const editLinkLatestRecord = $('[data-qa="edit-latest-link"]').attr('href')
         expect(editLinkLatestRecord).toBe(
-          `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
+          `/${NOMS_ID}/immigration-detention/update/document-date/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}?source=DPS&courtAppearanceUuid=123`,
         )
 
         const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
         expect(deleteLinkLatestRecord).toBe(
-          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}`,
+          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}?source=DPS&courtAppearanceUuid=123`,
         )
 
         expect(res.text).toContain('IS91 Detention Authority')

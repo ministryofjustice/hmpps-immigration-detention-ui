@@ -12,6 +12,7 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
       homeOfficeReferenceNumber: 'B1234567',
       immigrationDetentionUuid: '123',
       prisonerId: 'A1234',
+      courtAppearanceUuid: '123',
     })
   })
 

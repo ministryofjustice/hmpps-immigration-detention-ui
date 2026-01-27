@@ -58,12 +58,31 @@ export default class RemandAndSentencingApiClient extends RestClient {
     ) as Promise<DeleteImmigrationDetentionResponse>
   }
 
+  async deleteCourtAppearance(courtAppearanceUuid: string, username: string): Promise<void> {
+    return this.delete(
+      {
+        path: `/court-appearance/${courtAppearanceUuid}`,
+      },
+      asSystem(username),
+    )
+  }
+
   async getImmigrationDetentionRecord(
     immigrationDetentionUUId: string,
     username: string,
   ): Promise<ImmigrationDetention> {
     return this.get(
       { path: `/immigration-detention/${immigrationDetentionUUId}` },
+      asSystem(username),
+    ) as Promise<ImmigrationDetention>
+  }
+
+  async getImmigrationDetentionRecordFromCourtAppearance(
+    courtAppearanceUuid: string,
+    username: string,
+  ): Promise<ImmigrationDetention> {
+    return this.get(
+      { path: `/immigration-detention/court-appearance/${courtAppearanceUuid}` },
       asSystem(username),
     ) as Promise<ImmigrationDetention>
   }

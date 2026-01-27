@@ -6,6 +6,8 @@ export default class ImmigrationDetentionDeleteModel {
     public nomsId: string,
     public id: string,
     public immigrationDetention: ImmigrationDetention,
+    public source: 'NOMIS' | 'DPS',
+    public courtAppearanceUuid: string,
   ) {
     if (this.immigrationDetention.immigrationDetentionRecordType === 'IS91') {
       this.recordTypeDesc = 'IS91'

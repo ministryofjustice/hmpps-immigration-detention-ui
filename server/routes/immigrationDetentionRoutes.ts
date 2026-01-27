@@ -37,12 +37,17 @@ export default class ImmigrationDetentionRoutes {
   public delete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params as { nomsId: string; id: string }
     const { username = 'Unknown' } = res.locals.user
-
-    const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+    const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
+    const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+      id,
+      source,
+      courtAppearanceUuid,
+      username,
+    )
 
     if (immigrationDetention != null) {
       return res.render('pages/deleteImmigrationDetentionRecord', {
-        model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention),
+        model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention, source, courtAppearanceUuid),
       })
     }
 
@@ -52,7 +57,13 @@ export default class ImmigrationDetentionRoutes {
   public submitDelete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params as { nomsId: string; id: string }
     const { username = 'Unknown' } = res.locals.user
-    await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id, username)
+    const { source = 'DPS', courtAppearanceUuid = 'Unknown' } =
+      req.body ??
+      ({} as {
+        source: 'NOMIS' | 'DPS'
+        courtAppearanceUuid: string
+      })
+    await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id, source, courtAppearanceUuid, username)
 
     res.redirect(`/${nomsId}/immigration-detention/overview`)
   }
@@ -82,7 +93,8 @@ export default class ImmigrationDetentionRoutes {
 
   public submitReview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params as { nomsId: string; id: string }
-    const { username = 'Unknown', activeCaseLoadId = 'Unknown' } = res.locals.user as User
+    const { username = 'Unknown' } = res.locals.user as User
+    const { prisonId = 'Unknown' } = res.locals.prisoner
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const outcomes = await this.immigrationDetentionService.getImmigrationDetentionAppearanceOutcomes(username)
 
@@ -96,13 +108,14 @@ export default class ImmigrationDetentionRoutes {
             immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
               .nomisCode,
         ).outcomeUuid,
-        createdByPrison: activeCaseLoadId,
+        createdByPrison: prisonId,
         createdByUsername: username,
         noLongerOfInterestComment: immigrationDetention.noLongerOfInterestComment,
         noLongerOfInterestReason: immigrationDetention.noLongerOfInterestReason,
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     } else if (
       immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
@@ -116,12 +129,13 @@ export default class ImmigrationDetentionRoutes {
             immigrationDetentionRecordTypes.find(it => it.value === immigrationDetention.immigrationDetentionRecordType)
               .nomisCode,
         ).outcomeUuid,
-        createdByPrison: activeCaseLoadId,
+        createdByPrison: prisonId,
         createdByUsername: username,
         homeOfficeReferenceNumber: immigrationDetention.homeOfficeReferenceNumber,
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     }
 
@@ -171,8 +185,14 @@ export default class ImmigrationDetentionRoutes {
     const { username = 'Unknown' } = res.locals.user
     let immigrationDetention
     if (addOrEditOrUpdate === 'update') {
+      const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
-      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+        id,
+        source,
+        courtAppearanceUuid,
+        username,
+      )
     } else {
       immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     }
@@ -199,8 +219,14 @@ export default class ImmigrationDetentionRoutes {
 
     let immigrationDetention
     if (addOrEditOrUpdate === 'update') {
+      const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
-      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(id, username)
+      immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
+        id,
+        source,
+        courtAppearanceUuid,
+        username,
+      )
     } else {
       immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     }
@@ -335,10 +361,9 @@ export default class ImmigrationDetentionRoutes {
     model.validate()
 
     if (model.errors && model.errors.length > 0) {
-      res.render('pages/recordNoLongerInterestReason', {
+      return res.render('pages/recordNoLongerInterestReason', {
         model,
       })
-      return
     }
 
     immigrationDetention = {
@@ -349,11 +374,10 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (addOrEditOrUpdate === 'edit') {
-      res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/review/${id}`)
-      return
+      return res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/review/${id}`)
     }
 
-    res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/confirmed-date/${id}`)
+    return res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/confirmed-date/${id}`)
   }
 
   public addConfirmedDate: RequestHandler = async (req, res): Promise<void> => {

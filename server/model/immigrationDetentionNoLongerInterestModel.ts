@@ -70,7 +70,7 @@ export default class ImmigrationDetentionNoLongerInterestModel {
       return [
         {
           text: 'You must select an option',
-          fields: ['noLongerInterestReason'],
+          fields: ['noLongerOfInterestReason'],
         },
       ]
     }

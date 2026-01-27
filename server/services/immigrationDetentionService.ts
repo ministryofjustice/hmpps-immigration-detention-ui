@@ -30,16 +30,27 @@ export default class ImmigrationDetentionService {
 
   public async getImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
+    source: 'NOMIS' | 'DPS',
+    courtAppearanceUuid: string,
     username: string,
   ): Promise<ImmigrationDetention> {
-    return this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, username)
+    return source === 'NOMIS'
+      ? this.remandAndSentencingApiClient.getImmigrationDetentionRecordFromCourtAppearance(
+          courtAppearanceUuid,
+          username,
+        )
+      : this.remandAndSentencingApiClient.getImmigrationDetentionRecord(immigrationDetentionUUId, username)
   }
 
   public async deleteImmigrationDetentionByUUID(
     immigrationDetentionUUId: string,
+    source: 'NOMIS' | 'DPS',
+    courtAppearanceUuid: string,
     username: string,
-  ): Promise<DeleteImmigrationDetentionResponse> {
-    return this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId, username)
+  ): Promise<DeleteImmigrationDetentionResponse | void> {
+    return source === 'NOMIS'
+      ? this.remandAndSentencingApiClient.deleteCourtAppearance(courtAppearanceUuid, username)
+      : this.remandAndSentencingApiClient.deleteImmigrationDetention(immigrationDetentionUUId, username)
   }
 
   public getImmigrationDetentionRecordsForPrisoner(
