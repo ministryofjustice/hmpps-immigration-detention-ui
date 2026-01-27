@@ -26,9 +26,7 @@
     <div class="govuk-grid-column-full">
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [
-          model.errorList()
-        ]
+        errorList: model.errorList()
       }) }}
     </div>
   </div>
@@ -60,7 +58,7 @@
         {{ govukRadios({
             id: "noLongerOfInterestReason",
             name: "noLongerOfInterestReason",
-            errorMessage: model.messageForField('noLongerInterestReason'),
+            errorMessage: model.messageForField('noLongerOfInterestReason'),
             items: [
                 {
                     value: "RIGHT_TO_REMAIN",

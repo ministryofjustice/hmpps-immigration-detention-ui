@@ -361,10 +361,9 @@ export default class ImmigrationDetentionRoutes {
     model.validate()
 
     if (model.errors && model.errors.length > 0) {
-      res.render('pages/recordNoLongerInterestReason', {
+      return res.render('pages/recordNoLongerInterestReason', {
         model,
       })
-      return
     }
 
     immigrationDetention = {
@@ -375,11 +374,10 @@ export default class ImmigrationDetentionRoutes {
     this.immigrationDetentionStoreService.store(req, nomsId, id, immigrationDetention)
 
     if (addOrEditOrUpdate === 'edit') {
-      res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/review/${id}`)
-      return
+      return res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/review/${id}`)
     }
 
-    res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/confirmed-date/${id}`)
+    return res.redirect(`/${nomsId}/immigration-detention/${addOrEditOrUpdate}/confirmed-date/${id}`)
   }
 
   public addConfirmedDate: RequestHandler = async (req, res): Promise<void> => {
