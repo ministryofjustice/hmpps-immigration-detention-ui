@@ -109,6 +109,7 @@ export default class ImmigrationDetentionRoutes {
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     } else if (
       immigrationDetention.immigrationDetentionRecordType === 'IS91' ||
@@ -128,6 +129,7 @@ export default class ImmigrationDetentionRoutes {
         prisonerId: nomsId,
         recordDate: immigrationDetention.recordDate,
         immigrationDetentionRecordType: immigrationDetention.immigrationDetentionRecordType,
+        courtAppearanceUuid: immigrationDetention.courtAppearanceUuid,
       }
     }
 
