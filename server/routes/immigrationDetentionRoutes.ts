@@ -47,7 +47,7 @@ export default class ImmigrationDetentionRoutes {
 
     if (immigrationDetention != null) {
       return res.render('pages/deleteImmigrationDetentionRecord', {
-        model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention),
+        model: new ImmigrationDetentionDeleteModel(nomsId, id, immigrationDetention, source, courtAppearanceUuid),
       })
     }
 
@@ -57,7 +57,13 @@ export default class ImmigrationDetentionRoutes {
   public submitDelete: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId, id } = req.params
     const { username = 'Unknown' } = res.locals.user
-    await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id, username)
+    const { source = 'DPS', courtAppearanceUuid = 'Unknown' } =
+      req.body ??
+      ({} as {
+        source: 'NOMIS' | 'DPS'
+        courtAppearanceUuid: string
+      })
+    await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id, source, courtAppearanceUuid, username)
 
     res.redirect(`/${nomsId}/immigration-detention/overview`)
   }

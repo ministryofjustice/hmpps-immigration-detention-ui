@@ -144,11 +144,13 @@ describe('immigrationDetentionService', () => {
       expect(result).toEqual(SAVED_IMMIGRATION_DETENTION_OBJECT)
     })
 
-    it('Delete a Immigration Detention Record', async () => {
+    it('Delete a Immigration Detention Record DPS sourced', async () => {
       remandAndSentencingApiClient.deleteImmigrationDetention.mockResolvedValue(DELETED_IMMIGRATION_DETENTION_OBJECT)
 
       const result = await immigrationDetentionService.deleteImmigrationDetentionByUUID(
         'IMM-DET-UUID-1234',
+        'DPS',
+        '456',
         'test-user',
       )
 
@@ -157,6 +159,17 @@ describe('immigrationDetentionService', () => {
         'test-user',
       )
       expect(result).toEqual(DELETED_IMMIGRATION_DETENTION_OBJECT)
+    })
+
+    it('Delete a Immigration Detention Record NOMIS sourced', async () => {
+      await immigrationDetentionService.deleteImmigrationDetentionByUUID(
+        'IMM-DET-UUID-1234',
+        'NOMIS',
+        '456',
+        'test-user',
+      )
+
+      expect(remandAndSentencingApiClient.deleteCourtAppearance).toHaveBeenCalledWith('456', 'test-user')
     })
   })
 })
