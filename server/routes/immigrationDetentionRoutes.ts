@@ -26,7 +26,7 @@ export default class ImmigrationDetentionRoutes {
   ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
     return res.render('pages/reviewImmigrationDetentionRecord', {
@@ -35,7 +35,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public delete: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
     const { username = 'Unknown' } = res.locals.user
     const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
     const immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
@@ -55,7 +55,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitDelete: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
     const { username = 'Unknown' } = res.locals.user
     const { source = 'DPS', courtAppearanceUuid = 'Unknown' } =
       req.body ??
@@ -69,7 +69,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public overview: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId } = req.params
+    const { nomsId } = req.params as { nomsId: string }
     const { username = 'Unknown', userRoles = [] } = res.locals.user
     const { firstName = 'Unknown', lastName = 'Unknown' } = res.locals.prisoner || {}
     const immigrationDetentionList = await this.immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(
@@ -92,7 +92,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitReview: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
     const { username = 'Unknown' } = res.locals.user as User
     const { prisonId = 'Unknown' } = res.locals.prisoner
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
@@ -153,7 +153,7 @@ export default class ImmigrationDetentionRoutes {
 
   public add: RequestHandler = async (req, res): Promise<void> => {
     // await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    const { nomsId } = req.params
+    const { nomsId } = req.params as { nomsId: string }
     const sessionId = randomUUID()
     this.paramStoreService.clearAll(req)
 
@@ -166,7 +166,7 @@ export default class ImmigrationDetentionRoutes {
 
   public addRecordType: RequestHandler = async (req, res): Promise<void> => {
     // await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
 
     let immigrationDetention = null
 
@@ -181,7 +181,7 @@ export default class ImmigrationDetentionRoutes {
 
   public addNoLongerOfInterestReason: RequestHandler = async (req, res): Promise<void> => {
     // await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     const { username = 'Unknown' } = res.locals.user
     let immigrationDetention
     if (addOrEditOrUpdate === 'update') {
@@ -214,7 +214,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public addDocumentDate: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     const { username = 'Unknown' } = res.locals.user
 
     let immigrationDetention
@@ -241,7 +241,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitDocumentDate: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
     const immigrationDetentionDocumentDate = new ImmigrationDetentionDocumentDateModel(
@@ -273,7 +273,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public addHORefNumber: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = null
     immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
@@ -293,7 +293,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitHORefNumber: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const hoRefNumberForm = {
       hoRefNumber: req.body.hoRefNumber,
@@ -324,7 +324,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitRecordType: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params
+    const { nomsId, id } = req.params as { nomsId: string; id: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const edit = req.path.includes('/edit')
 
@@ -355,7 +355,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitNoLongerOfInterestType: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const model = new ImmigrationDetentionNoLongerInterestModel(nomsId, id, immigrationDetention, false, req.body)
     model.validate()
@@ -381,7 +381,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public addConfirmedDate: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = null
     immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
@@ -394,7 +394,7 @@ export default class ImmigrationDetentionRoutes {
   }
 
   public submitConfirmedDate: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id, addOrEditOrUpdate } = req.params
+    const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
     const immigrationDetentionConfirmedDateModel = new ImmigrationDetentionConfirmedDateModel(

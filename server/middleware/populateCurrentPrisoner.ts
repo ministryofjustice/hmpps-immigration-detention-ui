@@ -9,7 +9,7 @@ export default function populateCurrentPrisoner(
   userService: UserService,
 ): RequestHandler {
   return async (req, res, next) => {
-    const { nomsId } = req.params
+    const { nomsId } = req.params as { nomsId: string }
     const user = await userService.getUser(res.locals.user.token)
 
     if (user && nomsId) {
