@@ -78,6 +78,7 @@ export default class ImmigrationDetentionRoutes {
     )
 
     if (immigrationDetentionList.length > 0) {
+      this.immigrationDetentionStoreService.clear(req, nomsId)
       return res.render('pages/immigrationDetentionOverview', {
         model: new ImmigrationDetentionOverviewModel(
           nomsId,
@@ -184,7 +185,7 @@ export default class ImmigrationDetentionRoutes {
     const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     const { username = 'Unknown' } = res.locals.user
     let immigrationDetention
-    if (addOrEditOrUpdate === 'update') {
+    if (addOrEditOrUpdate === 'update' && !this.immigrationDetentionStoreService.sessionInitialised(req, nomsId, id)) {
       const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
       immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
@@ -218,7 +219,7 @@ export default class ImmigrationDetentionRoutes {
     const { username = 'Unknown' } = res.locals.user
 
     let immigrationDetention
-    if (addOrEditOrUpdate === 'update') {
+    if (addOrEditOrUpdate === 'update' && !this.immigrationDetentionStoreService.sessionInitialised(req, nomsId, id)) {
       const { source, courtAppearanceUuid } = req.query as { source: 'NOMIS' | 'DPS'; courtAppearanceUuid: string }
       this.paramStoreService.store(req, 'isUpdate', true)
       immigrationDetention = await this.immigrationDetentionService.getImmigrationDetentionByUUID(
