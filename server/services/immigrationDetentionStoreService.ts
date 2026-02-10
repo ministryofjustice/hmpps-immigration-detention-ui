@@ -49,6 +49,11 @@ export default class ImmigrationDetentionStoreService {
     return req.session.immigrationDetention[nomsId][id]
   }
 
+  public sessionInitialised(req: Request, nomsId: string, id: string): boolean {
+    this.initSessionForNomsId(req, nomsId)
+    return Object.keys(req.session.immigrationDetention[nomsId]).some(sessionId => sessionId === id)
+  }
+
   public getAll(req: Request, nomsId: string): Record<string, SessionImmigrationDetention> {
     this.initSessionForNomsId(req, nomsId)
     return req.session.immigrationDetention[nomsId]
