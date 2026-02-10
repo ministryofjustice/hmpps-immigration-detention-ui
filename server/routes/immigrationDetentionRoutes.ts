@@ -78,6 +78,7 @@ export default class ImmigrationDetentionRoutes {
     )
 
     if (immigrationDetentionList.length > 0) {
+      this.immigrationDetentionStoreService.clear(req, nomsId)
       return res.render('pages/immigrationDetentionOverview', {
         model: new ImmigrationDetentionOverviewModel(
           nomsId,
