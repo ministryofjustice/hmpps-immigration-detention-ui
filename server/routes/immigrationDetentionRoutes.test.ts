@@ -8,6 +8,7 @@ import ImmigrationDetentionService from '../services/immigrationDetentionService
 import ParamStoreService from '../services/paramStoreService'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import config from '../config'
+import AuditService from '../services/auditService'
 
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
@@ -19,6 +20,8 @@ const immigrationDetentionStoreService =
 const paramsService = new ParamStoreService() as jest.Mocked<ParamStoreService>
 
 const immigrationDetentionService = new ImmigrationDetentionService(null) as jest.Mocked<ImmigrationDetentionService>
+
+const auditService = new AuditService(null) as jest.Mocked<AuditService>
 
 const NOMS_ID = 'ABC123'
 const SESSION_ID = '96c83672-8499-4a64-abc9-3e031b1747b3'
@@ -72,6 +75,7 @@ let app: Express
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
+      auditService,
       immigrationDetentionStoreService,
       immigrationDetentionService,
       paramsStoreService: paramsService,
@@ -437,6 +441,9 @@ describe('Immigration Detention routes', () => {
           dispositionCode: 'DISP',
         },
       ]),
+    )
+    immigrationDetentionService.createImmigrationDetention.mockReturnValue(
+      Promise.resolve({ immigrationDetentionUuid: 'test-uuid' }),
     )
     return request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/review/${SESSION_ID}`)
