@@ -21,7 +21,7 @@ import AuditService from '../services/auditService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
-    private  readonly auditService: AuditService,
+    private readonly auditService: AuditService,
     private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
     private readonly paramStoreService: ParamStoreService,
@@ -148,11 +148,14 @@ export default class ImmigrationDetentionRoutes {
       return res.redirect(`/${nomsId}/immigration-detention/overview`)
     }
     this.paramStoreService.clearAll(req)
-    const createImmigrationDetentionResponse = await this.immigrationDetentionService.createImmigrationDetention(createdImmigrationDetention, username)
+    const createImmigrationDetentionResponse = await this.immigrationDetentionService.createImmigrationDetention(
+      createdImmigrationDetention,
+      username,
+    )
 
     const auditDetails = {
       immigrationDetentionUuid: createImmigrationDetentionResponse.immigrationDetentionUuid,
-      time: Date.now()
+      time: Date.now(),
     }
 
     await this.auditService.logAuditEvent({
@@ -161,8 +164,8 @@ export default class ImmigrationDetentionRoutes {
       subjectId: nomsId,
       subjectType: 'PRISONER_ID',
       correlationId: req.id,
-      details: auditDetails
-      })
+      details: auditDetails,
+    })
 
     return res.render('pages/resultPage', {
       model: new ImmigrationDetentionResultPageModel(nomsId, id, immigrationDetention),
