@@ -17,9 +17,11 @@ import config from '../config'
 import { User } from '../data/manageUsersApiClient'
 import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 import SessionImmigrationDetention from '../@types/ImmigrationDetention'
+import AuditService from '../services/auditService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
+    private  readonly auditService: AuditService,
     private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
     private readonly paramStoreService: ParamStoreService,
@@ -146,7 +148,22 @@ export default class ImmigrationDetentionRoutes {
       return res.redirect(`/${nomsId}/immigration-detention/overview`)
     }
     this.paramStoreService.clearAll(req)
-    await this.immigrationDetentionService.createImmigrationDetention(createdImmigrationDetention, username)
+    const createImmigrationDetentionResponse = await this.immigrationDetentionService.createImmigrationDetention(createdImmigrationDetention, username)
+
+    const auditDetails = {
+      immigrationDetentionUuid: createImmigrationDetentionResponse.immigrationDetentionUuid,
+      time: Date.now()
+    }
+
+    await this.auditService.logAuditEvent({
+      who: username,
+      what: `CREATE_IMMIGRATION_DET`,
+      subjectId: nomsId,
+      subjectType: 'PRISONER_ID',
+      correlationId: req.id,
+      details: auditDetails
+      })
+
     return res.render('pages/resultPage', {
       model: new ImmigrationDetentionResultPageModel(nomsId, id, immigrationDetention),
     })

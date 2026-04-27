@@ -7,6 +7,7 @@ import PrisonerImageRoutes from './prisonerImageRoutes'
 export default function routes(service: Services): Router {
   const router = Router()
   const immigrationDetentionRoutes = new ImmigrationDetentionRoutes(
+    service.auditService,
     service.immigrationDetentionStoreService,
     service.immigrationDetentionService,
     service.paramsStoreService,
