@@ -153,7 +153,12 @@ export default class ImmigrationDetentionRoutes {
       username,
     )
 
-    await this.auditService.logImmigrationDetentionAddEvent(username, nomsId, req.id, createImmigrationDetentionResponse.immigrationDetentionUuid)
+    await this.auditService.logImmigrationDetentionAddEvent(
+      username,
+      nomsId,
+      req.id,
+      createImmigrationDetentionResponse.immigrationDetentionUuid,
+    )
 
     return res.render('pages/resultPage', {
       model: new ImmigrationDetentionResultPageModel(nomsId, id, immigrationDetention),

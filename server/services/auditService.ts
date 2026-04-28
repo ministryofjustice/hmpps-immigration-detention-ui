@@ -27,9 +27,14 @@ export default class AuditService {
     await this.hmppsAuditClient.sendMessage(event)
   }
 
-  async logImmigrationDetentionAddEvent(username: string, nomsId: string, correlationId: string, immigrationDetentionUuid: string) {
+  async logImmigrationDetentionAddEvent(
+    username: string,
+    nomsId: string,
+    correlationId: string,
+    immigrationDetentionUuid: string,
+  ) {
     const auditDetails = {
-      immigrationDetentionUuid: immigrationDetentionUuid,
+      immigrationDetentionUuid,
       time: Date.now(),
     }
 
@@ -38,7 +43,7 @@ export default class AuditService {
       what: `CREATE_IMMIGRATION_DET`,
       subjectId: nomsId,
       subjectType: 'PRISONER_ID',
-      correlationId: correlationId,
+      correlationId,
       details: auditDetails,
     })
   }
