@@ -153,19 +153,7 @@ export default class ImmigrationDetentionRoutes {
       username,
     )
 
-    const auditDetails = {
-      immigrationDetentionUuid: createImmigrationDetentionResponse.immigrationDetentionUuid,
-      time: Date.now(),
-    }
-
-    await this.auditService.logAuditEvent({
-      who: username,
-      what: `CREATE_IMMIGRATION_DET`,
-      subjectId: nomsId,
-      subjectType: 'PRISONER_ID',
-      correlationId: req.id,
-      details: auditDetails,
-    })
+    await this.auditService.logImmigrationDetentionAddEvent(username, nomsId, req.id, createImmigrationDetentionResponse.immigrationDetentionUuid)
 
     return res.render('pages/resultPage', {
       model: new ImmigrationDetentionResultPageModel(nomsId, id, immigrationDetention),
