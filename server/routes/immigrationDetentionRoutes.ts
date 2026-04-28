@@ -66,6 +66,7 @@ export default class ImmigrationDetentionRoutes {
         courtAppearanceUuid: string
       })
     await this.immigrationDetentionService.deleteImmigrationDetentionByUUID(id, source, courtAppearanceUuid, username)
+    await this.auditService.logImmigrationDetentionDeleteEvent(username, nomsId, req.id, id)
 
     res.redirect(`/${nomsId}/immigration-detention/overview`)
   }

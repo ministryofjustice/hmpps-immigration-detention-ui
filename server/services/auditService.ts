@@ -40,7 +40,7 @@ export default class AuditService {
 
     await this.hmppsAuditClient.sendMessage({
       who: username,
-      what: `CREATE_IMMIGRATION_DET`,
+      what: 'CREATE_IMMIGRATION_DET',
       subjectId: nomsId,
       subjectType: 'PRISONER_ID',
       correlationId,
@@ -61,7 +61,28 @@ export default class AuditService {
 
     await this.hmppsAuditClient.sendMessage({
       who: username,
-      what: `EDIT_IMMIGRATION_DET`,
+      what: 'EDIT_IMMIGRATION_DET',
+      subjectId: nomsId,
+      subjectType: 'PRISONER_ID',
+      correlationId,
+      details: auditDetails,
+    })
+  }
+
+  async logImmigrationDetentionDeleteEvent(
+    username: string,
+    nomsId: string,
+    correlationId: string,
+    immigrationDetentionUuid: string,
+  ) {
+    const auditDetails = {
+      immigrationDetentionUuid,
+      time: Date.now(),
+    }
+
+    await this.hmppsAuditClient.sendMessage({
+      who: username,
+      what: 'DELETE_IMMIGRATION_DET',
       subjectId: nomsId,
       subjectType: 'PRISONER_ID',
       correlationId,
