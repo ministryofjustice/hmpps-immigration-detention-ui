@@ -145,6 +145,7 @@ export default class ImmigrationDetentionRoutes {
     if (this.paramStoreService.get(req, 'isUpdate')) {
       this.paramStoreService.clearAll(req)
       await this.immigrationDetentionService.updateImmigrationDetention(id, createdImmigrationDetention, username)
+      await this.auditService.logImmigrationDetentionEditEvent(username, nomsId, req.id, id)
       return res.redirect(`/${nomsId}/immigration-detention/overview`)
     }
     this.paramStoreService.clearAll(req)
