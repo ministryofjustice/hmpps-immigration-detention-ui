@@ -13,6 +13,7 @@ import AuditService from '../services/auditService'
 jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
 jest.mock('../services/paramStoreService')
+jest.mock('../services/auditService')
 
 const immigrationDetentionStoreService =
   new ImmigrationDetentionStoreService() as jest.Mocked<ImmigrationDetentionStoreService>
@@ -466,6 +467,7 @@ describe('Immigration Detention routes', () => {
     }
     const localApp = appWithAllRoutes({
       services: {
+        auditService,
         immigrationDetentionStoreService,
         immigrationDetentionService,
         paramsStoreService: paramsService,
