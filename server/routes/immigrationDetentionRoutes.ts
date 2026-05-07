@@ -89,6 +89,9 @@ export default class ImmigrationDetentionRoutes {
         subjectId: nomsId,
         details: {
           time: Date.now(),
+          immigrationDetentionUuids: immigrationDetentionList.map(
+            immigrationDetention => immigrationDetention.immigrationDetentionUuid,
+          ),
         },
       })
 
