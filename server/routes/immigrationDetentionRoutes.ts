@@ -98,7 +98,7 @@ export default class ImmigrationDetentionRoutes {
       subjectType: 'PRISONER_ID',
       subjectId: nomsId,
       details: {
-          time: Date.now(),
+        time: Date.now(),
       },
     })
 
