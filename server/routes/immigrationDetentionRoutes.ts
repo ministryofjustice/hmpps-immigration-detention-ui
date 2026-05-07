@@ -17,7 +17,7 @@ import config from '../config'
 import { User } from '../data/manageUsersApiClient'
 import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 import SessionImmigrationDetention from '../@types/ImmigrationDetention'
-import AuditService from '../services/auditService'
+import AuditService, { Page } from '../services/auditService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -91,6 +91,16 @@ export default class ImmigrationDetentionRoutes {
         ),
       })
     }
+
+    await this.auditService.logPageView(Page.IMMIGRATION_OVERVIEW, {
+      who: res.locals.user.username,
+      correlationId: req.id,
+      subjectType: 'PRISONER_ID',
+      subjectId: nomsId,
+      details: {
+        time: Date.now(),
+      },
+    })
 
     return res.redirect(`${config.services.courtCasesReleaseDates.url}/prisoner/${nomsId}/overview`)
   }
