@@ -82,6 +82,16 @@ export default class ImmigrationDetentionRoutes {
 
     if (immigrationDetentionList.length > 0) {
       this.immigrationDetentionStoreService.clear(req, nomsId)
+      await this.auditService.logPageView(Page.IMMIGRATION_OVERVIEW, {
+        who: res.locals.user.username,
+        correlationId: req.id,
+        subjectType: 'PRISONER_ID',
+        subjectId: nomsId,
+        details: {
+          time: Date.now(),
+        },
+      })
+
       return res.render('pages/immigrationDetentionOverview', {
         model: new ImmigrationDetentionOverviewModel(
           nomsId,
@@ -91,16 +101,6 @@ export default class ImmigrationDetentionRoutes {
         ),
       })
     }
-
-    await this.auditService.logPageView(Page.IMMIGRATION_OVERVIEW, {
-      who: res.locals.user.username,
-      correlationId: req.id,
-      subjectType: 'PRISONER_ID',
-      subjectId: nomsId,
-      details: {
-        time: Date.now(),
-      },
-    })
 
     return res.redirect(`${config.services.courtCasesReleaseDates.url}/prisoner/${nomsId}/overview`)
   }
