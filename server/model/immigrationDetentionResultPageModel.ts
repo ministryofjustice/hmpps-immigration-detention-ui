@@ -46,4 +46,3 @@ export default class ImmigrationDetentionResultPageModel {
     return `${config.services.courtCasesReleaseDates.url}/prisoner/${this.nomsId}/overview`
   }
 }
-
