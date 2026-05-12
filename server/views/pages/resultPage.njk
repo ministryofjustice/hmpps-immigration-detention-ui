@@ -28,12 +28,12 @@
         {% set followInfo = model.getFollowInfo() %}
         <div class="govuk-heading-l">What you need to do next</div>
 
-        <p class="govuk-body" data-qa="follow-info">
+        <p class="govuk-body" data-qa="follow-info-line-one">
           {{ followInfo.lineOne }}
         </p>
 
         {% if followInfo.lineTwo %}
-          <p class="govuk-body">
+          <p class="govuk-body" data-qa="follow-info-line-two">
             {{ followInfo.lineTwo }}
           </p>
         {% endif %}
