@@ -31,13 +31,14 @@ export default class ImmigrationDetentionResultPageModel {
       this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
     ) {
       return {
-        lineOne: 'If this person will be detained under immigration powers after their release date, you need to:'
+        lineOne: 'If this person will be detained under immigration powers after their release date, you need to:',
       }
     }
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
       return {
-          lineOne: 'This person\'s immigration court case(s) have been made inactive in NOMIS.',
-          lineTwo: 'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.',
+        lineOne: "This person's immigration court case(s) have been made inactive in NOMIS.",
+        lineTwo:
+          'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.',
       }
     }
     return undefined
