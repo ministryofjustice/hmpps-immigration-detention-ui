@@ -17,5 +17,7 @@ export default class AddImmigrationDetentionResultPage extends AbstractPage {
 
   public successMessage = (): Locator => this.page.locator('[data-qa=success-message]')
 
-  public followInfo = (): Locator => this.page.locator('[data-qa=follow-info]')
+  public followInfoLineOne = (): Locator => this.page.locator('[data-qa=follow-info-line-one]')
+
+  public followInfoLineTwo = (): Locator => this.page.locator('[data-qa=follow-info-line-two]')
 }

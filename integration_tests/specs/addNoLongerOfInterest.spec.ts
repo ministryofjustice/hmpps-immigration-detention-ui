@@ -63,8 +63,11 @@ test.describe('Add Immigration Detention - No Longer Of Interest', () => {
       page,
       'No longer of interest successfully recorded',
     )
-    expect(immigrationDetentionResult.successMessage()).toHaveText('No longer of interest successfully recorded')
-    expect(immigrationDetentionResult.followInfo()).toHaveText(
+    await expect(immigrationDetentionResult.successMessage()).toHaveText('No longer of interest successfully recorded')
+    await expect(immigrationDetentionResult.followInfoLineOne()).toHaveText(
+      "This person's immigration court case(s) have been made inactive in NOMIS.",
+    )
+    await expect(immigrationDetentionResult.followInfoLineTwo()).toHaveText(
       'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.',
     )
   })
