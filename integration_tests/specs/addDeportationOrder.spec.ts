@@ -60,7 +60,7 @@ test.describe('Add Immigration Detention - Detention Order', () => {
       page,
       'Deportation order successfully recorded',
     )
-    expect(immigrationDetentionResult.followInfo()).toHaveText(
+    expect(immigrationDetentionResult.followInfoLineOne()).toHaveText(
       'If this person will be detained under immigration powers after their release date, you need to:',
     )
     expect(immigrationDetentionResult.successMessage()).toHaveText('Deportation order successfully recorded')
