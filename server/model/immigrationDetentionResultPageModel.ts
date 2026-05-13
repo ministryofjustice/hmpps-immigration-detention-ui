@@ -25,15 +25,21 @@ export default class ImmigrationDetentionResultPageModel {
     return `${config.services.dpsPrisoner.url}/prisoner/${this.nomsId}/alerts/active`
   }
 
-  public getFollowInfo(): string | undefined {
+  public getFollowInfo(): { lineOne: string; lineTwo?: string } | undefined {
     if (
       this.immigrationDetention?.immigrationDetentionRecordType === 'IS91' ||
       this.immigrationDetention?.immigrationDetentionRecordType === 'DEPORTATION_ORDER'
     ) {
-      return 'If this person will be detained under immigration powers after their release date, you need to:'
+      return {
+        lineOne: 'If this person will be detained under immigration powers after their release date, you need to:',
+      }
     }
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
-      return 'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.'
+      return {
+        lineOne: "This person's immigration court case(s) have been made inactive in NOMIS.",
+        lineTwo:
+          'This person will not be detained under immigration powers after their release. You need to check if there are any alerts that might prevent a release.',
+      }
     }
     return undefined
   }

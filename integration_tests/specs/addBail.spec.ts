@@ -67,6 +67,6 @@ test.describe('Add Immigration Detention - Bail', () => {
       'Immigration bail successfully recorded',
     )
     expect(immigrationDetentionResult.successMessage()).toHaveText('Immigration bail successfully recorded')
-    expect(immigrationDetentionResult.followInfo()).toHaveCount(0)
+    expect(immigrationDetentionResult.followInfoLineOne()).toHaveCount(0)
   })
 })

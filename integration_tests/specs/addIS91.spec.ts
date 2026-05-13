@@ -61,7 +61,7 @@ test.describe('Add Immigration Detention - IS91', () => {
       'IS91 Detention Authority successfully recorded',
     )
     expect(immigrationDetentionResult.successMessage()).toHaveText('IS91 Detention Authority successfully recorded')
-    expect(immigrationDetentionResult.followInfo()).toHaveText(
+    expect(immigrationDetentionResult.followInfoLineOne()).toHaveText(
       'If this person will be detained under immigration powers after their release date, you need to:',
     )
   })
