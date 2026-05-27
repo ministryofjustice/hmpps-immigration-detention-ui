@@ -14,7 +14,7 @@
     "start-feature:dev": "node esbuild/esbuild --watch --env feature.env",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
-    "typecheck": "tsc && tsc -p integration_tests",
+    "typecheck": "tsc && tsc -p integration_tests && tsc -p assets/js",
     "test": "jest",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
@@ -33,7 +33,7 @@
     "npm": "^11"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1046.0",
+    "@aws-sdk/client-sqs": "^3.1047.0",
     "@microsoft/applicationinsights-clickanalytics-js": "^3.4.1",
     "@microsoft/applicationinsights-web": "^3.4.1",
     "@ministryofjustice/frontend": "^9.0.0",
@@ -69,8 +69,9 @@
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
-    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.4",
-    "@ministryofjustice/hmpps-precommit-hooks": "^3.0.0",
+    "@ministryofjustice/frontend-types": "2.0.0",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.5",
+    "@ministryofjustice/hmpps-precommit-hooks": "3.0.0",
     "@playwright/test": "^1.60.0",
     "@tsconfig/node24": "^24.0.4",
     "@types/bunyan": "^1.8.11",
@@ -93,7 +94,7 @@
     "cheerio": "^1.2.0",
     "del": "8.0.1",
     "dotenv": "17.4.2",
-    "esbuild": "^0.27.3",
+    "esbuild": "^0.28.0",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.7.0",
