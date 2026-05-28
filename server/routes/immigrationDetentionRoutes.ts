@@ -28,11 +28,11 @@ export default class ImmigrationDetentionRoutes {
   ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
-    const { nomsId, id } = req.params as { nomsId: string; id: string }
+    const { nomsId, id, addOrEditOrUpdate} = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     const immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
 
     return res.render('pages/reviewImmigrationDetentionRecord', {
-      model: new ImmigrationDetentionReviewModel(nomsId, id, immigrationDetention),
+      model: new ImmigrationDetentionReviewModel(nomsId, id, immigrationDetention, addOrEditOrUpdate),
     })
   }
 
@@ -256,6 +256,7 @@ export default class ImmigrationDetentionRoutes {
         courtAppearanceUuid,
         username,
       )
+
     } else {
       immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     }
