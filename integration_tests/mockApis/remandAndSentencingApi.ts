@@ -1,4 +1,5 @@
-import { stubFor } from './wiremock'
+import type { SuperAgentRequest } from 'superagent'
+import { stubFor, stubPing } from './wiremock'
 
 const stubGetImmigrationDetentionByUUID = () =>
   stubFor({
@@ -178,16 +179,7 @@ const stubGetAllAppearanceOutcomes = () =>
     },
   })
 
-const ping = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/ras-api/health/ping',
-    },
-    response: {
-      status: 200,
-    },
-  })
+const ping = (httpStatus = 200): SuperAgentRequest => stubPing('/ras-api', httpStatus)
 
 export default {
   stubGetImmigrationDetentionByUUID,
@@ -195,6 +187,7 @@ export default {
   stubGetImmigrationDetentionByPrisoner,
   stubDeleteImmigrationDetentionByUUID,
   stubPutImmigrationDetentionByUUID,
+  stubPing: ping,
   stubRASApiPing: ping,
   stubGetAllAppearanceOutcomes,
 }
