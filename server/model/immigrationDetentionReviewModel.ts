@@ -8,6 +8,7 @@ export default class ImmigrationDetentionReviewModel extends ImmigrationDetentio
     public nomsId: string,
     public id: string,
     public immigrationDetention: ImmigrationDetention,
+    public addOrEditOrUpdate: string,
   ) {
     super(immigrationDetention)
   }
@@ -16,9 +17,9 @@ export default class ImmigrationDetentionReviewModel extends ImmigrationDetentio
 
   public backLink(): string {
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'NO_LONGER_OF_INTEREST') {
-      return `/${this.nomsId}/immigration-detention/add/confirmed-date/${this.id}`
+      return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/confirmed-date/${this.id}`
     }
-    return `/${this.nomsId}/immigration-detention/add/ho-ref/${this.id}`
+    return `/${this.nomsId}/immigration-detention/${this.addOrEditOrUpdate}/ho-ref/${this.id}`
   }
 
   public isNoLongerOfInterest(): boolean {
