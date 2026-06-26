@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import express, { Router, Request, Response, NextFunction } from 'express'
 import helmet from 'helmet'
+import { IncomingMessage, ServerResponse } from 'http'
 import config from '../config'
 
 export default function setUpWebSecurity(): Router {
@@ -14,12 +15,22 @@ export default function setUpWebSecurity(): Router {
     next()
   })
 
-  const scriptSrc = ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`]
-  const styleSrc = ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`]
+  const scriptSrc = [
+    "'self'",
+    (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as Response).locals.cspNonce}'`,
+  ]
+  const styleSrc = [
+    "'self'",
+    (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as Response).locals.cspNonce}'`,
+  ]
   const fontSrc = ["'self'"]
   const imgSrc = ["'self'", 'data:']
   const formAction = [`'self' ${config.apis.hmppsAuth.externalUrl} ${config.services.courtCasesReleaseDates.url}`]
-  const connectSrc = ["'self' https://northeurope-0.in.applicationinsights.azure.com https://js.monitor.azure.com"]
+  const connectSrc = [
+    "'self'",
+    'https://northeurope-0.in.applicationinsights.azure.com',
+    'https://js.monitor.azure.com',
+  ]
 
   if (config.apis.frontendComponents.enabled) {
     scriptSrc.push(config.apis.frontendComponents.url)

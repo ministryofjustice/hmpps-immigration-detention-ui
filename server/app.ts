@@ -4,7 +4,6 @@ import createError from 'http-errors'
 
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
-import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
@@ -17,6 +16,7 @@ import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 
 import getFrontendComponents from './middleware/getFeComponents'
+import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 import routes from './routes'
 import type { Services } from './services'
 import populateCurrentPrisoner from './middleware/populateCurrentPrisoner'
@@ -28,7 +28,6 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
-  app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
@@ -42,9 +41,9 @@ export default function createApp(services: Services): express.Application {
 
   app.get(/.*/, getFrontendComponents(services))
 
-  app.use(setUpCurrentUser(services))
-
   app.use('/:nomsId', populateCurrentPrisoner(services.prisonerSearchService, services.userService))
+
+  app.use(addUsernameAndCaseloadToTelemetry())
 
   app.use(routes(services))
 

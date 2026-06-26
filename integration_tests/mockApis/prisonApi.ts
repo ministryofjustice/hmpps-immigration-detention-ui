@@ -1,4 +1,5 @@
-import { stubFor } from './wiremock'
+import type { SuperAgentRequest } from 'superagent'
+import { stubFor, stubPing } from './wiremock'
 
 const stubGetUserCaseloads = () =>
   stubFor({
@@ -31,19 +32,11 @@ const stubGetPrisonerImage = () =>
     },
   })
 
-const ping = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/prison-api/health/ping',
-    },
-    response: {
-      status: 200,
-    },
-  })
+const ping = (httpStatus = 200): SuperAgentRequest => stubPing('/prison-api', httpStatus)
 
 export default {
   stubGetUserCaseloads,
   stubGetPrisonerImage,
+  stubPing: ping,
   stubGetUserCasePing: ping,
 }

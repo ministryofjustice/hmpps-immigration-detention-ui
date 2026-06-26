@@ -1,7 +1,6 @@
 # Pre-commit hook configuration file
 #
 # This contains the list of hooks to be run before committing code.
-# The devsecops-hooks baseline hook is temporarily disabled while we investigate issues with it but will eventually become compulsory.
 # Other hooks maybe added or removed as needed to suit individual project requirements.
 
 repos:
