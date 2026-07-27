@@ -104,14 +104,14 @@ export default class ImmigrationDetentionHORefModel {
       (this.hoRefNumberForm?.hoRefNumber.length < 5 || this.hoRefNumberForm?.hoRefNumber.length > 16)
     ) {
       errors.push({
-        text: 'The Home Office Reference Number should be between 5 and 16 characters',
+        text: 'The Home Office Reference Number should be between 5 to 16 characters.',
         fields: ['refNumber'],
       })
     }
 
     if (this.hoRefNumberForm?.hoRefNumber && !validPattern.test(this.hoRefNumberForm?.hoRefNumber)) {
       errors.push({
-        text: "The Home Office Reference Number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters (e.g. '@', '#', '%', '&', '-').",
+        text: "The Home Office Reference Number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters",
         fields: ['refNumber'],
       })
     }
