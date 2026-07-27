@@ -19,6 +19,7 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
   describe('isValidCode', () => {
     it('valid codes should pass', () => {
       const validCodes = [
+        '12345', // to show 5 digit code works
         'N1105951',
         'W1997262',
         '16224684',
@@ -59,7 +60,7 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
 
     it('invalid codes should fail (too short or too long)', () => {
       const invalidCodes = [
-        'A19509', // too short (6 chars)
+        'A195', // too short (4 chars)
         'W199726211111111', // too long (16 chars)
       ]
 
