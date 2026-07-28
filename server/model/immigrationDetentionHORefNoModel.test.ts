@@ -61,7 +61,7 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
     it('invalid codes should fail (too short or too long)', () => {
       const invalidCodes = [
         'A195', // too short (4 chars)
-        'W199726211111111', // too long (16 chars)
+        'W1997262111111111', // too long (17 chars)
       ]
 
       invalidCodes.forEach(code => {
