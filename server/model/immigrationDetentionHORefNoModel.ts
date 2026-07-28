@@ -74,7 +74,7 @@ export default class ImmigrationDetentionHORefModel {
 
   // validator.js
   public validateHORefNumber(value: string) {
-    const pattern = /^[A-Z0-9/-]{8,15}$/
+    const pattern = /^[A-Za-z0-9/]{5,16}$/
     return pattern.test(value)
   }
 
@@ -94,24 +94,24 @@ export default class ImmigrationDetentionHORefModel {
     const errors: ValidationError[] = []
     if (!this.hoRefNumberForm?.hoRefNumber) {
       errors.push({
-        text: 'Enter the Home Office reference number',
+        text: 'Enter the Home Office Reference Number',
         fields: ['refNumber'],
       })
     }
 
     if (
       this.hoRefNumberForm?.hoRefNumber &&
-      (this.hoRefNumberForm?.hoRefNumber.length < 8 || this.hoRefNumberForm?.hoRefNumber.length > 16)
+      (this.hoRefNumberForm?.hoRefNumber.length < 5 || this.hoRefNumberForm?.hoRefNumber.length > 16)
     ) {
       errors.push({
-        text: 'The Home Office reference number should be between 8 to 16 characters.',
+        text: 'The Home Office Reference Number should be between 5 to 16 characters.',
         fields: ['refNumber'],
       })
     }
 
     if (this.hoRefNumberForm?.hoRefNumber && !validPattern.test(this.hoRefNumberForm?.hoRefNumber)) {
       errors.push({
-        text: "The Home Office reference number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters (e.g. '@', '#', '%', '&', '-').",
+        text: "The Home Office Reference Number should only contain numbers and letters. It might have a forward slash '/' but should not contain any other special characters",
         fields: ['refNumber'],
       })
     }

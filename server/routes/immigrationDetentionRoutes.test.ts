@@ -31,7 +31,7 @@ const IMMIGRATION_DETENTION_OBJECT: ImmigrationDetention = {
   immigrationDetentionUuid: '123-latest',
   immigrationDetentionRecordType: 'IS91',
   recordDate: '2022-06-22',
-  homeOfficeReferenceNumber: 'ABC123',
+  homeOfficeReferenceNumber: 'ABC12',
   source: 'DPS',
   createdAt: '2025-11-03T08:06:37.123Z',
   courtAppearanceUuid: '123',
@@ -349,17 +349,17 @@ describe('Immigration Detention routes', () => {
       .type('form')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Enter the Home Office reference number')
+        expect(res.text).toContain('Enter the Home Office Reference Number')
       })
   })
 
   it.each([
-    { input: 'ABC12345@' },
-    { input: 'ABC-12345' },
-    { input: 'ABC#12345' },
-    { input: 'ABC%12345' },
-    { input: 'ABC&12345' },
-    { input: 'ABC 12345' },
+    { input: 'ABC1@2' },
+    { input: 'ABC-12' },
+    { input: 'ABC#13' },
+    { input: 'ABC%13' },
+    { input: 'ABC&14' },
+    { input: 'ABC 14' },
   ])(
     'POST /{nomsId}/immigration-detention/add/ho-ref/{id} throws error for invalid HO Ref with special characters: "$input"',
     ({ input }) => {
@@ -371,19 +371,19 @@ describe('Immigration Detention routes', () => {
         .expect('Content-Type', /html/)
         .expect(res => {
           expect(res.text).toContain(
-            'The Home Office reference number should only contain numbers and letters. It might have a forward slash &#39;/&#39; but should not contain any other special characters',
+            'The Home Office Reference Number should only contain numbers and letters. It might have a forward slash &#39;/&#39; but should not contain any other special characters',
           )
         })
     },
   )
 
   it.each([
-    { input: '', expectedError: 'Enter the Home Office reference number' },
-    { input: 'ABC123', expectedError: 'The Home Office reference number should be between 8 to 16 characters.' },
-    { input: 'abc123', expectedError: 'The Home Office reference number should be between 8 to 16 characters.' },
+    { input: '', expectedError: 'Enter the Home Office Reference Number' },
+    { input: 'ABC1', expectedError: 'The Home Office Reference Number should be between 5 to 16 characters.' },
+    { input: 'abc1', expectedError: 'The Home Office Reference Number should be between 5 to 16 characters.' },
     {
       input: 'ABCDEFGHIJKLMNOPQ',
-      expectedError: 'The Home Office reference number should be between 8 to 16 characters.',
+      expectedError: 'The Home Office Reference Number should be between 5 to 16 characters.',
     },
   ])(
     'POST /{nomsId}/immigration-detention/add/ho-ref/{id} throws error for invalid HO Ref: "$input"',
