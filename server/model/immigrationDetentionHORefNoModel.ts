@@ -74,7 +74,7 @@ export default class ImmigrationDetentionHORefModel {
 
   // validator.js
   public validateHORefNumber(value: string) {
-    const pattern = /^[A-Z0-9/-]{5,15}$/
+    const pattern = /^[A-Za-z0-9/]{5,15}$/
     return pattern.test(value)
   }
 
