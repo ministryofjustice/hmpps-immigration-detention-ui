@@ -4,6 +4,7 @@ import config from '../config'
 import immigrationDetentionNoLongerInterestTypes from './immigrationDetentionNoLongerInterestTypes'
 import immigrationDetentionRecordTypes from './immigrationDetentionRecordTypes'
 import ImmigrationDetentionReviewCommonModel from './immigrationDetentionReviewCommonModel'
+import { Role, Roles } from '../@types/roles'
 
 export default class ImmigrationDetentionOverviewModel extends ImmigrationDetentionReviewCommonModel {
   constructor(
@@ -33,7 +34,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private hasImmigrationDetentionAdminRole(): boolean {
-    return this.roles && this.roles.indexOf('IMMIGRATION_DETENTION_ADMIN') !== -1
+    return this.roles?.some(role => [Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN), Roles.getRole(Role.COURT_CASES)].includes(role))
   }
 
   public deleteLinkForLatestRecord(): string | undefined {
