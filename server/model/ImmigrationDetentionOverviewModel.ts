@@ -34,7 +34,9 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   private hasImmigrationDetentionAdminRole(): boolean {
-    return this.roles?.some(role => [Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN), Roles.getRole(Role.COURT_CASES)].includes(role))
+    return this.roles?.some(role =>
+      [Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN), Roles.getRole(Role.COURT_CASES)].includes(role),
+    )
   }
 
   public deleteLinkForLatestRecord(): string | undefined {

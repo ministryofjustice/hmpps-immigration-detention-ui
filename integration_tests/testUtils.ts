@@ -6,7 +6,7 @@ import { Role, Roles } from '../server/@types/roles'
 
 export { resetStubs }
 
-const DEFAULT_ROLES = [Roles.getAuthority(Role.IMMIGRATION_DETENTION_USER),Roles.getAuthority(Role.COURT_CASES)]
+const DEFAULT_ROLES = [Roles.getAuthority(Role.IMMIGRATION_DETENTION_USER), Roles.getAuthority(Role.COURT_CASES)]
 
 export const attemptHmppsAuthLogin = async (page: Page) => {
   await page.goto('/')

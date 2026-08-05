@@ -502,48 +502,51 @@ describe('Immigration Detention routes', () => {
       })
   })
 
-  it.each([Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN), Roles.getRole(Role.COURT_CASES)])('GET /{nomsId}/immigration-detention/overview shows delete link for COURT_CASES role', async (role) => {
-    const testUser = {
-      ...mockUser,
-      userRoles: [role],
-    }
-    const localApp = appWithAllRoutes({
-      services: {
-        auditService,
-        immigrationDetentionStoreService,
-        immigrationDetentionService,
-        paramsStoreService: paramsService,
-      },
-      userSupplier: () => testUser as HmppsUser,
-    })
-
-    immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
-    immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
-      Promise.resolve([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]),
-    )
-
-    await request(localApp)
-      .get(`/${NOMS_ID}/immigration-detention/overview`)
-      .expect(200)
-      .expect(res => {
-        const $: cheerio.CheerioAPI = cheerio.load(res.text)
-
-        const headingOverview = $('[data-qa="overview-heading"]').text().trim()
-        expect(headingOverview).toBe(`Immigration documents overview`)
-
-        const messageOverview = $('[data-qa="message-heading"]').text().trim()
-        expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
-
-        const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
-        expect(deleteLinkLatestRecord).toBe(
-          `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}?source=DPS&courtAppearanceUuid=123`,
-        )
-
-        expect(res.text).toContain('IS91 Detention Authority')
-        expect(res.text).toContain('IS91 recorded on ')
-        expect(res.text).toContain('ABC123')
+  it.each([Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN), Roles.getRole(Role.COURT_CASES)])(
+    'GET /{nomsId}/immigration-detention/overview shows delete link for COURT_CASES role',
+    async role => {
+      const testUser = {
+        ...mockUser,
+        userRoles: [role],
+      }
+      const localApp = appWithAllRoutes({
+        services: {
+          auditService,
+          immigrationDetentionStoreService,
+          immigrationDetentionService,
+          paramsStoreService: paramsService,
+        },
+        userSupplier: () => testUser as HmppsUser,
       })
-  })
+
+      immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT)
+      immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner.mockReturnValue(
+        Promise.resolve([IMMIGRATION_DETENTION_OBJECT, IMMIGRATION_DETENTION_NLI_OBJECT]),
+      )
+
+      await request(localApp)
+        .get(`/${NOMS_ID}/immigration-detention/overview`)
+        .expect(200)
+        .expect(res => {
+          const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+          const headingOverview = $('[data-qa="overview-heading"]').text().trim()
+          expect(headingOverview).toBe(`Immigration documents overview`)
+
+          const messageOverview = $('[data-qa="message-heading"]').text().trim()
+          expect(messageOverview).toBe(`An IS91 Detention Authority has been recorded`)
+
+          const deleteLinkLatestRecord = $('[data-qa="delete-latest-link"]').attr('href')
+          expect(deleteLinkLatestRecord).toBe(
+            `/${NOMS_ID}/immigration-detention/delete/${IMMIGRATION_DETENTION_OBJECT.immigrationDetentionUuid}?source=DPS&courtAppearanceUuid=123`,
+          )
+
+          expect(res.text).toContain('IS91 Detention Authority')
+          expect(res.text).toContain('IS91 recorded on ')
+          expect(res.text).toContain('ABC123')
+        })
+    },
+  )
 
   it('GET /{nomsId}/immigration-detention/overview does not show edit/delete link for NOMIS record with feature toggle false', async () => {
     immigrationDetentionStoreService.getById.mockReturnValue(IMMIGRATION_DETENTION_OBJECT_NOMIS)
