@@ -20,6 +20,7 @@ import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 import routes from './routes'
 import type { Services } from './services'
 import populateCurrentPrisoner from './middleware/populateCurrentPrisoner'
+import { Role, Roles } from './@types/roles'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -35,7 +36,13 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app, services.applicationInfo)
   app.use(setUpAuthentication())
-  app.use(authorisationMiddleware(['IMMIGRATION_DETENTION_USER', 'IMMIGRATION_DETENTION_ADMIN']))
+  app.use(
+    authorisationMiddleware([
+      Roles.getRole(Role.IMMIGRATION_DETENTION_USER),
+      Roles.getRole(Role.IMMIGRATION_DETENTION_ADMIN),
+      Roles.getRole(Role.COURT_CASES),
+    ]),
+  )
   app.use(setUpCsrf())
   app.use(setUpCurrentUser(services))
 

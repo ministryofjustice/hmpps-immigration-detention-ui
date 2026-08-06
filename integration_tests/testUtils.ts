@@ -2,10 +2,11 @@ import { Page } from '@playwright/test'
 import tokenVerification from './mockApis/tokenVerification'
 import hmppsAuth, { type UserToken } from './mockApis/hmppsAuth'
 import { resetStubs } from './mockApis/wiremock'
+import { Role, Roles } from '../server/@types/roles'
 
 export { resetStubs }
 
-const DEFAULT_ROLES = ['ROLE_IMMIGRATION_DETENTION_USER']
+const DEFAULT_ROLES = [Roles.getAuthority(Role.IMMIGRATION_DETENTION_USER), Roles.getAuthority(Role.COURT_CASES)]
 
 export const attemptHmppsAuthLogin = async (page: Page) => {
   await page.goto('/')
