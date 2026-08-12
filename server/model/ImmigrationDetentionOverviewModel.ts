@@ -83,7 +83,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
           details += ` : ${it.noLongerOfInterestComment}`
         }
       } else {
-        details = it.homeOfficeReferenceNumber
+        details = ImmigrationDetentionOverviewModel.formatHoRefNumber(it.homeOfficeReferenceNumber)
       }
 
       return [

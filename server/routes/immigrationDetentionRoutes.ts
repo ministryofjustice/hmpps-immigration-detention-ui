@@ -325,7 +325,7 @@ export default class ImmigrationDetentionRoutes {
     const { nomsId, id, addOrEditOrUpdate } = req.params as { nomsId: string; id: string; addOrEditOrUpdate: string }
     let immigrationDetention = this.immigrationDetentionStoreService.getById(req, nomsId, id)
     const hoRefNumberForm = {
-      hoRefNumber: req.body.hoRefNumber,
+      hoRefNumber: req.body.hoRefNumber?.trim() || null,
     }
     const immigrationDetentionHomeOfficeRefNo = new ImmigrationDetentionHORefModel(
       nomsId,
