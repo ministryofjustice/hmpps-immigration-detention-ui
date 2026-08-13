@@ -61,7 +61,13 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
   }
 
   public columnHeadings() {
-    return [{ text: 'Document Type' }, { text: 'Date' }, { text: 'Details' }, { text: '' }, { text: '' }]
+    return [
+      { text: 'Document Type' },
+      { text: 'Date' },
+      { text: 'Details', attributes: { 'data-qa': 'overview-table-details-heading' } },
+      { text: '' },
+      { text: '' },
+    ]
   }
 
   public overviewTable() {
@@ -94,7 +100,7 @@ export default class ImmigrationDetentionOverviewModel extends ImmigrationDetent
             'Unknown',
         },
         { html: dayjs(date).format('D MMMM YYYY') },
-        { text: details },
+        { text: details, attributes: { 'data-qa': 'overview-table-details-value' } },
         this.isNOMIS(it),
         this.actionCell(it),
       ]

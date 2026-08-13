@@ -39,7 +39,7 @@ test.describe('Add Immigration Detention - Bail', () => {
       'Enter the date that immigration bail was granted',
     )
     await addDocumentDatePage.enterDocDate('2024-04-20')
-    expect(addDocumentDatePage.captionText()).toHaveText('Record Immigration Bail')
+    await expect(addDocumentDatePage.captionText()).toHaveText('Record Immigration Bail')
     await addDocumentDatePage.continueButton().click()
 
     const addHORefNo = await AddHORefNo.verifyOnPage(
@@ -47,12 +47,12 @@ test.describe('Add Immigration Detention - Bail', () => {
       'Enter the reference number on the immigration bail document',
     )
     await addHORefNo.enterHoRefNo('111-222')
-    expect(addHORefNo.captionText()).toHaveText('Record Immigration Bail')
-    expect(addHORefNo.hinText()).toHaveText('This will be at the top of the document')
+    await expect(addHORefNo.captionText()).toHaveText('Record Immigration Bail')
+    await expect(addHORefNo.hinText()).toHaveText('This will be at the top of the document')
     await addHORefNo.continueButton().click()
 
     const immigrationDetentionSummary = await AddImmigrationDetentionReview.verifyOnPage(page)
-    expect(immigrationDetentionSummary.captionText()).toHaveText('Record Immigration Bail')
+    await expect(immigrationDetentionSummary.captionText()).toHaveText('Record Immigration Bail')
 
     await immigrationDetentionSummary.editDocumentDate().click()
     await immigrationDetentionSummary.continueButton().click()
@@ -66,7 +66,43 @@ test.describe('Add Immigration Detention - Bail', () => {
       page,
       'Immigration bail successfully recorded',
     )
-    expect(immigrationDetentionResult.successMessage()).toHaveText('Immigration bail successfully recorded')
-    expect(immigrationDetentionResult.followInfoLineOne()).toHaveCount(0)
+    await expect(immigrationDetentionResult.successMessage()).toHaveText('Immigration bail successfully recorded')
+    await expect(immigrationDetentionResult.followInfoLineOne()).toHaveCount(0)
+  })
+  ;[
+    { input: '  111-222  ', expectedText: '111-222' },
+    { input: '', expectedText: 'Not entered' },
+  ].forEach(({ input, expectedText }) => {
+    test(`Enter bail with HO Ref "${input}" resolves to "${expectedText}"`, async ({ page }) => {
+      await login(page)
+      const immigrationDetention = await AddImmigrationDetentionTypePage.goTo('A1234AB', page)
+      await immigrationDetention.selectRecordType('IMMIGRATION_BAIL').click()
+      await immigrationDetention.continueButton().click()
+
+      const addDocumentDatePage = await AddDocumentDatePage.verifyOnPage(
+        page,
+        'Enter the date that immigration bail was granted',
+      )
+      await addDocumentDatePage.enterDocDate('2024-04-20')
+      await addDocumentDatePage.continueButton().click()
+
+      const addHORefNo = await AddHORefNo.verifyOnPage(
+        page,
+        'Enter the reference number on the immigration bail document',
+      )
+      await addHORefNo.enterHoRefNo(input)
+      await addHORefNo.continueButton().click()
+
+      const immigrationDetentionSummary = await AddImmigrationDetentionReview.verifyOnPage(page)
+      await expect(page.getByText(expectedText, { exact: true })).toBeVisible()
+
+      await immigrationDetentionSummary.submit().click()
+
+      const immigrationDetentionResult = await AddImmigrationDetentionResultPage.verifyOnPage(
+        page,
+        'Immigration bail successfully recorded',
+      )
+      await expect(immigrationDetentionResult.successMessage()).toHaveText('Immigration bail successfully recorded')
+    })
   })
 })

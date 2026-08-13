@@ -24,7 +24,7 @@ export default class ImmigrationDetentionHORefModel {
       this.hoRefNumberForm.hoRefNumber === 'IMMIGRATION_BAIL' ||
       this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL'
     ) {
-      return 'Enter the reference number on the immigration bail document'
+      return 'Enter the reference number on the immigration bail document (optional)'
     }
     return 'Enter the Home Office Reference Number (optional)'
   }
@@ -115,17 +115,15 @@ export default class ImmigrationDetentionHORefModel {
   }
 
   validateImmigrationBail(): ValidationError[] {
-    const validPattern = /^[0-9-]+$/ // Allows only uppercase or lowercase letters, numbers, and forward slash '/'
+    const validPattern = /^[0-9-]+$/ // Allows only numbers and hyphens '-'
     const errors: ValidationError[] = []
+    const hoRefNumber = this.hoRefNumberForm?.hoRefNumber
 
-    if (!this.hoRefNumberForm?.hoRefNumber) {
-      errors.push({
-        text: 'Enter the reference on the immigration bail document',
-        fields: ['refNumber'],
-      })
+    if (!hoRefNumber) {
+      return errors
     }
 
-    if (this.hoRefNumberForm?.hoRefNumber && !validPattern.test(this.hoRefNumberForm?.hoRefNumber)) {
+    if (!validPattern.test(hoRefNumber)) {
       errors.push({
         text: "The reference number should only contain numbers. It might have a dash '-' but should not contain any other special characters (e.g. '@', '#', '%', '&').",
         fields: ['refNumber'],

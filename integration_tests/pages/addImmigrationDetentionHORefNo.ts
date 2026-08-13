@@ -15,6 +15,8 @@ export default class AddHORefNo extends AbstractPage {
     return addHORefNoPage
   }
 
+  public questionText = (): Locator => this.page.locator('[data-qa=recordHORefQuestion]')
+
   public continueButton = (): Locator => this.page.locator('[data-qa=submit-form]')
 
   public captionText = (): Locator => this.page.locator('[data-qa=caption-text]')
