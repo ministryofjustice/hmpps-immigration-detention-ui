@@ -72,12 +72,6 @@ export default class ImmigrationDetentionHORefModel {
     return `${config.services.courtCasesReleaseDates.url}/prisoner/${this.nomsId}/overview`
   }
 
-  // validator.js
-  public validateHORefNumber(value: string) {
-    const pattern = /^[A-Za-z0-9/]{5,16}$/
-    return pattern.test(value)
-  }
-
   async validation(): Promise<ValidationError[]> {
     const errors: ValidationError[] = []
     if (this.immigrationDetention?.immigrationDetentionRecordType === 'IMMIGRATION_BAIL') {

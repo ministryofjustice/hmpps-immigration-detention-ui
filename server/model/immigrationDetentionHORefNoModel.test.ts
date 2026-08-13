@@ -16,7 +16,7 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
     })
   })
 
-  describe('isValidCode', () => {
+  describe('validateHomeOffenceReference', () => {
     it('valid codes should pass', () => {
       const validCodes = [
         '12345', // to show 5 digit code works
@@ -40,7 +40,8 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
       ]
 
       validCodes.forEach(code => {
-        expect(model.validateHORefNumber(code)).toBe(true)
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateHomeOffenceReference()).toEqual([])
       })
     })
 
@@ -54,7 +55,8 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
       ]
 
       invalidCodes.forEach(code => {
-        expect(model.validateHORefNumber(code)).toBe(false)
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateHomeOffenceReference().length).toBeGreaterThan(0)
       })
     })
 
@@ -65,7 +67,43 @@ describe('🧩 ImmigrationDetentionHORefModel', () => {
       ]
 
       invalidCodes.forEach(code => {
-        expect(model.validateHORefNumber(code)).toBe(false)
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateHomeOffenceReference().length).toBeGreaterThan(0)
+      })
+    })
+  })
+
+  describe('validateImmigrationBail', () => {
+    it('valid codes should pass', () => {
+      const validCodes = ['12345', '1234567890', '123-456', '123456789012345678', '1-2-3-4-5', '0000000']
+
+      validCodes.forEach(code => {
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateImmigrationBail()).toEqual([])
+      })
+    })
+
+    it('empty or undefined values should pass', () => {
+      const emptyValues = ['', undefined]
+
+      emptyValues.forEach(code => {
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateImmigrationBail()).toEqual([])
+      })
+    })
+
+    it('invalid codes should fail', () => {
+      const invalidCodes = [
+        'A1876986', // letters
+        '123 456', // space
+        '123@456', // invalid character
+        '123_456', // underscore
+        '123/456', // forward slash
+      ]
+
+      invalidCodes.forEach(code => {
+        model.hoRefNumberForm.hoRefNumber = code
+        expect(model.validateImmigrationBail().length).toBeGreaterThan(0)
       })
     })
   })
