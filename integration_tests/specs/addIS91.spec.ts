@@ -35,18 +35,19 @@ test.describe('Add Immigration Detention - IS91', () => {
 
     const addDocumentDatePage = await AddDocumentDatePage.verifyOnPage(page, 'Record IS91 Detention Authority')
     await addDocumentDatePage.enterDocDate('2024-04-20')
-    expect(addDocumentDatePage.captionText()).toHaveText('Record IS91 Detention Authority')
-    expect(addDocumentDatePage.docQuestion()).toHaveText('Enter the date on the IS91 document')
+    await expect(addDocumentDatePage.captionText()).toHaveText('Record IS91 Detention Authority')
+    await expect(addDocumentDatePage.docQuestion()).toHaveText('Enter the date on the IS91 document')
     await addDocumentDatePage.continueButton().click()
 
     const addHORefNo = await AddHORefNo.verifyOnPage(page, 'Record IS91 Detention Authority')
     await addHORefNo.enterHoRefNo('F3002497/003')
-    expect(addHORefNo.captionText()).toHaveText('Record IS91 Detention Authority')
-    expect(addHORefNo.hinText()).toHaveText('This can be found at the top of IS91 document')
+    await expect(addHORefNo.questionText()).toHaveText('Enter the Home Office Reference Number (optional)')
+    await expect(addHORefNo.captionText()).toHaveText('Record IS91 Detention Authority')
+    await expect(addHORefNo.hinText()).toHaveText('This can be found at the top of IS91 document')
     await addHORefNo.continueButton().click()
 
     const immigrationDetentionSummary = await AddImmigrationDetentionReview.verifyOnPage(page)
-    expect(immigrationDetentionSummary.captionText()).toHaveText('Record IS91 Detention Authority')
+    await expect(immigrationDetentionSummary.captionText()).toHaveText('Record IS91 Detention Authority')
 
     await immigrationDetentionSummary.editDocumentDate().click()
     await immigrationDetentionSummary.continueButton().click()
@@ -60,9 +61,44 @@ test.describe('Add Immigration Detention - IS91', () => {
       page,
       'IS91 Detention Authority successfully recorded',
     )
-    expect(immigrationDetentionResult.successMessage()).toHaveText('IS91 Detention Authority successfully recorded')
-    expect(immigrationDetentionResult.followInfoLineOne()).toHaveText(
+    await expect(immigrationDetentionResult.successMessage()).toHaveText(
+      'IS91 Detention Authority successfully recorded',
+    )
+    await expect(immigrationDetentionResult.followInfoLineOne()).toHaveText(
       'If this person will be detained under immigration powers after their release date, you need to:',
     )
+  })
+  ;[
+    { input: '  F3002497/003  ', expectedText: 'F3002497/003' },
+    { input: '', expectedText: 'Not entered' },
+  ].forEach(({ input, expectedText }) => {
+    test(`Enter Immigration Detention IS91 with HO Ref "${input}" resolves to "${expectedText}"`, async ({ page }) => {
+      await login(page)
+      const immigrationDetention = await AddImmigrationDetentionTypePage.goTo('A1234AB', page)
+      await immigrationDetention.selectRecordType('IS91').click()
+      await immigrationDetention.continueButton().click()
+
+      const addDocumentDatePage = await AddDocumentDatePage.verifyOnPage(page, 'Record IS91 Detention Authority')
+      await addDocumentDatePage.enterDocDate('2024-04-20')
+      await addDocumentDatePage.continueButton().click()
+
+      const addHORefNo = await AddHORefNo.verifyOnPage(page, 'Record IS91 Detention Authority')
+      await expect(addHORefNo.questionText()).toHaveText('Enter the Home Office Reference Number (optional)')
+      await addHORefNo.enterHoRefNo(input)
+      await addHORefNo.continueButton().click()
+
+      const immigrationDetentionSummary = await AddImmigrationDetentionReview.verifyOnPage(page)
+      await expect(page.getByText(expectedText, { exact: true })).toBeVisible()
+
+      await immigrationDetentionSummary.submit().click()
+
+      const immigrationDetentionResult = await AddImmigrationDetentionResultPage.verifyOnPage(
+        page,
+        'IS91 Detention Authority successfully recorded',
+      )
+      await expect(immigrationDetentionResult.successMessage()).toHaveText(
+        'IS91 Detention Authority successfully recorded',
+      )
+    })
   })
 })

@@ -20,6 +20,10 @@ export default class GetOverviewPage extends AbstractPage {
     return this.verifyOnPage(page)
   }
 
+  public hoRefNumberValue = (): Locator => this.page.locator('.summary-list-ho-ref-number-value')
+
+  public overviewTableValues = (): Locator => this.page.locator('[data-qa="overview-table-details-value"]')
+
   public checkOverviewTableExists = async (): Promise<void> =>
     expect(this.page.locator('[data-qa="view-overview-table"]')).toBeVisible()
 

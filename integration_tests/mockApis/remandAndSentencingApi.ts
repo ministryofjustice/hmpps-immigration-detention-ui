@@ -47,7 +47,10 @@ const stubPostImmigrationDetention = () =>
     },
   })
 
-const stubGetImmigrationDetentionByPrisoner = () =>
+const stubGetImmigrationDetentionByPrisoner = (
+  latestHomeOfficeReferenceNumber: string | null = 'A12345678901',
+  previousHomeOfficeReferenceNumber = latestHomeOfficeReferenceNumber,
+) =>
   stubFor({
     request: {
       method: 'GET',
@@ -62,7 +65,7 @@ const stubGetImmigrationDetentionByPrisoner = () =>
           prisonerId: 'string',
           immigrationDetentionRecordType: 'IS91',
           recordDate: '2025-11-03',
-          homeOfficeReferenceNumber: 'A12345678900',
+          homeOfficeReferenceNumber: latestHomeOfficeReferenceNumber,
           noLongerOfInterestReason: 'BRITISH_CITIZEN',
           noLongerOfInterestComment: 'string',
           createdAt: '2025-11-03T08:12:44.525Z',
@@ -72,11 +75,11 @@ const stubGetImmigrationDetentionByPrisoner = () =>
           immigrationDetentionUuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           prisonerId: 'string',
           immigrationDetentionRecordType: 'IS91',
-          recordDate: '2025-11-03',
-          homeOfficeReferenceNumber: 'A12345678900',
+          recordDate: '2025-11-02',
+          homeOfficeReferenceNumber: previousHomeOfficeReferenceNumber,
           noLongerOfInterestReason: 'BRITISH_CITIZEN',
           noLongerOfInterestComment: 'string',
-          createdAt: '2025-11-03T08:12:44.525Z',
+          createdAt: '2025-11-02T08:12:44.525Z',
           source: 'DPS',
         },
       ],
