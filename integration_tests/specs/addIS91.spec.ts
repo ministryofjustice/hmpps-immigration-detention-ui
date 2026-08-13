@@ -96,7 +96,9 @@ test.describe('Add Immigration Detention - IS91', () => {
         page,
         'IS91 Detention Authority successfully recorded',
       )
-      await expect(immigrationDetentionResult.successMessage()).toHaveText('IS91 Detention Authority successfully recorded')
+      await expect(immigrationDetentionResult.successMessage()).toHaveText(
+        'IS91 Detention Authority successfully recorded',
+      )
     })
   })
 })
