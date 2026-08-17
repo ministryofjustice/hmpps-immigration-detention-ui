@@ -1,0 +1,32 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Immigration" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl">
+        Immigration
+      </h1>
+
+      <p class="govuk-body">
+        There are no immigration documents recorded.
+      </p>
+
+      {{ govukButton({
+        text: "Record new immigration document",
+        href: "/" + nomsId + "/immigration-detention/add",
+        classes: "govuk-button--secondary",
+        attributes: {
+          'data-qa': 'record-new-immigration-document'
+        }
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}
