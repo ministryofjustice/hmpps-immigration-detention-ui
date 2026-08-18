@@ -11,6 +11,7 @@ export default function routes(service: Services): Router {
     service.immigrationDetentionStoreService,
     service.immigrationDetentionService,
     service.paramsStoreService,
+    service.courtCasesReleaseDatesService,
   )
   const prisonerImageRoutes = new PrisonerImageRoutes(service.prisonerSearchService)
 

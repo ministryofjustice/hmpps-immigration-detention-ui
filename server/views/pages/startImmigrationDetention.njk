@@ -1,8 +1,14 @@
 {% extends "../partials/layout.njk" %}
+{% from "hmpps/components/court-cases-release-dates/sub-navigation/macro.njk" import subNavigation %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Immigration" %}
 {% set mainClasses = "app-container govuk-body" %}
+
+{% block beforeContent %}
+  {{ super() }}
+  {{ subNavigation(serviceDefinitions.services, 'immigration') }}
+{% endblock %}
 
 {% block content %}
 

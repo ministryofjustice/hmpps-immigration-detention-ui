@@ -18,6 +18,7 @@ import { User } from '../data/manageUsersApiClient'
 import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 import SessionImmigrationDetention from '../@types/ImmigrationDetention'
 import AuditService, { Page } from '../services/auditService'
+import CourtCasesReleaseDatesService from '../services/courtCasesReleaseDatesService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -25,6 +26,7 @@ export default class ImmigrationDetentionRoutes {
     private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
     private readonly paramStoreService: ParamStoreService,
+    private readonly courtCasesReleaseDatesService: CourtCasesReleaseDatesService,
   ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
@@ -182,9 +184,16 @@ export default class ImmigrationDetentionRoutes {
 
   public start: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId } = req.params as { nomsId: string }
+    const { user } = res.locals
+
+    const serviceDefinitions = await this.courtCasesReleaseDatesService.getServiceDefinitions(
+    nomsId,
+    user.token,
+  )
 
     return res.render('pages/startImmigrationDetention', {
       nomsId,
+      serviceDefinitions,
     })
   }
 

@@ -16,6 +16,7 @@ export const services = () => {
     prisonApiClient,
     prisonerSearchClient,
     remandAndSentencingApiClient,
+    CourtCasesReleaseDatesApiClient,
   } = dataAccess()
   const prisonerSearchService = new PrisonerSearchService(prisonApiClient, prisonerSearchClient)
   const immigrationDetentionStoreService = new ImmigrationDetentionStoreService()
