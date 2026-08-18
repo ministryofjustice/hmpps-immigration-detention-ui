@@ -17,6 +17,7 @@ export default function routes(service: Services): Router {
   router.get('/', (req, res) => res.render('pages/index'))
   router.get('/:nomsId/image', prisonerImageRoutes.getImage)
 
+  router.get('/:nomsId/immigration-detention/start', immigrationDetentionRoutes.start)
   router.get('/:nomsId/immigration-detention/add', immigrationDetentionRoutes.add)
   router.get(
     '/:nomsId/immigration-detention/:addOrEditOrUpdate/record-type/:id',

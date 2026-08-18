@@ -110,6 +110,22 @@ describe('Immigration Detention routes', () => {
       })
   })
 
+  it('GET /{nomsId}/immigration-detention/start renders the start page', async () => {
+    await request(app)
+      .get(`/${NOMS_ID}/immigration-detention/start`)
+      .expect(200)
+      .expect(res => {
+        const $: cheerio.CheerioAPI = cheerio.load(res.text)
+
+        expect($('h1').text().trim()).toBe('Immigration')
+        expect(res.text).toContain('There are no immigration documents recorded.')
+
+        const recordNewImmigrationDocumentButton = $('[data-qa="record-new-immigration-document"]')
+        expect(recordNewImmigrationDocumentButton.text().trim()).toBe('Record new immigration document')
+        expect(recordNewImmigrationDocumentButton.attr('href')).toBe(`/${NOMS_ID}/immigration-detention/add`)
+      })
+  })
+
   it('POST /{nomsId}/immigration-detention/add/confirmed-date/{id} empty day, month and year', () => {
     return request(app)
       .post(`/${NOMS_ID}/immigration-detention/add/confirmed-date/${SESSION_ID}`)

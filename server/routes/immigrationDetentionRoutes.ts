@@ -180,6 +180,14 @@ export default class ImmigrationDetentionRoutes {
     })
   }
 
+  public start: RequestHandler = async (req, res): Promise<void> => {
+    const { nomsId } = req.params as { nomsId: string }
+
+    return res.render('pages/startImmigrationDetention', {
+      nomsId,
+    })
+  }
+
   public add: RequestHandler = async (req, res): Promise<void> => {
     // await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
     const { nomsId } = req.params as { nomsId: string }

@@ -35,3 +35,18 @@ describe('GET /', () => {
       })
   })
 })
+
+describe('GET /:nomsId/immigration-detention/start', () => {
+  it('should render the immigration detention start page', () => {
+    return request(app)
+      .get('/ABC123/immigration-detention/start')
+      .expect('Content-Type', /html/)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Immigration')
+        expect(res.text).toContain('There are no immigration documents recorded.')
+        expect(res.text).toContain('Record new immigration document')
+        expect(res.text).toContain('/ABC123/immigration-detention/add')
+      })
+  })
+})
