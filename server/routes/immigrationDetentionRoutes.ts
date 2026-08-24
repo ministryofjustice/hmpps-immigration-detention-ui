@@ -18,7 +18,7 @@ import { User } from '../data/manageUsersApiClient'
 import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 import SessionImmigrationDetention from '../@types/ImmigrationDetention'
 import AuditService, { Page } from '../services/auditService'
-import CourtCasesReleaseDatesService from '../services/courtCasesReleaseDatesService'
+import CourtCaseReleaseDatesService from '../services/courtCaseReleaseDatesService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -26,7 +26,7 @@ export default class ImmigrationDetentionRoutes {
     private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
     private readonly paramStoreService: ParamStoreService,
-    private readonly courtCasesReleaseDatesService: CourtCasesReleaseDatesService,
+    private readonly courtCaseReleaseDatesService: CourtCaseReleaseDatesService,
   ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
@@ -76,7 +76,11 @@ export default class ImmigrationDetentionRoutes {
   public overview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId } = req.params as { nomsId: string }
     const { username = 'Unknown', userRoles = [] } = res.locals.user
+    const { user } = res.locals
     const { firstName = 'Unknown', lastName = 'Unknown' } = res.locals.prisoner || {}
+
+    const serviceDefinitions = await this.courtCaseReleaseDatesService.getServiceDefinitions(nomsId, user.token)
+
     const immigrationDetentionList = await this.immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(
       nomsId,
       username,
@@ -84,6 +88,7 @@ export default class ImmigrationDetentionRoutes {
 
     if (immigrationDetentionList.length > 0) {
       this.immigrationDetentionStoreService.clear(req, nomsId)
+
       await this.auditService.logPageView(Page.IMMIGRATION_OVERVIEW, {
         who: res.locals.user.username,
         correlationId: req.id,
@@ -104,6 +109,7 @@ export default class ImmigrationDetentionRoutes {
           immigrationDetentionList,
           userRoles,
         ),
+        serviceDefinitions,
       })
     }
 
@@ -186,10 +192,7 @@ export default class ImmigrationDetentionRoutes {
     const { nomsId } = req.params as { nomsId: string }
     const { user } = res.locals
 
-    const serviceDefinitions = await this.courtCasesReleaseDatesService.getServiceDefinitions(
-    nomsId,
-    user.token,
-  )
+    const serviceDefinitions = await this.courtCaseReleaseDatesService.getServiceDefinitions(nomsId, user.token)
 
     return res.render('pages/startImmigrationDetention', {
       nomsId,

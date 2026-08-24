@@ -1,4 +1,4 @@
-import { CcrdServiceDefinitions } from '../@types/courtCasesReleaseDatesApi/types'
+import { CcrdServiceDefinitions } from '../@types/courtCaseReleaseDatesApi/types'
 import CourtCasesReleaseDatesApiClient from '../data/courtCaseReleaseDatesApiClient'
 
 export default class CourtCasesReleaseDatesService {

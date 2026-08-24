@@ -1,0 +1,9 @@
+{% extends "./layout.njk" %}
+
+{% from "hmpps/components/court-cases-release-dates/sub-navigation/macro.njk" import subNavigation %}
+
+{% block beforeContent %}
+  {{ super() }}
+
+  {{ subNavigation(serviceDefinitions.services, 'immigration') }}
+{% endblock %}
