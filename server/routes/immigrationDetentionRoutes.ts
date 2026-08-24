@@ -88,7 +88,6 @@ export default class ImmigrationDetentionRoutes {
 
     if (immigrationDetentionList.length > 0) {
       this.immigrationDetentionStoreService.clear(req, nomsId)
-
       await this.auditService.logPageView(Page.IMMIGRATION_OVERVIEW, {
         who: res.locals.user.username,
         correlationId: req.id,
