@@ -4,7 +4,7 @@ import logger from '../../logger'
 import config from '../config'
 import { CcrdServiceDefinitions } from '../@types/courtCaseReleaseDatesApi/types'
 
-export default class CourtCasesReleaseDatesApiClient extends RestClient {
+export default class CourtCaseReleaseDatesApiClient extends RestClient {
   constructor(authenticationClient: AuthenticationClient) {
     super('Court Cases Release Dates API', config.apis.courtCasesReleaseDatesApi, logger, authenticationClient)
   }

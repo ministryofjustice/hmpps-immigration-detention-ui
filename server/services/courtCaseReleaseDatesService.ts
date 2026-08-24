@@ -1,10 +1,10 @@
 import { CcrdServiceDefinitions } from '../@types/courtCaseReleaseDatesApi/types'
-import CourtCasesReleaseDatesApiClient from '../data/courtCaseReleaseDatesApiClient'
+import CourtCaseReleaseDatesApiClient from '../data/courtCaseReleaseDatesApiClient'
 
-export default class CourtCasesReleaseDatesService {
-  constructor(private readonly courtCasesReleaseDatesApiClient: CourtCasesReleaseDatesApiClient) {}
+export default class CourtCaseReleaseDatesService {
+  constructor(private readonly courtCaseReleaseDatesApiClient: CourtCaseReleaseDatesApiClient) {}
 
   public async getServiceDefinitions(prisonerId: string, token: string): Promise<CcrdServiceDefinitions> {
-    return this.courtCasesReleaseDatesApiClient.getServiceDefinitions(prisonerId, token)
+    return this.courtCaseReleaseDatesApiClient.getServiceDefinitions(prisonerId, token)
   }
 }

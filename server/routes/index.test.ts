@@ -2,10 +2,13 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService from '../services/auditService'
+import CourtCaseReleaseDatesService from '../services/courtCaseReleaseDatesService'
 
 jest.mock('../services/auditService')
+jest.mock('../services/courtCaseReleaseDatesService')
 
 const auditService = new AuditService(null) as jest.Mocked<AuditService>
+const courtCaseReleaseDatesService = new CourtCaseReleaseDatesService(null) as jest.Mocked<CourtCaseReleaseDatesService>
 
 let app: Express
 
@@ -13,6 +16,7 @@ beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       auditService,
+      courtCaseReleaseDatesService,
     },
     userSupplier: () => user,
   })

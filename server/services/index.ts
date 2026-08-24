@@ -23,7 +23,7 @@ export const services = () => {
   const immigrationDetentionStoreService = new ImmigrationDetentionStoreService()
   const immigrationDetentionService = new ImmigrationDetentionService(remandAndSentencingApiClient)
   const paramStoreService = new ParamStoreService()
-  const courtCasesReleaseDatesService = new CourtCaseReleaseDatesService(courtCaseReleaseDatesApiClient)
+  const courtCaseReleaseDatesService = new CourtCaseReleaseDatesService(courtCaseReleaseDatesApiClient)
 
   return {
     applicationInfo,
@@ -34,7 +34,7 @@ export const services = () => {
     immigrationDetentionStoreService,
     immigrationDetentionService,
     paramsStoreService: paramStoreService,
-    courtCasesReleaseDatesService,
+    courtCaseReleaseDatesService,
   }
 }
 
