@@ -214,3 +214,16 @@ You'll need to manually handle the merge of the changes, but if you do it early,
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)
+
+## Project shape
+
+- This is a TypeScript 24 Express application for managing HMPPS immigration detention records.
+- Request handling lives in `server/`: middleware, routes, services, data/API clients, models, and Nunjucks views.
+- Browser assets live in `assets/`: TypeScript, SCSS, and frontend templates/components.
+- End-to-end tests live in `integration_tests/` and use Playwright with WireMock API stubs.
+- `esbuild/` owns the application and asset build. Do not edit generated output in `dist/`.
+
+## Change discipline
+
+- Check `.env.example` and nearby configuration before introducing a new environment variable.
+- Keep deployment changes in `helm_deploy/` aligned across the relevant environment values files and validate Helm-related changes with the repository's CI conventions.
