@@ -9,6 +9,7 @@ import manageUsersApi from '../mockApis/manageUsersApi'
 import prisonApi from '../mockApis/prisonApi'
 import prisonerSearchApi from '../mockApis/prisonerSearchApi'
 import remandAndSentencingApi from '../mockApis/remandAndSentencingApi'
+import ccardApi from '../mockApis/ccardApi'
 
 test.describe('Add Immigration Detention - IS91', () => {
   test.beforeEach(async () => {
@@ -21,6 +22,7 @@ test.describe('Add Immigration Detention - IS91', () => {
       remandAndSentencingApi.stubGetImmigrationDetentionByPrisoner(),
       remandAndSentencingApi.stubGetImmigrationDetentionByUUID(),
       remandAndSentencingApi.stubPutImmigrationDetentionByUUID(),
+       ccardApi.getServiceDefinitions(),
     ])
   })
 
