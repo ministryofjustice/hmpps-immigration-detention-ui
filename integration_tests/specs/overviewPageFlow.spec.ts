@@ -22,7 +22,7 @@ test.describe('Add Immigration Detention - IS91', () => {
       remandAndSentencingApi.stubGetImmigrationDetentionByPrisoner(),
       remandAndSentencingApi.stubGetImmigrationDetentionByUUID(),
       remandAndSentencingApi.stubPutImmigrationDetentionByUUID(),
-       ccardApi.getServiceDefinitions(),
+      ccardApi.getServiceDefinitions(),
     ])
   })
 
