@@ -59,6 +59,15 @@ export default {
     expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
   },
   apis: {
+    courtCasesReleaseDatesApi: {
+      url: get('COURT_CASES_RELEASE_DATES_API_URL', 'http://localhost:8083', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('COURT_CASES_RELEASE_DATES_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('COURT_CASES_RELEASE_DATES_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COURT_CASES_RELEASE_DATES_API_TIMEOUT_RESPONSE', 10000))),
+    },
     remandAndSentencingApi: {
       url: get('REMAND_AND_SENTENCING_API_URL', 'http://127.0.0.1:8080', requiredInProduction),
       healthPath: '/health/ping',

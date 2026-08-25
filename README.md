@@ -146,6 +146,18 @@ There's some guidance for dealing with false positives in the [precommit hooks d
 
 The secret scanner hook can also be configured as described [here](https://github.com/ministryofjustice/devsecops-hooks?tab=readme-ov-file#-configuration).
 
+### Re-generate OpenAPI TypeScript types
+
+Downstream APIs within DPS should be Open API compatible. It is therefore possible to auto-gen the REST api and request/return object types via ``npm run generate-<type>``
+
+i.e. to re-generate the latest RaS api types
+
+``
+npm run generate-ras-api-types
+``
+
+This will in-turn generate the artifacts in ``server/@types/remandAndSentencingApi/index.d.ts``
+
 ### Run linter
 
 - `npm run lint` runs `eslint`.
@@ -202,3 +214,16 @@ You'll need to manually handle the merge of the changes, but if you do it early,
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)
+
+## Project shape
+
+- This is a TypeScript 24 Express application for managing HMPPS immigration detention records.
+- Request handling lives in `server/`: middleware, routes, services, data/API clients, models, and Nunjucks views.
+- Browser assets live in `assets/`: TypeScript, SCSS, and frontend templates/components.
+- End-to-end tests live in `integration_tests/` and use Playwright with WireMock API stubs.
+- `esbuild/` owns the application and asset build. Do not edit generated output in `dist/`.
+
+## Change discipline
+
+- Check `.env.example` and nearby configuration before introducing a new environment variable.
+- Keep deployment changes in `helm_deploy/` aligned across the relevant environment values files and validate Helm-related changes with the repository's CI conventions.

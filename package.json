@@ -26,6 +26,7 @@
     "generate-prison-api-types": "openapi-typescript https://prison-api-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonApi/index.d.ts",
     "generate-prisoner-search-api-types": "openapi-typescript https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonerSearchApi/index.d.ts",
     "generate-ras-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts",
+    "generate-calculate-release-dates-api-types": "openapi-typescript https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/calculateReleaseDatesApi/index.d.ts",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
@@ -109,7 +110,6 @@
   "overrides": {
     "@opentelemetry/core": "2.10.0",
     "form-data": "4.0.6",
-    "js-yaml": "^5.2.2",
     "openapi-typescript": {
       "typescript": "$typescript"
     },

@@ -5,6 +5,7 @@ import { appWithAllRoutes } from './testutils/appSetup'
 import ImmigrationDetentionStoreService from '../services/immigrationDetentionStoreService'
 import ImmigrationDetention from '../@types/ImmigrationDetention'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
+import CourtCaseReleaseDatesService from '../services/courtCaseReleaseDatesService'
 import ParamStoreService from '../services/paramStoreService'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import config from '../config'
@@ -15,6 +16,7 @@ jest.mock('../services/immigrationDetentionStoreService')
 jest.mock('../services/immigrationDetentionService')
 jest.mock('../services/paramStoreService')
 jest.mock('../services/auditService')
+jest.mock('../services/courtCaseReleaseDatesService')
 
 const immigrationDetentionStoreService =
   new ImmigrationDetentionStoreService() as jest.Mocked<ImmigrationDetentionStoreService>
@@ -24,6 +26,8 @@ const paramsService = new ParamStoreService() as jest.Mocked<ParamStoreService>
 const immigrationDetentionService = new ImmigrationDetentionService(null) as jest.Mocked<ImmigrationDetentionService>
 
 const auditService = new AuditService(null) as jest.Mocked<AuditService>
+
+const courtCaseReleaseDatesService = new CourtCaseReleaseDatesService(null) as jest.Mocked<CourtCaseReleaseDatesService>
 
 const NOMS_ID = 'ABC123'
 const SESSION_ID = '96c83672-8499-4a64-abc9-3e031b1747b3'
@@ -72,15 +76,49 @@ const IMMIGRATION_DETENTION_NLI_OBJECT: ImmigrationDetention = {
   courtAppearanceUuid: '123',
 }
 
+const SERVICE_DEFINITIONS = {
+  services: {
+    overview: {
+      href: 'http://localhost:8006/prisoner/ABC123/overview',
+      text: 'Overview',
+      thingsToDo: {
+        things: [] as Array<{
+          title: string
+          message: string
+          buttonText: string
+          buttonHref: string
+          type:
+            | 'CALCULATION_REQUIRED'
+            | 'ADA_INTERCEPT'
+            | 'REVIEW_IDENTIFIED_REMAND'
+            | 'PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW'
+            | 'HMCTS_API_DOCUMENT_RECEIVED'
+        }>,
+        count: 0,
+      },
+      maintenanceAlert: {
+        enabled: false,
+        message: '',
+      },
+    },
+  },
+  maintenanceAlert: {
+    enabled: false,
+    message: '',
+  },
+}
+
 let app: Express
 
 beforeEach(() => {
+  courtCaseReleaseDatesService.getServiceDefinitions.mockResolvedValue(SERVICE_DEFINITIONS)
   app = appWithAllRoutes({
     services: {
       auditService,
       immigrationDetentionStoreService,
       immigrationDetentionService,
       paramsStoreService: paramsService,
+      courtCaseReleaseDatesService,
     },
     userSupplier: () => mockUser as HmppsUser,
   })
@@ -464,6 +502,8 @@ describe('Immigration Detention routes', () => {
           relatedChargeOutcomeUuid: 'related-uuid',
           isSubList: false,
           dispositionCode: 'DISP',
+          status: 'ACTIVE',
+          warrantType: 'REMAND',
         },
       ]),
     )
@@ -489,12 +529,16 @@ describe('Immigration Detention routes', () => {
       ...mockUser,
       userRoles: ['IMMIGRATION_DETENTION_USER'],
     }
+
+    courtCaseReleaseDatesService.getServiceDefinitions.mockResolvedValue(SERVICE_DEFINITIONS)
+
     const localApp = appWithAllRoutes({
       services: {
         auditService,
         immigrationDetentionStoreService,
         immigrationDetentionService,
         paramsStoreService: paramsService,
+        courtCaseReleaseDatesService,
       },
       userSupplier: () => testUser as HmppsUser,
     })
@@ -532,12 +576,16 @@ describe('Immigration Detention routes', () => {
         ...mockUser,
         userRoles: [role],
       }
+
+      courtCaseReleaseDatesService.getServiceDefinitions.mockResolvedValue(SERVICE_DEFINITIONS)
+
       const localApp = appWithAllRoutes({
         services: {
           auditService,
           immigrationDetentionStoreService,
           immigrationDetentionService,
           paramsStoreService: paramsService,
+          courtCaseReleaseDatesService,
         },
         userSupplier: () => testUser as HmppsUser,
       })

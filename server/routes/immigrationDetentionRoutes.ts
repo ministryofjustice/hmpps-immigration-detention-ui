@@ -18,6 +18,7 @@ import { User } from '../data/manageUsersApiClient'
 import immigrationDetentionRecordTypes from '../model/immigrationDetentionRecordTypes'
 import SessionImmigrationDetention from '../@types/ImmigrationDetention'
 import AuditService, { Page } from '../services/auditService'
+import CourtCaseReleaseDatesService from '../services/courtCaseReleaseDatesService'
 
 export default class ImmigrationDetentionRoutes {
   constructor(
@@ -25,6 +26,7 @@ export default class ImmigrationDetentionRoutes {
     private readonly immigrationDetentionStoreService: ImmigrationDetentionStoreService,
     private readonly immigrationDetentionService: ImmigrationDetentionService,
     private readonly paramStoreService: ParamStoreService,
+    private readonly courtCaseReleaseDatesService: CourtCaseReleaseDatesService,
   ) {}
 
   public review: RequestHandler = async (req, res): Promise<void> => {
@@ -74,7 +76,11 @@ export default class ImmigrationDetentionRoutes {
   public overview: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId } = req.params as { nomsId: string }
     const { username = 'Unknown', userRoles = [] } = res.locals.user
+    const { user } = res.locals
     const { firstName = 'Unknown', lastName = 'Unknown' } = res.locals.prisoner || {}
+
+    const serviceDefinitions = await this.courtCaseReleaseDatesService.getServiceDefinitions(nomsId, user.token)
+
     const immigrationDetentionList = await this.immigrationDetentionService.getImmigrationDetentionRecordsForPrisoner(
       nomsId,
       username,
@@ -102,6 +108,7 @@ export default class ImmigrationDetentionRoutes {
           immigrationDetentionList,
           userRoles,
         ),
+        serviceDefinitions,
       })
     }
 
@@ -182,9 +189,13 @@ export default class ImmigrationDetentionRoutes {
 
   public start: RequestHandler = async (req, res): Promise<void> => {
     const { nomsId } = req.params as { nomsId: string }
+    const { user } = res.locals
+
+    const serviceDefinitions = await this.courtCaseReleaseDatesService.getServiceDefinitions(nomsId, user.token)
 
     return res.render('pages/startImmigrationDetention', {
       nomsId,
+      serviceDefinitions,
     })
   }
 

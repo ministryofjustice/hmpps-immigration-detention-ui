@@ -6,6 +6,7 @@ import PrisonerSearchService from './prisonerSearchService'
 import ImmigrationDetentionStoreService from './immigrationDetentionStoreService'
 import ImmigrationDetentionService from './immigrationDetentionService'
 import ParamStoreService from './paramStoreService'
+import CourtCaseReleaseDatesService from './courtCaseReleaseDatesService'
 
 export const services = () => {
   const {
@@ -16,11 +17,13 @@ export const services = () => {
     prisonApiClient,
     prisonerSearchClient,
     remandAndSentencingApiClient,
+    courtCaseReleaseDatesApiClient,
   } = dataAccess()
   const prisonerSearchService = new PrisonerSearchService(prisonApiClient, prisonerSearchClient)
   const immigrationDetentionStoreService = new ImmigrationDetentionStoreService()
   const immigrationDetentionService = new ImmigrationDetentionService(remandAndSentencingApiClient)
   const paramStoreService = new ParamStoreService()
+  const courtCaseReleaseDatesService = new CourtCaseReleaseDatesService(courtCaseReleaseDatesApiClient)
 
   return {
     applicationInfo,
@@ -31,6 +34,7 @@ export const services = () => {
     immigrationDetentionStoreService,
     immigrationDetentionService,
     paramsStoreService: paramStoreService,
+    courtCaseReleaseDatesService,
   }
 }
 
