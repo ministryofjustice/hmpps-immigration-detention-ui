@@ -7,6 +7,7 @@ import prisonerSearchApi from '../mockApis/prisonerSearchApi'
 import remandAndSentencingApi from '../mockApis/remandAndSentencingApi'
 import manageUsersApi from '../mockApis/manageUsersApi'
 import frontEndComponentsApi from '../mockApis/frontEndComponentsApi'
+import ccardApi from '../mockApis/ccardApi'
 
 const mockApis = [
   hmppsAuth,
@@ -16,6 +17,7 @@ const mockApis = [
   prisonerSearchApi,
   manageUsersApi,
   frontEndComponentsApi,
+  ccardApi,
 ]
 
 test.describe('Health', () => {
