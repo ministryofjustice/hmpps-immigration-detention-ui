@@ -502,6 +502,8 @@ describe('Immigration Detention routes', () => {
           relatedChargeOutcomeUuid: 'related-uuid',
           isSubList: false,
           dispositionCode: 'DISP',
+          status: 'ACTIVE',
+          warrantType: 'REMAND',
         },
       ]),
     )
