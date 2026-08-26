@@ -10,6 +10,7 @@ generic-service:
   env:
     COMPONENT_API_URL: "https://frontend-components-dev.hmpps.service.justice.gov.uk"
     COURT_CASES_AND_RELEASE_DATES_URL: "https://court-cases-release-dates-dev.hmpps.service.justice.gov.uk"
+    COURT_CASES_RELEASE_DATES_API_URL: "https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk"
     DIGITAL_PRISON_SERVICES_URL: "https://digital-dev.prison.service.justice.gov.uk"
     DPS_PRISONER_URL: 'https://prisoner-dev.digital.prison.service.justice.gov.uk'
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
