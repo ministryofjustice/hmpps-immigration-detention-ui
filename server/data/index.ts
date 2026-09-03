@@ -2,7 +2,6 @@ import { AuthenticationClient, InMemoryTokenStore, RedisTokenStore } from '@mini
 import { createRedisClient } from './redisClient'
 import config from '../config'
 import logger from '../../logger'
-import HmppsAuditClient from './hmppsAuditClient'
 import FeComponentsClient from './feComponentsClient'
 import PrisonApiClient from './prisonApiClient'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
@@ -24,7 +23,6 @@ export const dataAccess = () => {
     applicationInfo,
     authenticationClient,
     feComponentsClient: new FeComponentsClient(authenticationClient),
-    hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
     manageUsersApiClient: new ManageUsersApiClient(),
     prisonApiClient: new PrisonApiClient(authenticationClient),
     prisonerSearchClient: new PrisonerSearchApiClient(authenticationClient),
@@ -35,4 +33,4 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient }
+export { AuthenticationClient }
