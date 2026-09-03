@@ -22,6 +22,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     COMMON_COMPONENTS_ENABLED: 'true'
     ENVIRONMENT_NAME: DEV
+    LOG_LEVEL: 'debug'
     AUDIT_ENABLED: "true"
     FEATURES_MODIFY_NOMIS_RECORDS_ENABLED: "true"
 

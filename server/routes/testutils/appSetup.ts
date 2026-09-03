@@ -12,7 +12,6 @@ import setUpWebSession from '../../middleware/setUpWebSession'
 import ImmigrationDetentionService from '../../services/immigrationDetentionService'
 import type { ApplicationInfo } from '../../applicationInfo'
 import { PrisonerSearchApiPrisoner } from '../../@types/prisonerSearchApi/prisonerSearchTypes'
-import HmppsAuditClient from '../../data/hmppsAuditClient'
 
 jest.mock('../../services/auditService')
 
@@ -96,7 +95,7 @@ function appSetup(
 export function appWithAllRoutes({
   production = false,
   services = {
-    auditService: new AuditService({} as HmppsAuditClient) as jest.Mocked<AuditService>,
+    auditService: new AuditService({} as never) as jest.Mocked<AuditService>,
     immigrationDetentionService: new ImmigrationDetentionService(null) as jest.Mocked<ImmigrationDetentionService>,
   },
   userSupplier = () => user,

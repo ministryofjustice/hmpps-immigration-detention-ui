@@ -15,7 +15,7 @@ export default function routes(service: Services): Router {
   )
   const prisonerImageRoutes = new PrisonerImageRoutes(service.prisonerSearchService)
 
-  router.get('/', (req, res) => res.render('pages/index'))
+  router.get('/', (_req, res) => res.render('pages/index'))
   router.get('/:nomsId/image', prisonerImageRoutes.getImage)
 
   router.get('/:nomsId/immigration-detention/start', immigrationDetentionRoutes.start)

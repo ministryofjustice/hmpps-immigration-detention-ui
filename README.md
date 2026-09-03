@@ -130,10 +130,9 @@ for the in-memory DB used by Auth
 
 ### Installing dependencies
 
-By default no pre or post install scripts will be run during `npm install`.
-Instead a list of configured install scripts will be run via the [npm script allowlist](https://github.com/ministryofjustice/hmpps-typescript-lib/tree/main/packages/npm-script-allowlist) tool.
+Install scripts are controlled by npm 12 `allowScripts` in `package.json`.
 
-Instead of running `npm install`, run `npm run setup` - this will run an `npm ci` to install any dependencies and then run any configured install scripts.
+Instead of running `npm install`, run `npm run setup` - this will run `npm ci` and apply those allowed install scripts.
 
 ### Making changes
 
