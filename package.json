@@ -34,7 +34,7 @@
     "npm": "^12"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1121.0",
+    "@aws-sdk/client-sqs": "^3.1125.0",
     "@microsoft/applicationinsights-clickanalytics-js": "^3.4.3",
     "@microsoft/applicationinsights-web": "^3.4.3",
     "@ministryofjustice/frontend": "^9.0.0",
@@ -70,7 +70,7 @@
   "devDependencies": {
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
-    "@ministryofjustice/frontend-types": "2.0.1",
+    "@ministryofjustice/frontend-types": "2.0.2",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
     "@playwright/test": "^1.62.1",
     "@tsconfig/node24": "^24.0.5",
@@ -96,7 +96,7 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.7.0",
-    "jest": "^30.5.0",
+    "jest": "^30.5.1",
     "jest-html-reporter": "^4.4.0",
     "jest-junit": "^17.0.0",
     "jsonwebtoken": "^9.0.3",
@@ -108,7 +108,7 @@
     "typescript": "^6.0.3"
   },
   "overrides": {
-    "@opentelemetry/core": "2.10.0",
+    "@opentelemetry/core": "2.11.0",
     "form-data": "4.0.6",
     "openapi-typescript": {
       "typescript": "$typescript"
