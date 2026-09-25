@@ -1,4 +1,5 @@
 import express from 'express'
+import { telemetryMiddleware } from '@ministryofjustice/hmpps-azure-telemetry'
 
 import createError from 'http-errors'
 
@@ -16,7 +17,6 @@ import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 
 import getFrontendComponents from './middleware/getFeComponents'
-import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 import routes from './routes'
 import type { Services } from './services'
 import populateCurrentPrisoner from './middleware/populateCurrentPrisoner'
@@ -50,7 +50,18 @@ export default function createApp(services: Services): express.Application {
 
   app.use('/:nomsId', populateCurrentPrisoner(services.prisonerSearchService, services.userService))
 
-  app.use(addUsernameAndCaseloadToTelemetry())
+  app.use(
+    telemetryMiddleware.addUserMetadataToTelemetry({
+      getAttributes: (_req, res) => {
+        const { username } = res?.locals?.user || {}
+        const caseloadId = res?.locals?.prisoner?.prisonId || null
+        return {
+          ...(username && { username }),
+          ...(caseloadId && { caseloadId }),
+        }
+      },
+    }),
+  )
 
   app.use(routes(services))
 
