@@ -16,7 +16,7 @@ describe('Audit service', () => {
   describe('logAuditEvent', () => {
     it('sends audit message using audit client', async () => {
       await auditService.logAuditEvent({
-        action: 'AUDIT_EVENT',
+        what: 'AUDIT_EVENT',
         who: 'user1',
         subjectId: 'subject123',
         subjectType: 'SEARCH_TERM',
@@ -25,7 +25,7 @@ describe('Audit service', () => {
       })
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        action: 'AUDIT_EVENT',
+        what: 'AUDIT_EVENT',
         who: 'user1',
         subjectId: 'subject123',
         subjectType: 'SEARCH_TERM',
@@ -46,7 +46,7 @@ describe('Audit service', () => {
       })
 
       expect(hmppsAuditService.logAuditEvent).toHaveBeenCalledWith({
-        action: 'PAGE_VIEW_EXAMPLE_PAGE',
+        what: 'PAGE_VIEW_EXAMPLE_PAGE',
         who: 'user1',
         subjectId: 'subject123',
         subjectType: 'SEARCH_TERM',
