@@ -27,6 +27,3 @@ generic-service:
 
   scheduledDowntime:
     enabled: true
-
-generic-prometheus-alerts:
-  alertSeverity: legacy-replacement-alerts-non-prod

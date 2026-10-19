@@ -30,6 +30,3 @@ generic-service:
     enabled: true
   # Switches off the allow list in the DEV env only.
   allowlist: null
-
-generic-prometheus-alerts:
-  alertSeverity: legacy-replacement-alerts-non-prod
