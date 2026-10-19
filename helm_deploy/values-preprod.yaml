@@ -29,4 +29,4 @@ generic-service:
     enabled: true
 
 generic-prometheus-alerts:
-  alertSeverity: legacy-replacement-alerts-non-prod
+  businessHoursOnly: true
