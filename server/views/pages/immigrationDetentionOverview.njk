@@ -52,7 +52,7 @@
                 </a>
             </li>
           {% endif %}
-          {% if model.hasImmigrationDetentionAdminRole() %}
+          {% if model.hasCourtCasesRole() %}
             {% if model.deleteLinkForLatestRecord() %}
               <li class="govuk-summary-card__action">
                   <a class="govuk-link" data-qa='delete-latest-link' href="{{ model.deleteLinkForLatestRecord() }}">
@@ -138,4 +138,3 @@
   </div>
 
 {% endblock %}
-
