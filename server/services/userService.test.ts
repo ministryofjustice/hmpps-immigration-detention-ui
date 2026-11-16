@@ -1,7 +1,7 @@
 import UserService from './userService'
 import ManageUsersApiClient, { type User } from '../data/manageUsersApiClient'
 import createUserToken from '../testutils/createUserToken'
-import { PrisonApiUserCaseloads } from '../@types/prisonApi/prisonClientTypes'
+import { CaseLoad } from '../@types/prisonApi'
 import PrisonerSearchService from './prisonerSearchService'
 
 jest.mock('../data/manageUsersApiClient')
@@ -12,7 +12,7 @@ describe('User service', () => {
   let prisonerSearchService: jest.Mocked<PrisonerSearchService>
   const caseload = {
     caseLoadId: 'BRI',
-  } as PrisonApiUserCaseloads
+  } as CaseLoad
 
   describe('getUser', () => {
     beforeEach(() => {

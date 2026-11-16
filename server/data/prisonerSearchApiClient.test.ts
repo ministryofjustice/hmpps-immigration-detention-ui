@@ -4,7 +4,7 @@ import 'reflect-metadata'
 import nock from 'nock'
 import config from '../config'
 import PrisonerSearchApiClient from './prisonerSearchApiClient'
-import { PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi/prisonerSearchTypes'
+import { Prisoner as PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi'
 import FullPageErrorType from '../model/FullPageErrorType'
 
 describe('prisonerSearchClient', () => {

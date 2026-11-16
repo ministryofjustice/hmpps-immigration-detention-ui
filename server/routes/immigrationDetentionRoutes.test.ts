@@ -93,6 +93,7 @@ const SERVICE_DEFINITIONS = {
             | 'REVIEW_IDENTIFIED_REMAND'
             | 'PREVIOUS_PERIOD_OF_UAL_FOR_REVIEW'
             | 'HMCTS_API_DOCUMENT_RECEIVED'
+          messageIsHtml: boolean
         }>,
         count: 0,
       },

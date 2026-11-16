@@ -4,9 +4,9 @@ import PrisonApiClient from '../data/prisonApiClient'
 
 import { Context } from './context'
 import { UserDetails } from '../data/manageUsersApiClient'
-import { PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi/prisonerSearchTypes'
+import { Prisoner as PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi'
 import FullPageError from '../model/FullPageError'
-import { PrisonApiUserCaseloads } from '../@types/prisonApi/prisonClientTypes'
+import { CaseLoad } from '../@types/prisonApi'
 
 export default class PrisonerSearchService {
   constructor(
@@ -18,7 +18,7 @@ export default class PrisonerSearchService {
     return this.prisonApiClient.getPrisonerImage(prisonerNumber, user.username)
   }
 
-  async getUsersCaseloads(userToken: string): Promise<PrisonApiUserCaseloads[]> {
+  async getUsersCaseloads(userToken: string): Promise<CaseLoad[]> {
     return this.prisonApiClient.getUsersCaseloads(userToken)
   }
 

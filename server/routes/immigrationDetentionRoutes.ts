@@ -11,7 +11,7 @@ import ImmigrationDetentionConfirmedDateModel from '../model/immigrationDetentio
 import ImmigrationDetentionOverviewModel from '../model/ImmigrationDetentionOverviewModel'
 import ImmigrationDetentionService from '../services/immigrationDetentionService'
 import ImmigrationDetentionDeleteModel from '../model/immigrationDetentionDeleteModel'
-import { CreateImmigrationDetention } from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
+import { CreateImmigrationDetention } from '../@types/remandAndSentencingApi'
 import ParamStoreService from '../services/paramStoreService'
 import config from '../config'
 import { User } from '../data/manageUsersApiClient'
