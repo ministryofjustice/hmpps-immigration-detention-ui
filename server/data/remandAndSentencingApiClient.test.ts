@@ -9,7 +9,7 @@ import {
   CreateImmigrationDetention,
   DeleteImmigrationDetentionResponse,
   SaveImmigrationDetentionResponse,
-} from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
+} from '../@types/remandAndSentencingApi'
 
 const immigrationDetentionUuid = '123e4567-e89b-12d3-a456-426614174000'
 const courtAppearanceUuid = 'bd4f0d5c-b1c7-4183-8d19-e22048bdd34a'

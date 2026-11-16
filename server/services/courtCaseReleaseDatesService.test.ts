@@ -1,6 +1,6 @@
 import CourtCaseReleaseDatesApiClient from '../data/courtCaseReleaseDatesApiClient'
 import CourtCaseReleaseDatesService from './courtCaseReleaseDatesService'
-import { CcrdServiceDefinitions } from '../@types/courtCaseReleaseDatesApi/types'
+import { CcrdServiceDefinitions } from '../@types/courtCasesReleaseDatesApi'
 
 jest.mock('../data/courtCaseReleaseDatesApiClient')
 

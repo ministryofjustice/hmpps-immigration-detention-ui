@@ -5,7 +5,7 @@ import PrisonApiClient from '../data/prisonApiClient'
 
 import PrisonerSearchApiClient from '../data/prisonerSearchApiClient'
 import PrisonerSearchService from './prisonerSearchService'
-import { PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi/prisonerSearchTypes'
+import { Prisoner as PrisonerSearchApiPrisoner } from '../@types/prisonerSearchApi'
 import FullPageErrorType from '../model/FullPageErrorType'
 import { UserDetails } from '../data/manageUsersApiClient'
 

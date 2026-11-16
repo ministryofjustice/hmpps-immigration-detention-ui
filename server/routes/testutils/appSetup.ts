@@ -11,7 +11,7 @@ import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
 import ImmigrationDetentionService from '../../services/immigrationDetentionService'
 import type { ApplicationInfo } from '../../applicationInfo'
-import { PrisonerSearchApiPrisoner } from '../../@types/prisonerSearchApi/prisonerSearchTypes'
+import { Prisoner as PrisonerSearchApiPrisoner } from '../../@types/prisonerSearchApi'
 
 jest.mock('../../services/auditService')
 

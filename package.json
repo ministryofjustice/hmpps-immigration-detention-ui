@@ -23,10 +23,10 @@
     "int-test-init:ci": "npx playwright install",
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm run setup && npm run build",
-    "generate-prison-api-types": "openapi-typescript https://prison-api-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonApi/index.d.ts",
-    "generate-prisoner-search-api-types": "openapi-typescript https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/prisonerSearchApi/index.d.ts",
-    "generate-ras-api-types": "openapi-typescript https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/remandAndSentencingApi/index.d.ts",
-    "generate-calculate-release-dates-api-types": "openapi-typescript https://calculate-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/calculateReleaseDatesApi/index.d.ts",
+    "generate-prison-api-types": "openapi-ts -i https://prison-api-dev.prison.service.justice.gov.uk/v3/api-docs -o ./server/@types/prisonApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/prisonApi/types.gen.ts\"",
+    "generate-prisoner-search-api-types": "openapi-ts -i https://prisoner-search-dev.prison.service.justice.gov.uk/v3/api-docs -o ./server/@types/prisonerSearchApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/prisonerSearchApi/types.gen.ts\"",
+    "generate-remand-and-sentencing-api-types": "openapi-ts -i https://remand-and-sentencing-api-dev.hmpps.service.justice.gov.uk/v3/api-docs -o ./server/@types/remandAndSentencingApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/remandAndSentencingApi/types.gen.ts\"",
+    "generate-court-cases-release-dates-api-types": "openapi-ts -i https://court-cases-release-dates-api-dev.hmpps.service.justice.gov.uk/v3/api-docs -o server/@types/courtCasesReleaseDatesApi -p @hey-api/typescript && eslint . --cache --max-warnings 0 --fix \"./server/@types/courtCasesReleaseDatesApi/types.gen.ts\"",
     "setup": "npm ci"
   },
   "engines": {
@@ -68,6 +68,7 @@
     "superagent": "^10.4.1"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.4",
     "@ministryofjustice/frontend-types": "2.0.3",
@@ -102,7 +103,6 @@
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^17.6.0",
     "nock": "^15.0.6",
-    "openapi-typescript": "^7.13.0",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.15",
     "typescript": "^6.0.3"
@@ -110,9 +110,6 @@
   "overrides": {
     "@opentelemetry/core": "2.12.0",
     "form-data": "4.0.6",
-    "openapi-typescript": {
-      "typescript": "$typescript"
-    },
     "brace-expansion": "5.0.12",
     "js-yaml": "5.5.0",
     "moment": "2.31.0",

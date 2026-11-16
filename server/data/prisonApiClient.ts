@@ -3,7 +3,7 @@ import { ApiConfig, AuthenticationClient, RestClient, asSystem, asUser } from '@
 
 import config from '../config'
 import logger from '../../logger'
-import { PrisonApiUserCaseloads } from '../@types/prisonApi/prisonClientTypes'
+import { CaseLoad } from '../@types/prisonApi'
 
 export interface Agency {
   agencyId: string
@@ -17,8 +17,8 @@ export default class PrisonApiClient extends RestClient {
     super('Prison API', config.apis.prisonApi as ApiConfig, logger, authenticationClient)
   }
 
-  async getUsersCaseloads(userToken: string): Promise<PrisonApiUserCaseloads[]> {
-    return this.get({ path: `/api/users/me/caseLoads` }, asUser(userToken)) as Promise<PrisonApiUserCaseloads[]>
+  async getUsersCaseloads(userToken: string): Promise<CaseLoad[]> {
+    return this.get({ path: `/api/users/me/caseLoads` }, asUser(userToken)) as Promise<CaseLoad[]>
   }
 
   getPrisonerImage(prisonerNumber: string, username: string): Promise<Readable> {

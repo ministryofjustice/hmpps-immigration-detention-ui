@@ -1,7 +1,4 @@
-import { ImmigrationDetention } from './remandAndSentencingApi/remandAndSentencingClientTypes'
-import { components } from './remandAndSentencingApi'
-
-export type AppearanceOutcome = components['schemas']['CourtAppearanceOutcome']
+import { ImmigrationDetention } from './remandAndSentencingApi'
 
 type SessionImmigrationDetention = ImmigrationDetention & {
   complete?: boolean

@@ -5,7 +5,7 @@ import {
   CreateImmigrationDetention,
   DeleteImmigrationDetentionResponse,
   SaveImmigrationDetentionResponse,
-} from '../@types/remandAndSentencingApi/remandAndSentencingClientTypes'
+} from '../@types/remandAndSentencingApi'
 
 jest.mock('../data/remandAndSentencingApiClient')
 
